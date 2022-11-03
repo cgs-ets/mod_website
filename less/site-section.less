@@ -1,0 +1,112 @@
+.site-section {
+  display: block;
+  position: relative;
+  margin-bottom: 40px;
+
+  & > .site-block {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .section-title {
+    padding: 5px 0;
+    margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: 700;
+    display: flex;
+    gap: 10px;
+    justify-content: start;
+    .caret {
+      display: none;
+      width: 18px;
+    }
+  }
+
+  &[data-collapsible="true"] {
+    .section-title {
+      cursor: pointer;
+      .caret {
+        display: inline-block;
+      }
+    }
+
+    &.collapsed {
+      .section-blocks {
+        display: none;
+      }
+      .section-title .caret {
+        -webkit-transform: rotateX(180deg);
+            transform: rotateX(180deg);
+      }
+    }
+  }
+
+  
+
+
+}
+
+.site-section[data-layout="1"] .section-blocks {
+  @media (min-width: 780px) {
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+    & > .site-block {
+      flex: 1;
+      margin: 20px;
+      &:first-of-type {
+        margin-left: 0;
+      }
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.site-section[data-layout="2"] .section-blocks {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  @media (min-width: 780px) {
+    & > div:first-of-type {
+      float: left;
+    }
+    & > .site-block {
+      width: calc(50% - 40px);
+      float: right;
+      clear: right;
+    }
+  }
+}
+
+.site-section[data-layout="3"] .section-blocks {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  @media (min-width: 780px) {
+    & > div:first-of-type {
+      float: right;
+    }
+    & > .site-block {
+      width: calc(50% - 40px);
+      float: left;
+      clear: left;
+    }
+  }
+}
+
+.site-section[data-layout="4"] .section-blocks {
+  position: relative;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  gap: 40px;
+  //padding: 20px;
+  & > .site-block {
+    //padding: 10px;
+    //margin: 10px;
+  }
+}

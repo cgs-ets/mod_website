@@ -1,0 +1,65 @@
+
+
+/* Make site fullscreen */
+&.path-mod-website{
+  background-color: #fff;
+  overflow: hidden;
+  .modal-backdrop.in.show {
+    display: none !important;
+  }
+  .drawers-bottom-region-wrap {
+    margin: 0 !important;
+  }
+  .drawer {
+    display: none !important;
+  }
+  .drawer-toggler {
+    display: none;
+  }
+  #maincontent {
+    display: none;
+  }
+  #region-main {
+    border: 0 none;
+    overflow: visible;
+  }
+  nav {
+    display: none;
+  }
+  footer {
+    display: none;
+  }
+  #page-header {
+    display: none;
+  }
+  #nav-drawer {
+    display: none;
+  }
+  #page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin: 0;
+    padding: 0 !important;
+    z-index: 10;
+    #page-content {
+      padding: 0 !important;
+    }
+  }
+  div[role="main"] {
+    padding: 0 !important;
+  }
+  .activity-header {
+    display: none;
+  }
+  .secondary-navigation {
+    display: none;
+  }
+  #topofscroll {
+    margin: 0;
+    padding: 0;
+  }
+}

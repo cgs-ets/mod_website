@@ -1,0 +1,55 @@
+/* Group field labels, e.g. Picture button Title and URL */
+label.col-form-label.sr-only {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin-right: 15px;
+}
+
+/* Groups */
+.d-flex.flex-wrap.align-items-center {
+  display: block !important;
+}
+
+/* Fields */
+.form-group.fitem  {
+  margin-bottom: 15px;
+}
+
+/* Block type */
+#fgroup_id_typearray {
+  padding: 0;
+  font-size: 18px;
+  .col-form-label {
+    padding-top: 0;
+  }
+  label.form-check-inline.form-check-label.fitem {
+    justify-content: left;
+    margin: 0 0 10px 0;
+  }
+}
+
+/* Section layout */
+#fgroup_id_layoutar {
+  img {
+    max-width: 170px !important;
+    max-height: 100px !important;
+  }
+  label.form-check-inline.form-check-label.fitem.w-100 {
+    display: block;
+    margin-bottom: 30px;
+  }
+}
+
+// The menujson field.
+#fitem_id_menujson {
+  display: none;
+}
+#fitem_id_menujson>div{
+  display: none;
+}
+#fitem_id_menujson.has-danger {
+  display: block;
+  height: 22px;
+  overflow: hidden;
+}

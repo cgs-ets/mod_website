@@ -1,0 +1,139 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_website/edit_menu
+
+    A single section.
+}}
+<div class="edit-menu-wrap">
+
+  <div class="left">
+    <div class="active">
+      <h4>Menu</h4>
+      <div class="menu-list list-group nested-sortable list-move list-active">
+        {{#menu}}
+          <div class="list-group-item" data-pageid="{{id}}">
+            {{title}}
+            <div class="list-group nested-sortable list-move list-active">
+              {{#children}}
+                <div class="list-group-item" data-pageid="{{id}}">
+                  {{title}}
+                  <div class="list-group nested-sortable list-move list-active"></div>
+                </div>
+              {{/children}}
+            </div>
+          </div>
+        {{/menu}}
+      </div>
+    </div>
+    <!--<div class="bin">
+      <div class="menu-list list-group nested-sortable move">
+          <h4><i class="fa fa-trash" aria-hidden="true"></i></h4>
+      </div>
+    </div>-->
+  </div>
+
+  <div class="right">
+    <div class="inactive">
+      <h4>Inactive pages</h4>
+      <div class="menu-list list-group nested-sortable list-move list-inactive">
+        {{#unusedpages}}
+          <div class="list-group-item" data-pageid="{{id}}">
+            {{title}}
+            <div class="list-group nested-sortable list-move list-inactive">
+              {{#children}}
+                <div class="list-group-item" data-pageid="{{id}}">
+                  {{title}}
+                  <div class="list-group nested-sortable list-move list-inactive"></div>
+                </div>
+              {{/children}}
+            </div>
+          </div>
+        {{/unusedpages}}
+      </div>
+    </div>
+
+    <div class="all">
+      <h4>All pages</h4>
+      <div class="menu-list list-group nested-sortable list-clone list-all">
+        {{#allpages}}
+          <div class="list-group-item" data-pageid="{{id}}">
+            {{title}}
+            <div class="list-group nested-sortable list-move list-all">
+              {{#children}}
+                <div class="list-group-item" data-pageid="{{id}}">
+                  {{title}}
+                  <div class="list-group nested-sortable list-move list-all"></div>
+                </div>
+              {{/children}}
+            </div>
+          </div>
+        {{/allpages}}
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+.edit-menu-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+.left {
+  width: 65%;
+  padding-right: 10px;
+}
+.right {
+  width: 35%;
+}
+.menu-list {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px dashed #ccc;
+}
+.list-group {
+  border-radius: 0;
+}
+.list-group-item {
+  background-color: #e6e6e6;
+  padding: 12px 20px;
+  border: 1px solid rgba(0,0,0,.125) !important;
+  margin-bottom: 5px;
+}
+.menu-list .list-group-item > .nested-sortable > .list-group-item {
+  background-color: #cccccc;
+}
+.menu-list > .list-group-item:not(.reordering) > .nested-sortable > .list-group-item:first-child {
+  margin-top: 10px;
+}
+.menu-list.sorting > .list-group-item:not(.reordering) > .nested-sortable {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 15px;
+  border: 1px dashed #ccc;
+}
+/* Only 2 levels permitted */
+.menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable {
+  display: none;
+}
+/* Only 2 level for inactive and all */
+.inactive .menu-list > .list-group-item > .nested-sortable , .all .menu-list > .list-group-item > .nested-sortable {
+  display: none;
+}
+</style>

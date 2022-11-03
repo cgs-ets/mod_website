@@ -1,0 +1,706 @@
+.path-mod-website {
+  /* Hide completion accross the plugin */
+  /* Group field labels, e.g. Picture button Title and URL */
+  /* Groups */
+  /* Fields */
+  /* Block type */
+  /* Section layout */
+}
+.path-mod-website .activity-header {
+  display: none;
+}
+.path-mod-website label.col-form-label.sr-only {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin-right: 15px;
+}
+.path-mod-website .d-flex.flex-wrap.align-items-center {
+  display: block !important;
+}
+.path-mod-website .form-group.fitem {
+  margin-bottom: 15px;
+}
+.path-mod-website #fgroup_id_typearray {
+  padding: 0;
+  font-size: 18px;
+}
+.path-mod-website #fgroup_id_typearray .col-form-label {
+  padding-top: 0;
+}
+.path-mod-website #fgroup_id_typearray label.form-check-inline.form-check-label.fitem {
+  justify-content: left;
+  margin: 0 0 10px 0;
+}
+.path-mod-website #fgroup_id_layoutar img {
+  max-width: 170px !important;
+  max-height: 100px !important;
+}
+.path-mod-website #fgroup_id_layoutar label.form-check-inline.form-check-label.fitem.w-100 {
+  display: block;
+  margin-bottom: 30px;
+}
+.path-mod-website #fitem_id_menujson {
+  display: none;
+}
+.path-mod-website #fitem_id_menujson > div {
+  display: none;
+}
+.path-mod-website #fitem_id_menujson.has-danger {
+  display: block;
+  height: 22px;
+  overflow: hidden;
+}
+#page-mod-website-site {
+  /* Make site fullscreen */
+  /* The switch - the box around the slider */
+  /* Hide default HTML checkbox */
+  /* The slider */
+  /* Rounded sliders */
+  /* [Object] Modal
+ * =============================== */
+}
+#page-mod-website-site .flex {
+  display: flex;
+  align-items: center;
+}
+#page-mod-website-site .w-100 {
+  width: 100%;
+}
+#page-mod-website-site.path-mod-website {
+  background-color: #fff;
+  overflow: hidden;
+}
+#page-mod-website-site.path-mod-website .modal-backdrop.in.show {
+  display: none !important;
+}
+#page-mod-website-site.path-mod-website .drawers-bottom-region-wrap {
+  margin: 0 !important;
+}
+#page-mod-website-site.path-mod-website .drawer {
+  display: none !important;
+}
+#page-mod-website-site.path-mod-website .drawer-toggler {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #maincontent {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #region-main {
+  border: 0 none;
+  overflow: visible;
+}
+#page-mod-website-site.path-mod-website nav {
+  display: none;
+}
+#page-mod-website-site.path-mod-website footer {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #page-header {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #nav-drawer {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+  padding: 0 !important;
+  z-index: 10;
+}
+#page-mod-website-site.path-mod-website #page #page-content {
+  padding: 0 !important;
+}
+#page-mod-website-site.path-mod-website div[role="main"] {
+  padding: 0 !important;
+}
+#page-mod-website-site.path-mod-website .activity-header {
+  display: none;
+}
+#page-mod-website-site.path-mod-website .secondary-navigation {
+  display: none;
+}
+#page-mod-website-site.path-mod-website #topofscroll {
+  margin: 0;
+  padding: 0;
+}
+#page-mod-website-site .site-root[data-mode="view"] .editoption {
+  display: none;
+}
+#page-mod-website-site .site-root[data-mode="view"] .options {
+  display: none;
+}
+#page-mod-website-site .site-root[data-mode="edit"] {
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Disable all transitions and transforms inside blocks */
+  /* For the grid layout we need to fix the padding in edit mode. */
+  /* Disable links inside block content */
+  /* Dragging / Sorting / Changing block position */
+}
+#page-mod-website-site .site-root[data-mode="edit"] .editzone {
+  margin: 20px !important;
+  padding: 20px !important;
+  border: 2px dashed #ccc;
+  min-height: 60px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .editzone.hover {
+  border-color: #0091F7;
+  border-style: solid;
+  transform: scale(1.01);
+}
+#page-mod-website-site .site-root[data-mode="edit"] .editzone.nopadding {
+  padding: 0 !important;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section.editzone {
+  padding-bottom: 35px !important;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-block-inner > * {
+  transform: none !important;
+  transition: none !important;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section[data-layout="4"] {
+  gap: 40px;
+  padding: 40px !important;
+  padding-bottom: 55px !important;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section[data-layout="4"] .site-block {
+  margin: 0 !important;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-block-inner a {
+  pointer-events: none;
+}
+#page-mod-website-site .site-root[data-mode="edit"].sorting .editzone.hover,
+#page-mod-website-site .site-root[data-mode="edit"].sorting-sections .editzone.hover {
+  border: 2px dashed #ccc;
+  transform: scale(1);
+}
+#page-mod-website-site .site-root[data-mode="edit"].sorting .editzone.reordering,
+#page-mod-website-site .site-root[data-mode="edit"].sorting-sections .editzone.reordering {
+  border-color: #0091F7;
+  border-style: solid;
+  transform: scale(1.1);
+}
+#page-mod-website-site .site-root[data-mode="edit"] .menuwrap.mobile .menu {
+  top: 200px;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .topbar {
+  align-items: start;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .topbar-right {
+  align-items: end;
+  gap: 10px;
+  flex-direction: column-reverse;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-add-site-page,
+#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-edit-menu,
+#page-mod-website-site .site-root[data-mode="edit"] .site-body .btn-add-site-section {
+  background-color: #2196F3;
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  height: 37px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color ease 0.3s;
+  white-space: nowrap;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-add-site-page:hover,
+#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-edit-menu:hover,
+#page-mod-website-site .site-root[data-mode="edit"] .site-body .btn-add-site-section:hover {
+  background-color: #1d87da;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-body .options {
+  padding: 10px 0;
+  text-align: center;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .options {
+  display: block;
+  position: absolute;
+  bottom: 5px;
+  right: 2px;
+  padding: 0;
+  height: 35px;
+  margin: 5px;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .options .btn-add-site-block {
+  background-color: #2196F3;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: block;
+  text-align: center;
+  transition: all ease 0.2s;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .options .btn-add-site-block:hover {
+  background-color: #1d87da;
+  transform: scale(1.2);
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-title .caret {
+  display: none;
+}
+#page-mod-website-site .site-editor {
+  display: flex;
+  justify-content: right;
+  background: #313131;
+  color: #fff;
+  padding: 6px;
+  font-size: 14px;
+}
+#page-mod-website-site .switch {
+  margin: 0;
+  margin-left: 6px;
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 19px;
+}
+#page-mod-website-site .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+#page-mod-website-site .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+#page-mod-website-site .slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+#page-mod-website-site input:checked + .slider {
+  background-color: #2196F3;
+}
+#page-mod-website-site input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+#page-mod-website-site input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+#page-mod-website-site .slider.round {
+  border-radius: 34px;
+}
+#page-mod-website-site .slider.round:before {
+  border-radius: 50%;
+}
+#page-mod-website-site .site-section {
+  display: block;
+  position: relative;
+  margin-bottom: 40px;
+}
+#page-mod-website-site .site-section > .site-block {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  margin: 20px;
+}
+#page-mod-website-site .site-section .section-title {
+  padding: 5px 0;
+  margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  gap: 10px;
+  justify-content: start;
+}
+#page-mod-website-site .site-section .section-title .caret {
+  display: none;
+  width: 18px;
+}
+#page-mod-website-site .site-section[data-collapsible="true"] .section-title {
+  cursor: pointer;
+}
+#page-mod-website-site .site-section[data-collapsible="true"] .section-title .caret {
+  display: inline-block;
+}
+#page-mod-website-site .site-section[data-collapsible="true"].collapsed .section-blocks {
+  display: none;
+}
+#page-mod-website-site .site-section[data-collapsible="true"].collapsed .section-title .caret {
+  -webkit-transform: rotateX(180deg);
+  transform: rotateX(180deg);
+}
+@media (min-width: 780px) {
+  #page-mod-website-site .site-section[data-layout="1"] .section-blocks {
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+  }
+  #page-mod-website-site .site-section[data-layout="1"] .section-blocks > .site-block {
+    flex: 1;
+    margin: 20px;
+  }
+  #page-mod-website-site .site-section[data-layout="1"] .section-blocks > .site-block:first-of-type {
+    margin-left: 0;
+  }
+  #page-mod-website-site .site-section[data-layout="1"] .section-blocks > .site-block:last-of-type {
+    margin-right: 0;
+  }
+}
+#page-mod-website-site .site-section[data-layout="2"] .section-blocks {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+@media (min-width: 780px) {
+  #page-mod-website-site .site-section[data-layout="2"] .section-blocks > div:first-of-type {
+    float: left;
+  }
+  #page-mod-website-site .site-section[data-layout="2"] .section-blocks > .site-block {
+    width: calc(50% - 40px);
+    float: right;
+    clear: right;
+  }
+}
+#page-mod-website-site .site-section[data-layout="3"] .section-blocks {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+@media (min-width: 780px) {
+  #page-mod-website-site .site-section[data-layout="3"] .section-blocks > div:first-of-type {
+    float: right;
+  }
+  #page-mod-website-site .site-section[data-layout="3"] .section-blocks > .site-block {
+    width: calc(50% - 40px);
+    float: left;
+    clear: left;
+  }
+}
+#page-mod-website-site .site-section[data-layout="4"] .section-blocks {
+  position: relative;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  gap: 40px;
+}
+#page-mod-website-site .site-block .site-block-inner {
+  height: 100%;
+  width: 100%;
+}
+#page-mod-website-site .site-block img {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+#page-mod-website-site .site-block-inner {
+  /* Other goodies
+https://codepen.io/cycosta/pen/vYLJxwq
+https://codepen.io/mrReiha/pen/RwPgLeM
+https://codepen.io/petegarvin1/pen/YzWBbRx
+https://codepen.io/steveeeie/pen/NVWMEM
+*/
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  /* For UX sake, always show the caption */
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  transform: scale(1.05);
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure:hover figcaption {
+  top: 220px;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure:hover h2 {
+  opacity: 0;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure h2 {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-size: 60px;
+  font-weight: 100;
+  line-height: 1.05;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  right: 20px;
+  max-height: 196px;
+  overflow: hidden;
+  word-break: break-word;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure figcaption {
+  position: absolute;
+  top: 300px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  margin: 0;
+  padding: 15px 30px;
+  background-color: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  color: white;
+  line-height: 1;
+  transition: 0.25s;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure figcaption h3 {
+  margin: 0 0 20px;
+  padding: 0;
+  font-weight: 400;
+  font-size: 17px;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure figcaption {
+  top: 220px;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure h2 {
+  opacity: 0;
+}
+#page-mod-website-site .modal {
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.9);
+  transition: opacity 0.25s ease;
+  opacity: 1;
+  visibility: visible;
+}
+#page-mod-website-site .modal__bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  cursor: pointer;
+}
+#page-mod-website-site .modal-state {
+  display: none;
+}
+#page-mod-website-site .modal__inner {
+  transition: top 0.25s ease;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  margin: auto;
+  overflow: auto;
+  background: #fff;
+  border-radius: 5px;
+  padding: 1em 2em;
+  height: 50%;
+}
+#page-mod-website-site .modal__close {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  width: 1.1em;
+  height: 1.1em;
+  cursor: pointer;
+}
+#page-mod-website-site .modal__close:after,
+#page-mod-website-site .modal__close:before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 1.5em;
+  background: #ccc;
+  display: block;
+  transform: rotate(45deg);
+  left: 50%;
+  margin: -3px 0 0 -1px;
+  top: 0;
+}
+#page-mod-website-site .modal__close:hover:after,
+#page-mod-website-site .modal__close:hover:before {
+  background: #aaa;
+}
+#page-mod-website-site .modal__close:before {
+  transform: rotate(-45deg);
+}
+@media screen and (max-width: 600px) {
+  #page-mod-website-site .modal__inner {
+    width: 90%;
+    height: 90%;
+    box-sizing: border-box;
+  }
+}
+#page-mod-website-site .menu,
+#page-mod-website-site .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  -webkit-margin-start: 0;
+}
+#page-mod-website-site .menu {
+  display: flex;
+}
+#page-mod-website-site .submenu {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  background: #3C495A;
+  display: none;
+  width: 200px;
+  z-index: 10;
+}
+#page-mod-website-site .menuitem {
+  position: relative;
+  white-space: nowrap;
+}
+#page-mod-website-site .menuitem a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+#page-mod-website-site .menuitem a:focus {
+  background-color: inherit;
+}
+#page-mod-website-site .menuitem .caret {
+  width: 18px;
+  fill: currentColor;
+}
+#page-mod-website-site .menuitem:hover .submenu {
+  display: block;
+}
+#page-mod-website-site .menuitem.parentcopy {
+  display: none;
+}
+#page-mod-website-site .menuwrap .menutoggle {
+  cursor: pointer;
+  display: none;
+}
+#page-mod-website-site .menuwrap.mobile .menutoggle {
+  display: block;
+}
+#page-mod-website-site .menuwrap.mobile .menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  top: 53px;
+  background: #546e7a;
+  width: 100%;
+  max-width: 300px;
+  z-index: 10;
+}
+#page-mod-website-site .menuwrap.mobile .menu .submenu {
+  position: relative;
+  margin: 0;
+  width: auto;
+  display: none;
+}
+#page-mod-website-site .menuwrap.mobile .menu.expanded,
+#page-mod-website-site .menuwrap.mobile .menuitem.expanded .submenu {
+  display: block;
+}
+#page-mod-website-site .menuwrap.mobile .menuitem.parentcopy {
+  display: block;
+}
+#page-mod-website-site .menuwrap.checkingsize {
+  opacity: 0;
+}
+#page-mod-website-site .site-root {
+  min-height: 100vh;
+}
+#page-mod-website-site .site-body {
+  padding-bottom: 100px;
+}
+#page-mod-website-site .topbar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 16px;
+  padding-right: 16px;
+  background-color: #546e7a;
+}
+#page-mod-website-site .topbar .logo {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  white-space: nowrap;
+  margin-right: 25px;
+}
+#page-mod-website-site .topbar a {
+  display: block;
+  padding: 14px 13px;
+  color: #fff;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+#page-mod-website-site .site-header {
+  background-size: cover;
+  background-position: center center;
+}
+#page-mod-website-site .site-header .title {
+  margin: 0;
+  text-align: center;
+  padding: 100px 30px;
+  font-size: 34px;
+  font-weight: bold;
+  font-family: 'Poppins', 'sans serif';
+}
+#page-mod-website-site .site-sections {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-top: 38px;
+  padding-bottom: 38px;
+}
+#page-mod-website-site .topbar {
+  background-color: #546e7a;
+}
+#page-mod-website-site .topbar a {
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+}
+#page-mod-website-site .site-header.has-banner h1 {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+}

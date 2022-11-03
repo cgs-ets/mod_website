@@ -1,0 +1,151 @@
+.site-root[data-mode="view"] {
+  .editoption {
+    display: none;
+  }
+  .options {
+    display: none;
+  }
+}
+.site-root[data-mode="edit"] {
+  background-color: rgba(0,0,0,0.1);
+
+  .editzone {
+    margin: 20px !important;
+    padding: 20px !important;
+    border: 2px dashed #ccc;
+    min-height: 60px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &.hover {
+      border-color: #0091F7;
+      border-style: solid;
+      transform: scale(1.01);
+    }
+    &.nopadding {
+      padding: 0 !important;
+    }
+  }
+
+  .site-section.editzone {
+    padding-bottom: 35px !important;
+  }
+
+  /* Disable all transitions and transforms inside blocks */
+  .site-block-inner > * {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* For the grid layout we need to fix the padding in edit mode. */
+  .site-section[data-layout="4"] {
+    gap: 40px;
+    padding: 40px !important;
+    padding-bottom: 55px !important;
+    grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+    .site-block {
+      margin: 0 !important;
+    }
+  }
+
+  /* Disable links inside block content */
+  .site-block-inner {
+    a {
+      pointer-events: none;
+    }
+  }
+  
+  /* Dragging / Sorting / Changing block position */
+  &.sorting, &.sorting-sections {
+    .editzone.hover {
+      border: 2px dashed #ccc;
+      transform: scale(1);
+    }
+    .editzone.reordering {
+      border-color: #0091F7;
+      border-style: solid;
+      transform: scale(1.1);
+    }
+  }
+
+  .menuwrap.mobile .menu {
+    top: 200px;
+  }
+  .topbar {
+    align-items: start;
+  }
+  .topbar-right {
+    align-items: end;
+    gap: 10px;
+    flex-direction: column-reverse;
+  }
+
+  .topbar .btn-add-site-page, 
+  .topbar .btn-edit-menu,
+  .site-body .btn-add-site-section {
+    background-color: #2196F3;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-decoration: none;
+    height: 37px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color ease 0.3s;
+    white-space: nowrap;
+    &:hover {
+      background-color: #1d87da;
+    }
+  }
+
+  .site-body {
+    .options {
+      padding: 10px 0;
+      text-align: center;
+    }
+  }
+  
+  .site-section {
+    .options {
+      display: block;
+      position: absolute;
+      bottom: 5px;
+      right: 2px;
+      padding: 0;
+      height: 35px;
+      margin: 5px;
+      .btn-add-site-block {
+        background-color: #2196F3;
+        color: #fff;
+        border-radius: 20px;
+        font-size: 24px;
+        font-weight: 800;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        display: block;
+        text-align: center;
+        transition: all ease 0.2s;
+        &:hover {
+          background-color: #1d87da;
+          transform: scale(1.2);
+        }
+      }
+    }
+    .section-title {
+      .caret {
+        display: none;
+      }
+    }
+  }
+  
+
+
+}
+
+
+

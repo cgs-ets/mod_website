@@ -1,0 +1,48 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_website/site_section
+
+    A single section.
+}}
+<div class="site-section editzone" 
+    {{#canedit}}data-url="{{sectionurl}}"{{/canedit}} 
+    data-sectionid="{{id}}" 
+    data-layout="{{layout}}"
+    {{^options.hidetitle}}{{#options.collapsible}}data-collapsible="true"{{/options.collapsible}}{{/options.hidetitle}}
+    >
+
+  {{^options.hidetitle}}
+    <h2 class="section-title">
+      {{title}}
+      <svg class="caret" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+        <path d="M128,188a11.96187,11.96187,0,0,1-8.48535-3.51465l-80-80a12.0001,12.0001,0,0,1,16.9707-16.9707L128,159.0293l71.51465-71.51465a12.0001,12.0001,0,0,1,16.9707,16.9707l-80,80A11.96187,11.96187,0,0,1,128,188Z"/>
+      </svg>
+    </h2>
+  {{/options.hidetitle}}
+
+  <div class="section-blocks">
+    {{#blocks}}
+      {{>mod_website/site_block}}
+    {{/blocks}}
+  </div>
+
+  <span class="options">
+    <a href="{{newblockurl}}" class="btn-add-site-block editoption">+</a>
+  </span>
+
+</div>
