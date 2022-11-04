@@ -75,6 +75,8 @@ function website_add_instance($moduleinstance, $mform = null) {
     $site = new \mod_website\site();
     $site->create($sitedata);
 
+    website_grade_item_update($moduleinstance);
+
     return $id;
 }
 

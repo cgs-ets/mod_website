@@ -25,14 +25,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Site';
-$string['pluginname_desc'] = 'Create sites without code';
-$string['websitename'] = 'Site name';
-$string['websitenameplural'] = 'Sites';
-$string['modulename'] = 'Site';
-$string['websitename_help'] = 'Create sites without code';
-$string['websitesettings'] = 'Site Settings';
-$string['websitefieldset'] = 'Site Fieldset';
+$string['pluginname'] = 'Website';
+$string['pluginname_desc'] = 'Create a course website without code';
+$string['websitename'] = 'Website name';
+$string['websitenameplural'] = 'Websites';
+$string['modulename'] = 'Website';
+$string['websitename_help'] = 'Create a course website without code';
+$string['websitesettings'] = 'Website Settings';
+$string['websitefieldset'] = 'Website Fieldset';
 
 $string['dynamic'] = 'Distribution';
 $string['pagetitle'] = 'Page title';

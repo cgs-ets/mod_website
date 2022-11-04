@@ -101,5 +101,21 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102601, 'website');
     }
 
+    if ($oldversion < 2022102602) {
+
+        // Define field grade to be added to website.
+        $table = new xmldb_table('website');
+        $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'dynamic');
+
+        // Conditionally launch add field grade.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022102602, 'website');
+    }
+
+
     return true;
 }
