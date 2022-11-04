@@ -61,9 +61,9 @@ $PAGE->set_title(format_string($website->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-// Check if this is one static site or dynamic student sites.
-if ($website->dynamic) {
-    if (utils::is_grader()) {
+// Check if single site or copy for each student.
+if ($website->distribution) {
+    if (utils::is_teacher()) {
         // Get a list of sites (student copies) and print a table of links.
         echo "get list of copies";
     } else {

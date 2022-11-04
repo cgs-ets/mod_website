@@ -40,6 +40,7 @@ class Site {
     const TABLE_PAGES = 'website_site_pages';
     const TABLE_SECTIONS = 'website_site_sections';
     const TABLE_BLOCKS = 'website_site_blocks';
+    const TABLE_WEBSITE = 'website';
 
     private $data = array();
 
@@ -103,12 +104,12 @@ class Site {
         // Every site has an initial menu.
         $menudata = array(
             'siteid' => $id,
-            'json' => json_encode([
-                array(
-                    'id' => $page->get_id(), 
-                    'children' => []
-                )
-            ]),
+            'json' => json_encode([]),
+            //    array(
+            //        'id' => $page->get_id(), 
+            //        'children' => []
+            //    )
+            //]),
         );
         $menu = new \mod_website\menu();
         $menu->create($menudata);
@@ -282,15 +283,11 @@ class Site {
                 'site' => $this->data->id,
             ));
             
-            $editmenuurl = null;
-
-            if ($this->numpages > 1) {
-                $editmenuurl = new \moodle_url('/mod/website/edit-menu.php', array(
-                    'site' => $this->data->id,
-                    'menu' => $this->menu->get_id(),
-                    'page' => $this->currentpage->get_id(),
-                ));
-            }
+            $editmenuurl = new \moodle_url('/mod/website/edit-menu.php', array(
+                'site' => $this->data->id,
+                'menu' => $this->menu->get_id(),
+                'page' => $this->currentpage->get_id(),
+            ));
 
             $newsectionurl = new \moodle_url('/mod/website/edit-section.php', array(
                 'site' => $this->data->id,
@@ -368,12 +365,31 @@ class Site {
         return ($this->get_userid() === $USER->id);
     }
 
+    public function can_user_view() {
+        // If the distribution is single site, then everyone can view.
+        var_export($this->get_website()); exit;
+
+        // If the distribution is copy for each student, then teachers, the student, and their mentors can view.
+
+        return false;
+    }
+
     public function get_id() {
         return $this->data->id;
     }
 
     public function get_websiteid() {
         return $this->data->websiteid;
+    }
+
+    public function get_website() {
+        global $DB;
+    
+        $website = $DB->get_record(static::TABLE_WEBSITE, array(
+            'id' => $this->data->websiteid,
+        ), '*', IGNORE_MULTIPLE);
+
+        return $website;
     }
     
     public function get_cmid() {
@@ -419,13 +435,18 @@ class Site {
             }
         }
 
+        // If there is nothing in the menu then make sure sql works and all pages are returned.
+        if (empty($pageids)) {
+            $pageids[] = '0';
+        }
+
         list($insql, $inparams) = $DB->get_in_or_equal($pageids);
         $sql = "SELECT *
                 FROM {" . static::TABLE_PAGES . "}
                 WHERE siteid = ?
                 AND hidden = 0
                 AND deleted = 0
-                AND id NOT " . $insql;
+                AND id NOT IN (SELECT id FROM {" . static::TABLE_PAGES . "} WHERE id " . $insql . ")";
         $unused = $DB->get_records_sql($sql, array_merge([$this->data->id], $inparams));
 
         return array_values($unused);

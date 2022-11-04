@@ -105,7 +105,7 @@ function xmldb_website_upgrade($oldversion) {
 
         // Define field grade to be added to website.
         $table = new xmldb_table('website');
-        $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'dynamic');
+        $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'distribution');
 
         // Conditionally launch add field grade.
         if (!$dbman->field_exists($table, $field)) {

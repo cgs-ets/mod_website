@@ -280,10 +280,4 @@ class Page {
         }
     }
 
-    public function can_user_edit() {
-        global $USER, $DB;
-        $siteuser = $DB->get_field(static::TABLE_SITES, 'userid', array('id' => $this->data->siteid, 'deleted' => 0), '*', IGNORE_MULTIPLE);
-        return ($siteuser === $USER->id);
-    }
-
 }

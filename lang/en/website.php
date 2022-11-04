@@ -34,11 +34,14 @@ $string['websitename_help'] = 'Create a course website without code';
 $string['websitesettings'] = 'Website Settings';
 $string['websitefieldset'] = 'Website Fieldset';
 
-$string['dynamic'] = 'Distribution';
+$string['distribution'] = 'Distribution';
 $string['pagetitle'] = 'Page title';
 $string['editpage'] = 'Edit page';
 $string['addtomenu'] = 'Site menu';
 $string['bannerimage'] = 'Banner image';
+
+$string['nopermissiontoview'] = 'You do not have permission to view this website.';
+$string['nopermissiontoedit'] = 'You do not have permission to edit this website.';
 
 $string['editmenu'] = 'Edit menu';
 $string['editsection'] = 'Edit section';

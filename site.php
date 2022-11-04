@@ -35,19 +35,19 @@ $pageid = optional_param('page', 0, PARAM_INT);
 // Get the single site instance.
 $site = new Site($siteid);
 
-if ( ! $site->can_user_edit()) {
-    return;
-}
-
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
 
+if ( ! $site->can_user_view() ) {
+    notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
+
 // Check edit mode preference.
 $mode = 'view';
-if (website_is_editing_on()) {
+if ($site->can_user_edit() && website_is_editing_on()) {
     $mode = 'edit';
 }
 
@@ -88,32 +88,3 @@ $data = $site->export(array(
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 
 echo $OUTPUT->footer();
-
-
-/*
-// Check if this is one static site or dynamic student sites.
-if ($website->dynamic) {
-    // Get and display the site for this user.
-    echo "get copy for user";
-} else {
-    // Add scripts.
-    $PAGE->requires->js_call_amd('mod_website/site', 'init');
-
-    // Get the single site instance.
-    $site = new Site();
-    $site->fetch($website->id, $pageid);
-    // Export the data. Also checks if this user is the site user (allowing editing)
-    $data = $site->export(array(
-        'user' => $USER,
-        'mode' => $mode,
-        'course' => $course,
-        'website' => $website,
-        'modulecontext' => $modulecontext,
-    ));
-
-    // Render it. 
-    echo $OUTPUT->render_from_template('mod_website/site', $data);
-}
-
-echo $OUTPUT->footer();
-*/

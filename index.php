@@ -52,7 +52,7 @@ echo $OUTPUT->heading($modulenameplural);
 $websites = get_all_instances_in_course('website', $course);
 
 if (empty($websites)) {
-    notice(get_string('no$websiteinstances', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    notice(get_string('nowebsiteinstances', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
 $table = new html_table();

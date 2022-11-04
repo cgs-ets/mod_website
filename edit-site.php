@@ -32,15 +32,16 @@ use mod_website\forms\form_site;
 $siteid = required_param('site', PARAM_INT);
 
 $site = new \mod_website\site($siteid);
-if ( ! $site->can_user_edit()) {
-    return;
-}
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
+
+if ( ! $site->can_user_edit()) {
+    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
 
 $modulecontext = context_module::instance($cm->id);
 $thisurl = new moodle_url('/mod/website/edit-site.php', array(

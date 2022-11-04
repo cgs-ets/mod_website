@@ -52,15 +52,19 @@ class form_sitesection extends \moodleform {
          *   Section layout.
          *----------------------*/
         $layoutarray=array();
-        // Horizontal.
-        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Horizontally divided <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-1.png" /></div>', 1, array('class' => 'w-100'));
-        // Half, right side vertical.
-        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Left half fixed, right half vertical <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-2.png" /></div>', 2, array('class' => 'w-100'));
-        // Half, left side vertical.
-        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Right half fixed, left half vertical <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-3.png" /></div>', 3, array('class' => 'w-100'));
+        
         // Responsive grid.
         $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Responsive grid <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-4.png" /></div>', 4, array('class' => 'w-100'));
         
+        // Horizontal.
+        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Horizontally divided <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-1.png" /></div>', 1, array('class' => 'w-100'));
+        
+        // Half, right side vertical.
+        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Left half fixed, right half vertical <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-2.png" /></div>', 2, array('class' => 'w-100'));
+        
+        // Half, left side vertical.
+        $layoutarray[] = $mform->createElement('radio', 'layout', '', 'Right half fixed, left half vertical <div style="margin-bottom: 5px;width: 100%;"><img src="/mod/website/pix/website-layout-3.png" /></div>', 3, array('class' => 'w-100'));
+
         $mform->addGroup($layoutarray, 'layoutar', get_string('sectionlayout', 'mod_website'), array(' '), false);
 
         /*----------------------

@@ -71,9 +71,9 @@ class mod_website_mod_form extends moodleform_mod {
             '0' => 'Single teacher-driven website, viewable by all students',
             '1' => 'Copy for each student, editable and viewable by the student',
         );
-        $select = $mform->addElement('select', 'dynamic', get_string('dynamic', 'mod_website'), $options);
+        $select = $mform->addElement('select', 'distribution', get_string('distribution', 'mod_website'), $options);
         $select->setSelected('0');
-        $mform->addRule('dynamic', null, 'required', null, 'client');
+        $mform->addRule('distribution', null, 'required', null, 'client');
 
 
         // Add standard grading elements.
