@@ -187,7 +187,7 @@ function website_grade_item_update($moduleinstance, $reset=false) {
         $item['reset'] = true;
     }
 
-    grade_update('/mod/website', $moduleinstance->course, 'mod', 'mod_website', $moduleinstance->id, 0, null, $item);
+    grade_update('/mod/website', $moduleinstance->course, 'mod', 'website', $moduleinstance->id, 0, null, $item);
 }
 
 /**
@@ -218,7 +218,7 @@ function website_update_grades($moduleinstance, $userid = 0) {
 
     // Populate array of grade objects indexed by userid.
     $grades = array();
-    grade_update('/mod/website', $moduleinstance->course, 'mod', 'mod_website', $moduleinstance->id, 0, $grades);
+    grade_update('/mod/website', $moduleinstance->course, 'mod', 'website', $moduleinstance->id, 0, $grades);
 }
 
 /**
