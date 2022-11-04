@@ -367,11 +367,11 @@ class Site {
 
     public function can_user_view() {
         // If the distribution is single site, then everyone can view.
-        var_export($this->get_website()); exit;
+        //var_export($this->get_website()); exit;
 
         // If the distribution is copy for each student, then teachers, the student, and their mentors can view.
 
-        return false;
+        return true;
     }
 
     public function get_id() {
