@@ -67,7 +67,8 @@
     // Set up editing.
     self.setupEditing();
 
-    document.querySelector(".site-editor-switch").addEventListener('change', (e) => {
+    let editswitch = document.querySelector('.site-editor-switch');
+    editswitch && editswitch.addEventListener('change', (e) => {
       let mode = 0
       if (e.currentTarget.checked) {
         self.rootel.dataset.mode = 'edit'
@@ -130,7 +131,7 @@
     }, true)
 
     // Menu Toggle.
-    var menutoggle = document.querySelector('.menutoggle');
+    let menutoggle = document.querySelector('.menutoggle');
     menutoggle && menutoggle.addEventListener('click', e => {
       const menu = document.querySelector('.menu')
       if (menu.classList.contains('expanded')) {
