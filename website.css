@@ -411,7 +411,8 @@
   height: 100%;
   width: 100%;
 }
-#page-mod-website-site .site-block img {
+#page-mod-website-site .site-block img,
+#page-mod-website-site .site-block iframe {
   display: inline-block;
   margin: 0;
   padding: 0;
