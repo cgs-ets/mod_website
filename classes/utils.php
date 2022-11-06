@@ -74,10 +74,10 @@ class utils {
     public static function should_clean_content($website) {
         // Don't clean teacher sites.
         if ($website->distribution === '0') {
-            return false;
+            return true; //noclean
         }
         // Clean student sites.
-        return true;
+        return false;
     }
 
 }
