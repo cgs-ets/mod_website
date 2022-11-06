@@ -168,6 +168,7 @@ class Block {
 
         $blockurl = new \moodle_url('/mod/website/edit-block.php', array(
             'site' => $this->data->siteid,
+            'page' => $related['pageid'],
             'section' => $related['sectionid'],
             'block' => $this->get_id() ? $this->get_id() : 0,
         ));

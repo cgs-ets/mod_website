@@ -49,6 +49,7 @@ if ( ! $site->can_user_edit()) {
 $modulecontext = context_module::instance($cm->id);
 $thisurl = new moodle_url('/mod/website/edit-block.php', array(
     'site' => $siteid,
+    'page' => $pageid,
     'section' => $sectionid,
     'block' => $blockid,
 ));

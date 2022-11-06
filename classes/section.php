@@ -187,6 +187,7 @@ class Section {
         ));
         $newblockurl = new \moodle_url('/mod/website/edit-block.php', array(
             'site' => $this->data->siteid,
+            'page' => $related['pageid'],
             'section' => $this->data->id,
         ));
 
