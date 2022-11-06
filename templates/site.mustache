@@ -30,17 +30,15 @@
     {{>mod_website/site_editor}}
   {{/canedit}}
   <div class="topbar editzone">
-
     <div class="logo">
       <a href="{{course.url}}">{{course.shortname}}</a> / 
       <a href="{{website.url}}">{{website.name}}</a>
     </div>
     <div class="topbar-right flex">
       {{>mod_website/site_menu}}
-      {{#editmenuurl}}<a href="{{editmenuurl}}" class="btn-edit-menu editoption">Edit menu</a>{{/editmenuurl}}
-      <a href="{{newpageurl}}" class="btn-add-site-page editoption">New page</a>
+      {{#canedit}}<a href="{{editmenuurl}}" class="btn-edit-menu editoption">Edit menu</a>{{/canedit}}
+      {{#canedit}}<a href="{{newpageurl}}" class="btn-add-site-page editoption">New page</a>{{/canedit}}
     </div>
-
   </div>
   {{#page}}
     {{>mod_website/site_header}}
@@ -51,7 +49,7 @@
         {{/sections}}
       </div>
       <div class="options">
-        <a href="{{newsectionurl}}" class="btn-add-site-section editoption">Add section</a>
+        {{#canedit}}<a href="{{newsectionurl}}" class="btn-add-site-section editoption">Add section</a>{{/canedit}}
       </div>
     </div>
   {{/page}}

@@ -270,31 +270,29 @@ class Site {
     public function export($related) {
         $this->validate_related($related);
 
-        // Editing URLs
+        // Is this user an editor?
         $canedit = false;
         if ($this->data->userid == $related['user']->id) {
             $canedit = true;
-
-            $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
-                'site' => $this->data->id,
-                'page' => $this->currentpage->get_id(),
-            ));
-
-            $newpageurl = new \moodle_url('/mod/website/edit-page.php', array(
-                'site' => $this->data->id,
-            ));
-            
-            $editmenuurl = new \moodle_url('/mod/website/edit-menu.php', array(
-                'site' => $this->data->id,
-                'menu' => $this->menu->get_id(),
-                'page' => $this->currentpage->get_id(),
-            ));
-
-            $newsectionurl = new \moodle_url('/mod/website/edit-section.php', array(
-                'site' => $this->data->id,
-                'page' => $this->currentpage->get_id(),
-            ));
         }
+
+        // Editing URLs
+        $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
+        $newpageurl = new \moodle_url('/mod/website/edit-page.php', array(
+            'site' => $this->data->id,
+        ));
+        $editmenuurl = new \moodle_url('/mod/website/edit-menu.php', array(
+            'site' => $this->data->id,
+            'menu' => $this->menu->get_id(),
+            'page' => $this->currentpage->get_id(),
+        ));
+        $newsectionurl = new \moodle_url('/mod/website/edit-section.php', array(
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
 
         // Go back / Course URL
         $courseurl = new \moodle_url('/course/view.php', array(
