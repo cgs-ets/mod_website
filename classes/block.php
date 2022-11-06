@@ -51,7 +51,7 @@ class Block {
     }
 
     private static function required_related() {
-        return array('sectionid', 'modulecontext');
+        return array('sectionid', 'modulecontext', 'website');
     }
 
     /**
@@ -187,7 +187,7 @@ class Block {
                 // Apply filters
                 $options = (object) array(
                     'context' => $related['modulecontext'],
-                    'noclean' => false, // We want this cleaned for security.
+                    'noclean' => utils::should_clean_content($related['website']), // We may want this cleaned for security (student site)
                     'nocache' => true,
                 );
                 $html = format_text($html, FORMAT_HTML, $options);

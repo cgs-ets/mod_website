@@ -63,7 +63,7 @@ $PAGE->set_context($modulecontext);
 
 // Check if single site or copy for each student.
 if ($website->distribution) {
-    if (utils::is_teacher()) {
+    if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
         echo "get list of copies";
     } else {

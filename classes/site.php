@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\utils;
 
 /**
  * Provides utility functions for this plugin.
@@ -310,7 +311,8 @@ class Site {
         if ($this->currentpage) {
             $currentpage = $this->currentpage->export(array(
                 'cmid' => $this->data->cmid,
-                'modulecontext' => $related['modulecontext']
+                'modulecontext' => $related['modulecontext'],
+                'website' => $related['website']
             ));
         }
 
@@ -366,12 +368,25 @@ class Site {
     }
 
     public function can_user_view() {
-        // If the distribution is single site, then everyone can view.
-        //var_export($this->get_website()); exit;
 
-        // If the distribution is copy for each student, then teachers, the student, and their mentors can view.
+        // Single site
+        if ($this->get_website()->distribution === '0') {
+            // Everyone can view.
+            return true;
+        }
 
-        return true;
+        // Copy for each student.
+        if ($this->get_website()->distribution === '1') {
+            // Teachers, the student, and their mentors can view.
+            if (utils::is_grader() || 
+                $this->get_userid() === $USER->id || 
+                utils::is_user_mentor_of_student($USER->id, $this->get_userid()) ) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 
     public function get_id() {

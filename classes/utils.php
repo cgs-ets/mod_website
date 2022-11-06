@@ -46,4 +46,38 @@ class utils {
         return false;
     }
 
+    public static function is_user_mentor_of_student($userid, $studentuserid) {
+        $mentors = static::get_users_mentors($userid, 'id');
+        return in_array($userid, $mentors);
+    }
+
+    public static function get_users_mentors($userid, $field = 'username') {
+        global $DB;
+
+        $mentors = array();
+        $mentorssql = "SELECT u.*
+                         FROM {role_assignments} ra, {context} c, {user} u
+                        WHERE c.instanceid = :menteeid
+                          AND c.contextlevel = :contextlevel
+                          AND ra.contextid = c.id
+                          AND u.id = ra.userid";
+        $mentorsparams = array(
+            'menteeid' => $userid,
+            'contextlevel' => CONTEXT_USER
+        );
+        if ($mentors = $DB->get_records_sql($mentorssql, $mentorsparams)) {
+            $mentors = array_column($mentors, $field);
+        }
+        return $mentors;
+    }
+
+    public static function should_clean_content($website) {
+        // Don't clean teacher sites.
+        if ($website->distribution === '0') {
+            return false;
+        }
+        // Clean student sites.
+        return true;
+    }
+
 }

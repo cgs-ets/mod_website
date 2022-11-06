@@ -49,7 +49,7 @@ class Page {
     }
 
     private static function required_related() {
-        return array('cmid', 'modulecontext');
+        return array('cmid', 'modulecontext', 'website');
     }
 
     /**
@@ -172,6 +172,7 @@ class Page {
                 'pageid' => $this->data->id,
                 'cmid' => $related['cmid'],
                 'modulecontext' => $related['modulecontext'],
+                'website' => $related['website'],
             ));
         }
 
