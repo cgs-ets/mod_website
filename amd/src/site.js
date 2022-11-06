@@ -130,7 +130,8 @@
     }, true)
 
     // Menu Toggle.
-    document.querySelector('.menutoggle').addEventListener('click', e => {
+    var menutoggle = document.querySelector('.menutoggle');
+    menutoggle && menutoggle.addEventListener('click', e => {
       const menu = document.querySelector('.menu')
       if (menu.classList.contains('expanded')) {
         menu.classList.remove('expanded');
@@ -241,8 +242,6 @@
       onStart: self.SectionSortStart,
       onEnd: self.SectionSortEnd,
     })*/
-
-
 
   }
 
