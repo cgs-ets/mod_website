@@ -67,7 +67,7 @@
     // Set up editing.
     self.setupEditing();
 
-    let editswitch = document.querySelector('.site-editor-switch');
+    let editswitch = document.querySelector('.site-editor-switch')
     editswitch && editswitch.addEventListener('change', (e) => {
       let mode = 0
       if (e.currentTarget.checked) {
@@ -77,13 +77,12 @@
       } else {
         self.rootel.dataset.mode = 'view'
         // Disable block sorting.
-        const sections = document.querySelectorAll('.site-section');
+        const sections = document.querySelectorAll('.site-section')
         sections.forEach(section => {
           let sortable = Sortable.get(section)
           sortable.option("disabled", true)
         })
       }
-
       Ajax.call([{
         methodname: 'mod_website_apicontrol',
         args: { 
@@ -93,7 +92,6 @@
             }),
         }
       }])
-
     })
 
     if (self.rootel.dataset.canedit == '1') {
@@ -214,9 +212,11 @@
       // Enable block sorting
       sections.forEach(section => {
         let sortable = Sortable.get(section)
-        sortable.option("disabled", false)
+        if (sortable !== undefined) {
+          sortable.option("disabled", false)
+          return
+        }
       })
-      return; 
     }
 
     // Only setup once.
