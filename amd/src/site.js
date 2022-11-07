@@ -117,7 +117,7 @@
         item.addEventListener('mouseleave', e => {
           e.target.classList.remove("hover")
           // If going from a child editzone into a parent editzone, add hover to the parent as mouseenter would not be triggered.
-          if (e.toElement && e.toElement.classList.contains('editzone')) {
+          if (e.toElement && ( e.toElement.classList.contains('editzone') || e.toElement.parentNode.classList.contains('editzone') )) {
             e.toElement.classList.add("hover")
           }
         })
