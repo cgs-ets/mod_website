@@ -80,7 +80,9 @@
         const sections = document.querySelectorAll('.site-section')
         sections.forEach(section => {
           let sortable = Sortable.get(section)
-          sortable.option("disabled", true)
+          if (sortable !== undefined) {
+            sortable.option("disabled", true)
+          }
         })
       }
       Ajax.call([{
