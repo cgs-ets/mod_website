@@ -25,6 +25,8 @@
  /** Include required files */
 require_once($CFG->libdir.'/filelib.php');
 
+use mod_website\utils;
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -63,17 +65,37 @@ function website_add_instance($moduleinstance, $mform = null) {
     // Create the website record.
     $id = $DB->insert_record('website', $moduleinstance);
    
-    // Create the user site.
-    $sitedata = array(
-        'websiteid' => $id,
-        'cmid' => $moduleinstance->coursemodule,
-        'creatorid' => $USER->id,
-        'userid' => $USER->id,
-        'title' => $moduleinstance->name,
-        'siteoptions' => '',
-    );
-    $site = new \mod_website\site();
-    $site->create($sitedata);
+    if ($moduleinstance->distribution === '0') {
+        // Single teacher site.
+        $sitedata = array(
+            'websiteid' => $id,
+            'cmid' => $moduleinstance->coursemodule,
+            'creatorid' => $USER->id,
+            'userid' => $USER->id,
+            'title' => $moduleinstance->name,
+            'siteoptions' => '',
+        );
+        $site = new \mod_website\site();
+        $site->create($sitedata);
+    } else {
+        // Student sites.
+        // Get students in course.
+        $students = utils::get_enrolled_students($moduleinstance->course);
+        foreach ($students as $studentid) {
+            $sitedata = array(
+                'websiteid' => $id,
+                'cmid' => $moduleinstance->coursemodule,
+                'creatorid' => $USER->id,
+                'userid' => $studentid,
+                'title' => $moduleinstance->name,
+                'siteoptions' => '',
+            );
+            $site = new \mod_website\site();
+            $site->create($sitedata);
+        }
+        
+
+    }
 
     website_grade_item_update($moduleinstance);
 
@@ -95,6 +117,9 @@ function website_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+
+    // Once set, distribution cannot be changed.
+    unset($moduleinstance->distribution);
 
     return $DB->update_record('website', $moduleinstance);
 }

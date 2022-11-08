@@ -56,3 +56,10 @@ $string['wysiwyg'] = 'WYSIWYG editor';
 $string['picturebutton'] = 'Picture button';
 $string['buttontitle'] = 'Title';
 $string['buttonurl'] = 'URL';
+
+$string['studentnameheader'] = 'Student';
+$string['websitelinkheader'] = 'Website';
+$string['previewheader'] = 'Website';
+$string['launchwebsite'] = 'Launch website';
+$string['gradeheader'] = 'Grade';
+$string['grade'] = 'Grade';

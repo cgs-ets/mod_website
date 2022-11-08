@@ -27,6 +27,7 @@ require_once(__DIR__.'/lib.php');
 
 use mod_website\utils;
 use mod_website\site;
+use mod_website\website;
 
 // Course module id.
 $id = optional_param('id', 0, PARAM_INT);
@@ -62,13 +63,17 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 // Check if single site or copy for each student.
-if ($website->distribution) {
+if ($website->distribution === '1') {
     if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
-        echo "get list of copies";
+        echo $OUTPUT->header();
+        $website = new Website($cm->instance, $course->id);
+        $website->render_student_sites_table();
+        echo $OUTPUT->footer();
     } else {
         // Get and display the site for this user.
         echo "get copy for user";
+        exit;
     }
 } else {
     // Get the single site instance.
@@ -78,7 +83,3 @@ if ($website->distribution) {
 	redirect($url->out(false));
 	exit;
 }
-
-echo $OUTPUT->header();
-
-echo $OUTPUT->footer();

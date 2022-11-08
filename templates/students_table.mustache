@@ -1,0 +1,67 @@
+
+
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    @package   mod_website
+    @copyright 2022 Michael Vangelovski
+    @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template mod_website/distributions
+}}
+<div class="container-fluid table-container">
+    <table class="mod-website-table-view table table-hover table-bordered table-lg">
+        <thead>
+          <tr>
+            <th>{{#str}} studentnameheader, mod_website{{/str}}</th>
+            <th>{{#str}} previewheader, mod_website{{/str}}</th>
+            <th>{{#str}} websitelinkheader, mod_website{{/str}}</th>
+            <th>{{#str}} gradeheader, mod_website{{/str}}</th>
+          </tr>
+        </thead>
+        <tbody class="table-striped">
+          {{#students}}
+            <tr>
+              <td>{{{picture}}}</td>
+              <td>
+                <iframe src="{{siteurl}}" style="
+                  height: 200px;
+                  width: 100%;
+                  border: 1px solid;
+                  display: block;
+                  min-width: 380px;
+                  margin-right: 10px;
+                "></iframe>
+              </td>
+              <td>                  
+                <a target="_blank" href="{{siteurl}}" class="btn btn-primary" role="button">{{#str}}launchwebsite, mod_website{{/str}}</a>
+              </td>
+              {{^beengraded}}
+                <td>
+                  <a href="{{{gradeurl}}}" class="btn btn-primary" role="button">{{#str}} grade, mod_website{{/str}}</a>
+                </td>
+              {{/beengraded}}
+              {{#beengraded}}
+                <td>
+                  <a href="{{{gradeurl}}}" role="button">{{gradevalue}}</a>
+                </td>
+              {{/beengraded}}
+            </tr>
+          {{/students}}
+        </tbody>
+    </table>
+</div>

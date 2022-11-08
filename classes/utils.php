@@ -80,4 +80,21 @@ class utils {
         return false;
     }
 
+    /**
+     * Helper function to get the students enrolled
+     *
+     * @param int $courseid
+     * @return int[]
+     */
+    public static function get_enrolled_students($courseid) {
+        global $DB;
+        $context = \context_course::instance($courseid);
+        
+        // 5 is student.
+        $studentroleid = $DB->get_field('role', 'id', array('shortname'=> 'student'));
+        $users = get_role_users($studentroleid, $context, false, 'u.id, u.username, u.firstname, u.lastname', 'u.lastname'); //last param is sort by.
+
+        return array_map('intval', array_column($users, 'id'));
+    }
+
 }

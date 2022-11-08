@@ -176,6 +176,24 @@ class Site {
     }
 
     /**
+     * Load the data from the DB.
+     *
+     * @return static
+     */
+    final public function read_for_studentid($studentid) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('userid' => $studentid, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+
+        $this->read_siteoptions();
+        $this->load_page();
+
+        return $this;
+    }
+
+    
+
+    /**
      * Fetch site and page.
      *
      * @return static
