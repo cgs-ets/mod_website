@@ -40,4 +40,9 @@ use external_api;
  */
 class api extends external_api {
 	use apicontrol;
+    use get_participant;
+    use grade_student_site;
+    use save_quick_grading;
+    use list_participants;
+    use get_participant_by_id;
 }

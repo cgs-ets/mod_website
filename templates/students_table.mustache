@@ -28,7 +28,7 @@
         <thead>
           <tr>
             <th>{{#str}} studentnameheader, mod_website{{/str}}</th>
-            <th>{{#str}} previewheader, mod_website{{/str}}</th>
+            <!--<th>{{#str}} previewheader, mod_website{{/str}}</th>-->
             <th>{{#str}} websitelinkheader, mod_website{{/str}}</th>
             <th>{{#str}} gradeheader, mod_website{{/str}}</th>
           </tr>
@@ -37,18 +37,32 @@
           {{#students}}
             <tr>
               <td>{{{picture}}}</td>
-              <td>
-                <iframe src="{{siteurl}}" style="
-                  height: 200px;
-                  width: 100%;
-                  border: 1px solid;
-                  display: block;
-                  min-width: 380px;
-                  margin-right: 10px;
-                "></iframe>
-              </td>
+              <!--<td style="padding: 0;">
+                <div style="position: relative; overflow: hidden; min-width: 400px; width: 100%; height: 300px;">
+                  <iframe src="{{siteurl}}" style="
+                    height: 300px;
+                    width: calc(100% + 11px);
+                    border: 0 none;
+                    min-width: 380px;
+                    margin-right: 10px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                  "></iframe>
+                  <a target="_blank" href="{{siteurl}}" style="
+                    position:absolute; 
+                    top:0; 
+                    left:0; 
+                    display:inline-block; 
+                    width: 100%; 
+                    height: 300px; 
+                    z-index:5;
+                    background-color: transparent !important;
+                    "></a>
+                </div>
+              </td>-->
               <td>                  
-                <a target="_blank" href="{{siteurl}}" class="btn btn-primary" role="button">{{#str}}launchwebsite, mod_website{{/str}}</a>
+                <a target="_blank" href="{{siteurl}}" class="btn btn-primary" role="button">{{#str}}launch, mod_website{{/str}}</a>
               </td>
               {{^beengraded}}
                 <td>

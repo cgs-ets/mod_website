@@ -29,7 +29,9 @@ $string['pluginname'] = 'Website';
 $string['pluginname_desc'] = 'Create a course website without code';
 $string['websitename'] = 'Website name';
 $string['websitenameplural'] = 'Websites';
+$string['modulenameplural'] = 'Websites';
 $string['modulename'] = 'Website';
+$string['pluginadministration'] = 'Website administration';
 $string['websitename_help'] = 'Create a course website without code';
 $string['websitesettings'] = 'Website Settings';
 $string['websitefieldset'] = 'Website Fieldset';
@@ -58,8 +60,12 @@ $string['buttontitle'] = 'Title';
 $string['buttonurl'] = 'URL';
 
 $string['studentnameheader'] = 'Student';
-$string['websitelinkheader'] = 'Website';
-$string['previewheader'] = 'Website';
-$string['launchwebsite'] = 'Launch website';
+$string['websitelinkheader'] = 'Website link';
+$string['previewheader'] = 'Preview';
+$string['launch'] = 'Launch website';
 $string['gradeheader'] = 'Grade';
 $string['grade'] = 'Grade';
+$string['viewgrading'] = 'View all submissions';
+$string['savingchanges'] = 'Saving changes';
+$string['nousersselected'] = 'No users selected';
+

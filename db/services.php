@@ -35,4 +35,52 @@ $functions = [
         'loginrequired' => true,
         'ajax'          => true,
     ],
+
+
+
+    'mod_website_grade_student_site' => [
+        'classname' => 'mod_website\external\api', // Class containing a reference to the external function.
+        'methodname' => 'grade_student_site', // External function name.
+        'description' => 'Grade student file  ', // Human readable description of the WS function.
+        'type' => 'write', // DB rights of the WS function.
+        'loginrequired' => true,
+        'ajax' => true  // Is this service available to 'internal' ajax calls.
+    ],
+
+
+    'mod_website_save_quick_grading' => [
+        'classname' => 'mod_website\external\api', // Class containing a reference to the external function.
+        'methodname' => 'save_quick_grading', // External function name.
+        'description' => 'Save grading and comment  ', // Human readable description of the WS function.
+        'type' => 'write', // DB rights of the WS function.
+        'loginrequired' => true,
+        'ajax' => true  // Is this service available to 'internal' ajax calls.
+    ],
+
+    'mod_website_get_participant' => [
+        'classname' => 'mod_website\external\api', // Class containing a reference to the external function.
+        'methodname' => 'get_participant', // External function name.
+        'description' => 'Get participant details  ', // Human readable description of the WS function.
+        'type' => 'write', // DB rights of the WS function.
+        'loginrequired' => true,
+        'ajax' => true  // Is this service available to 'internal' ajax calls.
+    ],
+
+    'mod_website_get_participants' => [
+        'classname' => 'mod_website\external\api', // Class containing a reference to the external function.
+        'methodname' => 'list_participants', // External function name.
+        'description' => 'Get participant details  ', // Human readable description of the WS function.
+        'type' => 'write', // DB rights of the WS function.
+        'loginrequired' => true,
+        'ajax' => true  // Is this service available to 'internal' ajax calls.
+    ],
+
+    'mod_website_get_next_participant_details' => [
+        'classname' => 'mod_website\external\api', // Class containing a reference to the external function.
+        'methodname' => 'get_participant_by_id', // External function name.
+        'description' => 'Get participant file details  ', // Human readable description of the WS function.
+        'type' => 'write', // DB rights of the WS function.
+        'loginrequired' => true,
+        'ajax' => true  // Is this service available to 'internal' ajax calls.
+    ],
 ];

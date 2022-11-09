@@ -42,7 +42,7 @@ class Page {
     const TABLE_SECTIONS = 'website_site_sections';
 
     private $data = array();
-    private $sections = null;
+    private $sections = array();
 
     private static function required_data() {
         return array('siteid');

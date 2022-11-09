@@ -27,6 +27,9 @@ require_once($CFG->libdir.'/filelib.php');
 
 use mod_website\utils;
 
+define('WEBSITE_GRADING_STATUS_GRADED', 'graded');
+define('WEBSITE_GRADING_STATUS_NOT_GRADED', 'notgraded');
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -133,13 +136,14 @@ function website_update_instance($moduleinstance, $mform = null) {
 function website_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('website', array('id' => $id));
-    if (!$exists) {
+    $website = $DB->get_record('website', array('id' => $id));
+    if (!$website) {
         return false;
     }
 
     $DB->delete_records('website', array('id' => $id));
 
+    website_grade_item_delete($website);
     return true;
 }
 
@@ -186,33 +190,180 @@ function website_scale_used_anywhere($scaleid) {
  *
  * Needed by {@see grade_update_mod_grades()}.
  *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param bool $reset Reset grades in the gradebook.
- * @return void.
+ * @category grade
+ * @uses GRADE_TYPE_VALUE
+ * @uses GRADE_TYPE_NONE
+ * @param object $website object with extra cmidnumber
+ * @param array|object $grades optional array/object of grade(s); 'reset' means reset grades in gradebook
+ * @return int 0 if ok, error code otherwise
  */
-function website_grade_item_update($moduleinstance, $reset=false) {
+function website_grade_item_update($website, $grades = null) {
     global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
 
-    $item = array();
-    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
-    $item['gradetype'] = GRADE_TYPE_VALUE;
+    if (!function_exists('grade_update')) { // Workaround for buggy PHP versions.
+        require_once($CFG->libdir . '/gradelib.php');
+    }
 
-    if ($moduleinstance->grade > 0) {
-        $item['gradetype'] = GRADE_TYPE_VALUE;
-        $item['grademax']  = $moduleinstance->grade;
-        $item['grademin']  = 0;
-    } else if ($moduleinstance->grade < 0) {
-        $item['gradetype'] = GRADE_TYPE_SCALE;
-        $item['scaleid']   = -$moduleinstance->grade;
+    if (property_exists($website, 'cmidnumber')) { // May not be always present.
+        $params = array('itemname' => $website->name, 'idnumber' => $website->cmidnumber);
     } else {
-        $item['gradetype'] = GRADE_TYPE_NONE;
-    }
-    if ($reset) {
-        $item['reset'] = true;
+        $params = array('itemname' => $website->name);
     }
 
-    grade_update('/mod/website', $moduleinstance->course, 'mod', 'website', $moduleinstance->id, 0, null, $item);
+    if (!isset($website->courseid)) {
+        $website->courseid = $website->course;
+    }
+
+    if ($website->grade > 0) {
+        $params['gradetype'] = GRADE_TYPE_VALUE;
+        $params['grademax'] = $website->grade;
+        $params['grademin'] = 0;
+    } else if ($website->grade < 0) {
+        $params['gradetype'] = GRADE_TYPE_SCALE;
+        $params['scaleid'] = -$website->grade;
+
+        // Make sure current grade fetched correctly from $grades
+        $currentgrade = null;
+        if (!empty($grades)) {
+            if (is_array($grades)) {
+                $currentgrade = reset($grades);
+            } else {
+                $currentgrade = $grades;
+            }
+        }
+
+        // When converting a score to a scale, use scale's grade maximum to calculate it.
+        if (!empty($currentgrade) && $currentgrade->rawgrade !== null) {
+            $grade = grade_get_grades($website->course, 'mod', 'website', $website->id, $currentgrade->userid);
+            $params['grademax'] = reset($grade->items)->grademax;
+        }
+    } else {
+        $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.
+    }
+
+    if ($grades === 'reset') {
+        $params['reset'] = true;
+        $grades = null;
+    } else if (!empty($grades)) {
+        // Need to calculate raw grade (Note: $grades has many forms).
+        if (is_object($grades)) {
+            $grades = array($grades->userid => $grades);
+        } else if (array_key_exists('userid', $grades)) {
+            $grades = array($grades['userid'] => $grades);
+        }
+        foreach ($grades as $key => $grade) {
+            if (!is_array($grade)) {
+                $grades[$key] = $grade = (array) $grade;
+            }
+            //check raw grade isnt null otherwise we erroneously insert a grade of 0
+            if ($grade['rawgrade'] !== null) {
+                $grades[$key]['rawgrade'] = ($grade['rawgrade'] * $params['grademax'] / 100);
+            } else {
+                // Setting rawgrade to null just in case user is deleting a grade.
+                $grades[$key]['rawgrade'] = null;
+            }
+        }
+    }
+
+    return grade_update('/mod/website', $website->course, 'mod', 'website', $website->id, 0, $grades, $params);
+}
+
+
+function website_get_user_grades_for_gradebook($instance, $userid = 0) {
+    global $DB;
+    $grades = array();
+    $adminconfig = get_config('website');
+
+    $gradebookplugin = website_is_gradebook_feedback_enabled();
+
+    if ($userid) {
+        $where = ' WHERE u.id = :userid ';
+    } else {
+        $where = ' WHERE u.id != :userid ';
+    }
+    $params = [
+        'websiteid1' => $instance->id,
+        'websiteid2' => $instance->id,
+        'websiteid3' => $instance->id,
+        'userid' => $userid
+    ];
+
+    $graderesults = $DB->get_recordset_sql('SELECT u.id as userid, s.timemodified as datesubmitted,
+                                            g.grade as rawgrade, g.timemodified as dategraded, g.grader as usermodified,                                             fc.commenttext as feedback, fc.commentformat as feedbackformat
+                                            FROM mdl_user as u
+                                            LEFT JOIN mdl_website_sites as s
+                                            ON u.id = s.userid and s.websiteid = :websiteid1
+                                            JOIN mdl_website_grades as g
+                                            ON u.id = g.userid and g.websiteid = :websiteid2
+                                            JOIN mdl_website_feedback as fc
+                                            ON fc.websiteid = :websiteid3 AND fc.grade = g.id' .
+        $where, $params);
+
+    foreach ($graderesults as $result) {
+        $gradingstatus = website_get_grading_status($result->userid, $instance->id);
+        if ($gradingstatus == WEBSITE_GRADING_STATUS_GRADED) {
+            $gradebookgrade = clone $result;
+            // Now get the feedback.
+            $gradebookgrade->feedback = $result->feedback;
+            $gradebookgrade->feedbackformat = $result->feedbackformat;
+            $grades[$gradebookgrade->userid] = $gradebookgrade;
+        }
+    }
+    $graderesults->close();
+    return $grades;
+}
+
+function website_is_gradebook_feedback_enabled() {
+    // Get default grade book feedback plugin.
+    $adminconfig = get_config('website');
+    $gradebookplugin = $adminconfig->feedback_plugin_for_gradebook;
+    $gradebookplugin = str_replace('assignfeedback_', '', $gradebookplugin);
+
+    // Check if default gradebook feedback is visible and enabled.
+    $gradebookfeedbackplugin = website_get_feedback_plugin_by_type($gradebookplugin);
+
+    if (empty($gradebookfeedbackplugin)) {
+        return false;
+    }
+
+    if ($gradebookfeedbackplugin->is_visible() && $gradebookfeedbackplugin->is_enabled()) {
+        return true;
+    }
+
+    // Gradebook feedback plugin is either not visible/enabled.
+    return false;
+}
+
+function website_get_feedback_plugin_by_type($type) {
+    return website_get_plugin_by_type('assignfeedback', $type);
+}
+
+function website_get_plugin_by_type($subtype, $type) {
+    $shortsubtype = substr($subtype, strlen('assign'));
+    $name = $shortsubtype . 'plugins';
+    if ($name != 'feedbackplugins' && $name != 'submissionplugins') {
+        return null;
+    }
+    $pluginlist = $name;
+    foreach ($pluginlist as $plugin) {
+        if ($plugin->get_type() == $type) {
+            return $plugin;
+        }
+    }
+    return null;
+}
+
+function website_get_grading_status($userid, $website) {
+    global $DB;
+    $sql = "SELECT * FROM mdl_website_grades WHERE userid = {$userid}
+            AND websiteid = {$website};";
+    $grades = $DB->get_record_sql($sql);
+
+    if ($grades) {
+        return WEBSITE_GRADING_STATUS_GRADED;
+    } else {
+        return WEBSITE_GRADING_STATUS_NOT_GRADED;
+    }
 }
 
 /**
@@ -222,28 +373,41 @@ function website_grade_item_update($moduleinstance, $reset=false) {
  * @return grade_item.
  */
 function website_grade_item_delete($moduleinstance) {
-    global $CFG;
+    global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
+    $DB->delete_records('website_grades', array('websiteid' => $website->id));
+    $DB->delete_records('website_feedback', array('website' => $website->id));
+    
     return grade_update('/mod/website', $moduleinstance->course, 'mod', 'website',
                         $moduleinstance->id, 0, null, array('deleted' => 1));
 }
 
-/**
- * Update mod_website grades in the gradebook.
- *
- * Needed by {@see grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param int $userid Update grade of specific user only, 0 means all participants.
- */
-function website_update_grades($moduleinstance, $userid = 0) {
-    global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
 
-    // Populate array of grade objects indexed by userid.
-    $grades = array();
-    grade_update('/mod/website', $moduleinstance->course, 'mod', 'website', $moduleinstance->id, 0, $grades);
+/**
+ * Update the grade(s) for the supplied user.
+ * @param stdClass  $website
+ * @param int $userid
+ * @param bool $nullifnone
+ */
+function website_update_grades($website, $userid = 0, $nullifnone = true) {
+    global $CFG;
+    require_once($CFG->libdir . '/gradelib.php');
+
+    if ($website->grade == 0) {
+        website_grade_item_update($website);
+    } else if ($grades = website_get_user_grades_for_gradebook($website, $userid)) {
+
+        foreach ($grades as $k => $v) {
+            if ($v->rawgrade == -1) {
+                $grades[$k]->rawgrade = null;
+            }
+        }
+
+        website_grade_item_update($website, $grades);
+    } else {
+        website_grade_item_update($website);
+    }
 }
 
 /**

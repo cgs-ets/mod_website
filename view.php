@@ -35,9 +35,6 @@ $id = optional_param('id', 0, PARAM_INT);
 // Activity instance id.
 $w = optional_param('w', 0, PARAM_INT);
 
-// View/edit.
-$mode = optional_param('mode', 'view', PARAM_TEXT);
-
 if ($id) {
     $cm = get_coursemodule_from_id('website', $id, 0, false, MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -67,7 +64,7 @@ if ($website->distribution === '1') {
     if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
         echo $OUTPUT->header();
-        $website = new Website($cm->instance, $course->id);
+        $website = new Website($cm->instance, $cm->id);
         $website->render_student_sites_table();
         echo $OUTPUT->footer();
     } else {
@@ -79,7 +76,7 @@ if ($website->distribution === '1') {
     // Get the single site instance.
     $site = new Site();
     $site->read_from_websiteid($website->id);
-    $url = new moodle_url('/mod/website/site.php', array('site' => $site->get_id(), 'mode' => $mode));
+    $url = new moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
 	redirect($url->out(false));
 	exit;
 }

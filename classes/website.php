@@ -40,42 +40,64 @@ use mod_website\utils;
 class Website {
 
     const TABLE = 'website';
-    const TABLE_SITES = 'website_sites';
-    const TABLE_PAGES = 'website_site_pages';
-    const TABLE_SECTIONS = 'website_site_sections';
-    const TABLE_BLOCKS = 'website_site_blocks';
 
     private $cmid;
-    private $courseid;
+    private $data;
 
     /**
      * Create an instance of this class.
      *
      * @param int $id If set, this is the id of an existing record, used to load the data.
      */
-    public function __construct($cmid = 0, $courseid = 0) {
+    public function __construct($id = 0, $cmid = 0) {
         global $CFG;
 
         $this->cmid = $cmid;
-        $this->courseid = $courseid;
+
+        if ($id > 0) {
+            return $this->read($id);
+        }
     }
+
+
+
+    /**
+     * Load the data from the DB.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function read($id) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+
+        return $this;
+    }
+
+
 
     public function render_student_sites_table() {
         global $OUTPUT;
 
-        $students = utils::get_enrolled_students($this->courseid);
+        $students = utils::get_enrolled_students($this->data->course);
         foreach ($students as $studentid) {
             $student = \core_user::get_user($studentid);
             $picture = $OUTPUT->user_picture($student, array(
-                'course' => $this->courseid,
+                'course' => $this->data->course,
                 'includefullname' => true, 
                 'class' => 'userpicture',
             ));
 
-            $grading_info = grade_get_grades($this->courseid, 'mod', 'website', $this->cmid, [9999999]);
-            $grade = array_pop($grading_info->items[0]->grades)->grade;
+            $grading_info = grade_get_grades($this->data->course, 'mod', 'website', $this->cmid, [$studentid]);
+            $grade = null;
+            if ($grading_info->items) {
+                if ($grading_info->items[0]->grades)  {
+                    $grade = array_pop($grading_info->items[0]->grades)->grade;
+                }
+            }
             $beengraded = $grade ? true : false;
-            $gradeurl = new \moodle_url('/mod/website/view_grading_app.php?', array(
+            $gradeurl = new \moodle_url('/mod/website/view_grading_app.php', array(
                 'id' => $this->cmid,
                 'action' => 'grader',
                 'userid' => $studentid
@@ -99,6 +121,134 @@ class Website {
         }
 
         echo $OUTPUT->render_from_template('mod_website/students_table', $data);
+    }
+
+
+    public function view_grading_app($userid) {
+        global $OUTPUT, $DB, $CFG;
+
+        // Get the user record.
+        $user = $DB->get_record('user', array('id' => $userid));
+
+        // Get the user's site.
+        $site = new Site();
+        $site->read_for_studentid($userid);
+        $siteurl = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
+
+        // Grade details.
+        list($gradegiven, $commentgiven) = $this->get_grade_comments($this->data->id, $userid);
+
+        // Get data from gradebook.
+        $sql = "SELECT * FROM mdl_grade_grades as gg
+                WHERE itemid = (
+                    SELECT id as itemid FROM mdl_grade_items
+                    WHERE iteminstance = {$this->data->id}
+                    AND itemtype = 'mod' AND itemmodule = 'website' 
+                )
+                AND userid = {$userid}"; 
+        $gg = $DB->get_record_sql($sql);
+
+        $lockedoroverriden = false;
+        $gradefromgradebook = 0;
+        $gradebookurl = '';
+        if ($gg && ($gg->locked != "0" || $gg->overridden != "0")) {
+            $lockedoroverriden = true;
+            $gradefromgradebook = $gg->finalgrade;
+            $gradebookurl = new \moodle_url($CFG->wwwroot . '/grade/report/grader/index.php', ['id' => $this->data->course]);
+        }
+
+        $gradeurl = new \moodle_url('/mod/website/view_grading_app.php', array(
+            'id' => $this->cmid,
+            'action' => 'grader',
+            'userid' => $userid,
+        ));
+
+        $coursecontext = \context_course::instance($this->data->course);
+
+        $data = [
+            'userid' => $userid,
+            'courseid' => $this->data->course,
+            'showuseridentity' => true,
+            'coursename' => $coursecontext->get_context_name(),
+            'cmid' => $this->cmid,
+            'name' => $this->data->name,
+            'caneditsettings' => false,
+            'actiongrading' => 'grading',
+            'viewgrading' => get_string('viewgrading', 'website'),
+            'websiteid' => $this->data->id,
+            'usersummary' => $OUTPUT->user_picture($user, array('course' => $this->data->course, 'includefullname' => true, 'class' => 'userpicture')),
+            'useremail' => $user->email,
+            'siteurl' =>   $siteurl,
+            'maxgrade' => $this->data->grade,
+            'gradegiven' => $gradegiven,
+            'graded' => ($gradegiven == '') ? false : true,
+            'commentgiven' => $commentgiven,
+            'users' => $this->get_list_participants($this->data->id),
+            'lockedoroverriden' => $lockedoroverriden,
+            'finalgrade' => number_format($gradefromgradebook, 2),
+            'gradebookurl' => $gradebookurl,
+            'display' => true,
+            'contextid' => $coursecontext->id,
+            'gradeurl' => $gradeurl
+        ];
+
+        //print_object($data); exit;
+        echo $OUTPUT->render_from_template('mod_website/grading_app', $data);
+    }
+
+    public function get_id() {
+        return $this->data->id;
+    }
+
+    public function get_course() {
+        return $this->data->course;
+    }
+
+    public function get_name() {
+        return $this->data->name;
+    }
+
+    function get_grade_comments($websiteid, $userid) {
+        global $DB;
+
+        $sql = "SELECT comments.commenttext as comment, grades.grade as gradevalue 
+                FROM mdl_website_grades as grades
+                INNER JOIN mdl_website_feedback as comments 
+                ON grades.id = comments.grade
+                WHERE grades.userid = :userid 
+                AND grades.websiteid = :instanceid;";
+
+        $grading = $DB->get_record_sql($sql, array(
+            'userid' => $userid,
+            'instanceid' => $websiteid,
+        ));
+
+        if ($grading) {
+            return array($grading->gradevalue, $grading->comment);
+        } else {
+            return array('', '');
+        }
+    }
+
+    private function get_list_participants($websiteid) {
+        global $DB;
+
+        $sql = "SELECT u.id, CONCAT(u.firstname,' ', u.lastname) as fullname, gf.* FROM mdl_website_sites as gf
+                JOIN mdl_user as u ON gf.userid = u.id
+                WHERE websiteid = :websiteid ORDER BY u.lastname;";
+
+        $participants = $DB->get_records_sql($sql, array('websiteid' => $websiteid));
+        $users = [];
+
+        foreach ($participants as $participant) {
+            $user = new \stdClass();
+            $user->userid = $participant->userid;
+            $user->fullname = $participant->fullname;
+            list($user->grade, $user->comment) = $this->get_grade_comments($websiteid, $participant->userid);
+            $users[] = $user;
+        }
+
+        return $users;
     }
 
 }

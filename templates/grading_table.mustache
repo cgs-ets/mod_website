@@ -1,0 +1,238 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    @package   mod_website
+    @copyright 2020 Veronica Bermegui
+    @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template mod_website/group_table
+}}
+
+<div role="main" >
+   <span id="maincontent"></span>
+   <h2>{{docname}}</h2>
+   
+    <br><br><br>
+    <div class="no-overflow" >
+         <table cellspacing="0" class="flexible generaltable generalbox gradetb" data-websiteid = "{{websiteid}}" data-courseid = "{{courseid}}" 
+                    data-maxgrade = "{{maxgrade}}" >
+            <thead>
+               <tr>
+                  <th class="header c0" scope="col">
+
+                     <div class="selectall"><label class="accesshide" for="selectall">Select all</label>
+
+                     </div>
+                     <div class="commands"></div>
+                  </th>
+                  <th class="header" scope="col">
+                     <a href="#">
+                        User picture
+                       <span class="accesshide ">Sort by User picture Ascending</span>
+                    </a> 
+                    <div class="commands">
+                        <a title="Hide User picture" aria-expanded="true" 
+                           href="#">
+                           <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+                  <th class="header " scope="col">
+                     <a href="#">
+                        First name
+                        <span class="accesshide ">Sort by First name Ascending</span>
+                    </a> /
+                    <a href="#">
+                       Surname
+                       <span class="accesshide ">Sort by Surname Ascending</span>
+                    </a>
+                    <div class="commands">
+                        <a title="Hide Full name" aria-expanded="true" 
+                           href="#">
+                            <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+                  <th class="header email" scope="col">
+                    <a href="#">
+                        Username
+                        <span class="accesshide ">Sort by Email address Ascending</span>
+                    </a> 
+                    <div class="commands">
+                        <a title="Hide Email address" aria-expanded="true" 
+                           href="#">
+                           <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+                  <th class="header email" scope="col">
+                    <a href="#">
+                        Email address
+                        <span class="accesshide ">Sort by Email address Ascending</span>
+                    </a> 
+                    <div class="commands">
+                        <a title="Hide Email address" aria-expanded="true" 
+                           href="#">
+                           <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+                  <th class="header " scope="col">
+                    <a href="#">
+                        Status
+                        <span class="accesshide ">Sort by Status Ascending</span>
+                    </a>
+                    <div class="commands">
+                        <a title="Hide Status" aria-expanded="true" >
+                           <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+                  <th class="header " scope="col">
+                    <a href="#">
+                        Grade
+                        <span class="accesshide ">Sort by Grade Ascending</span>
+                    </a>
+                    <div class="commands">
+                        <a title="Hide Grade" aria-expanded="true" >
+                            <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                        </a>
+                    </div>
+                  </th>
+            <th class="header c7" scope="col">
+            Edit
+            <div class="commands">
+                <a title="Hide Edit" aria-expanded="true" a
+                   href="#"><i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                </a>
+            </div>
+            </th>
+            <th class="header c8" scope="col">
+                <a href="#">Last modified (grade)<span class="accesshide ">Sort by Last modified (grade) Ascending</span></a> 
+                <div class="commands">
+                   <a title="Hide Last modified (grade)" aria-expanded="true" >
+                      <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                   </a>
+                </div>
+            </th>
+            <th class="header c8" scope="col">
+                Feedback comments
+                <div class="commands">
+                    <a title="Hide Feedback comments" aria-expanded="true" href="#">
+                      <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                    </a>
+                </div>
+            </th>
+            <th class="header c9" scope="col">
+               Final grade
+                <div class="commands">
+                  <a title="Hide Final grade" aria-expanded="true" >
+                  <i class="icon fa fa-minus fa-fw " title="Hide" aria-label="Hide"></i>
+                  </a>
+                </div>
+            </th>
+
+               </tr>
+            </thead>
+               {{#users}}
+               <tr class="user{{userid}} unselectedrow" data-user-id = "{{userid}}" data-websiteid = "{{websiteid}}" data-courseid = "{{courseid}}" 
+                    data-maxgrade = "{{maxgrade}}">
+                    <td>
+                       
+                        <input type="hidden" name="grademodified_{{id}}" value="">
+                        <input type="hidden" name="gradeattempt_{{id}}" value="">
+                    </td>
+                    <td> {{{picture}}} </td>
+                    <td> {{{fullname}}} </td>
+                    <td> {{username}} </td>
+                    <td class=" email">{{email}}</td>
+                    <td>
+                        {{^submited}}
+                            <div class="submissionstatus ">No submission</div>
+                        {{/submited}}
+                        {{#submited}}
+                        {{^gradegiven}}
+                            <div class="submissionstatussubmitted alert-success" >Submitted for grading</div>
+                        {{/gradegiven}}
+                        {{#gradegiven}}
+                            <div class="submissionstatussubmitted alert-success" >Graded</div>
+                        {{/gradegiven}}
+                        {{/submited}}
+                    </td>
+                    <td>
+                      <a href= "{{{gradeurl}}}" class="btn btn-primary btn-grade">
+                          Grade                     
+                      </a> <br> 
+                        <br>
+                        <input type="text" id="quickgrade_{{userid}}" name="quickgrade_{{userid}}" value= "{{gradegiven}}" size="6" maxlength="10" class="quickgrade"> <br>
+                        / {{maxgrade}}
+                    </td>
+                    <td>
+                     <div class="action-menu moodle-actionmenu d-inline" id="action-menu-3" data-enhance="moodle-core-actionmenu" data-owner=".gradingtable-actionmenu">
+                        <div class="menubar d-flex " id="action-menu-3-menubar" role="menubar">
+                           <div class="dropdown">
+                              <a href="#" tabindex="0" class=" dropdown-toggle icon-no-margin" id="action-menu-toggle-3" aria-label="Edit" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-3-menu">
+                              Edit
+                              <b class="caret"></b>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right menu  align-tl-bl" id="action-menu-3-menu" data-rel="menu-content" aria-labelledby="action-menu-toggle-3" role="menu" data-align="tl-bl" data-constraint=".gradingtable > .no-overflow">
+                                 <a href="{{{url}}}" class="dropdown-item menu-action" role="menuitem" aria-labelledby="actionmenuaction-8">
+                                 <span class="menu-action-text" id="actionmenuaction-8">Grade</span>
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                    </td>
+                    <td class="timemod">
+                       {{lastmodified}}
+                    </td>
+                    <td >
+                       <textarea name="quickgrade_comments_{{userid}}" id="quickgrade_comments_{{userid}}" class="quickgrade">{{comment}}</textarea>
+                    </td>
+                    <td class="finalgrade">
+                        {{#gradegiven}}
+                            {{gradegiven}} / {{maxgrade}}
+                        {{/gradegiven}}
+                        {{^gradegiven}}
+                           -
+                        {{/gradegiven}}
+
+                    </td>
+               </tr>
+               {{/users}}
+
+            </tbody>
+         </table>
+      </div>
+    <div class="div-quickgrading row  fitem femptylabel">
+        <div class="col-md-3">
+            <span class="float-sm-right text-nowrap"></span>
+            <label class="col-form-label d-inline "></label>
+        </div>
+        <div class="col-md-9 form-inline felement" data-fieldtype="submit">
+         <button class="btn btn-primary submit-quickgrade">Save all quick grading changes </button>
+        </div>
+    </div>
+   </div>
+
+
+{{#js}}
+    require(['mod_website/save_quick_grading'], function(mod) {
+        mod.init();
+    });
+{{/js}}

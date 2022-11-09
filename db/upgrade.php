@@ -116,6 +116,53 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102602, 'website');
     }
 
+    if ($oldversion < 2022102604) {
+
+        // Define table website_grades to be created.
+        $table = new xmldb_table('website_grades');
+
+        // Adding fields to table website_grades.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('websiteid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('grader', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('grade', XMLDB_TYPE_NUMBER, '5, 2', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table website_grades.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for website_grades.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Define table website_feedback to be created.
+        $table = new xmldb_table('website_feedback');
+
+        // Adding fields to table website_feedback.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('websiteid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('grade', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('commenttext', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('commentformat', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table website_feedback.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('websiteid', XMLDB_KEY_FOREIGN, ['websiteid'], 'website', ['id']);
+        $table->add_key('grade', XMLDB_KEY_FOREIGN, ['grade'], 'website_grades', ['id']);
+
+        // Conditionally launch create table for website_feedback.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022102604, 'website');
+    }
+
+
 
     return true;
 }
