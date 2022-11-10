@@ -277,6 +277,9 @@
     })
 
     // Save the new order.
+    Log.debug(e.from);
+    Log.debug(e.to);
+
     // Start with "from" section.
     let order = [];
     for (const block of e.from.children) {
@@ -289,7 +292,7 @@
       args: { 
           action: 'reorder_blocks',
           data: JSON.stringify({
-              sectionid: e.from.dataset.sectionid,
+              sectionid: e.from.parentNode.dataset.sectionid,
               blocks: JSON.stringify(order)
           }),
       }
@@ -297,7 +300,7 @@
   
     // Then do the "to" section.
     order = [];
-    if (e.from.className != e.to.className) {
+    if (e.from.parentNode.dataset.sectionid != e.to.parentNode.dataset.sectionid) {
       for (const block of e.to.children) {
         if (block.dataset.blockid) {
           order.push(block.dataset.blockid);
@@ -308,7 +311,7 @@
         args: { 
             action: 'reorder_blocks',
             data: JSON.stringify({
-                sectionid: e.to.dataset.sectionid,
+                sectionid: e.to.parentNode.dataset.sectionid,
                 blocks: JSON.stringify(order)
             }),
         }

@@ -69,8 +69,11 @@ if ($website->distribution === '1') {
         echo $OUTPUT->footer();
     } else {
         // Get and display the site for this user.
-        echo "get copy for user";
-        exit;
+        $site = new Site();
+        $site->read_for_studentid($USER->id);
+        $url = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
+        redirect($url->out(false));
+	    exit;
     }
 } else {
     // Get the single site instance.
