@@ -174,8 +174,11 @@ class Menu {
         $this->validate_related($related);
 
         $menuarr = $this->menu_to_array();
+        $backend = isset($related['backend']) ? $related['backend'] : false;
+        $first = true;
         foreach ($menuarr as &$menuitem) {
-            $this->expand_menu_item($menuitem);
+            $this->expand_menu_item($menuitem, $backend, $first);
+            $first = false;
         }
 
         return $menuarr;
@@ -186,7 +189,7 @@ class Menu {
      *
      * @return array
      */
-    private function expand_menu_item(&$menuitem) {
+    private function expand_menu_item(&$menuitem, $backend = false, $first = false) {
         global $DB;
 
         
@@ -196,7 +199,7 @@ class Menu {
             'deleted' => 0,
         ), '*', IGNORE_MULTIPLE);
 
-        $menuitem['title'] = $pagedata->title;
+        $menuitem['title'] = $first && !$backend ? 'Home' : $pagedata->title;
 
         //$cmid
         $url = new \moodle_url('/mod/website/site.php', array(

@@ -67,13 +67,9 @@ $PAGE->navbar->add($website->name, $gobackurl);
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 $PAGE->add_body_class('limitedwidth');
 
-//echo "<pre>";
-//var_export($site->get_unused_pages()); 
-//exit;
-
 // Initialise the form.
 $formsitemenu = new form_sitemenu($thisurl->out(false), array(
-    'menu' => $site->menu->export(),
+    'menu' => $site->menu->export(['backend' => true]),
     'unusedpages' => $site->get_unused_pages(),
     'allpages' => $site->get_all_pages(),
 ), 'post', '', array('data-form' => 'website-sitemenu'));
