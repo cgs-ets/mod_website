@@ -27,11 +27,17 @@
       <div class="menu-list list-group nested-sortable list-move list-active">
         {{#menu}}
           <div class="list-group-item" data-pageid="{{id}}">
-            {{title}}
+            <div class="page-details">
+              <span>{{title}}</span>
+              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            </div>
             <div class="list-group nested-sortable list-move list-active">
               {{#children}}
                 <div class="list-group-item" data-pageid="{{id}}">
-                  {{title}}
+                  <div class="page-details">
+                    <span>{{title}}</span>
+                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                  </div>
                   <div class="list-group nested-sortable list-move list-active"></div>
                 </div>
               {{/children}}
@@ -53,11 +59,17 @@
       <div class="menu-list list-group nested-sortable list-move list-inactive">
         {{#unusedpages}}
           <div class="list-group-item" data-pageid="{{id}}">
-            {{title}}
+            <div class="page-details">
+              <span>{{title}}</span>
+              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            </div>
             <div class="list-group nested-sortable list-move list-inactive">
               {{#children}}
                 <div class="list-group-item" data-pageid="{{id}}">
-                  {{title}}
+                  <div class="page-details">
+                    <span>{{title}}</span>
+                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                  </div>
                   <div class="list-group nested-sortable list-move list-inactive"></div>
                 </div>
               {{/children}}
@@ -72,11 +84,17 @@
       <div class="menu-list list-group nested-sortable list-clone list-all">
         {{#allpages}}
           <div class="list-group-item" data-pageid="{{id}}">
-            {{title}}
+            <div class="page-details">
+              <span>{{title}}</span>
+              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            </div>
             <div class="list-group nested-sortable list-move list-all">
               {{#children}}
                 <div class="list-group-item" data-pageid="{{id}}">
-                  {{title}}
+                  <div class="page-details">
+                    <span>{{title}}</span>
+                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                  </div>
                   <div class="list-group nested-sortable list-move list-all"></div>
                 </div>
               {{/children}}
@@ -115,6 +133,10 @@
   padding: 12px 20px;
   border: 1px solid rgba(0,0,0,.125) !important;
   margin-bottom: 5px;
+}
+.list-group-item .page-details {
+  display: flex;
+  justify-content: space-between;
 }
 .menu-list .list-group-item > .nested-sortable > .list-group-item {
   background-color: #cccccc;

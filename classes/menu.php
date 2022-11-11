@@ -173,15 +173,22 @@ class Menu {
     public function export($related = array()) {
         $this->validate_related($related);
 
-        $menuarr = $this->menu_to_array();
+        $pages = array();
+        if (!empty($related['pages'])) {
+            $pages = $related['pages'];
+        } else {
+            $pages = $this->menu_to_array();
+        }
+        
         $backend = isset($related['backend']) ? $related['backend'] : false;
         $first = true;
-        foreach ($menuarr as &$menuitem) {
+        foreach ($pages as &$menuitem) {
+            $menuitem = (array) $menuitem;
             $this->expand_menu_item($menuitem, $backend, $first);
             $first = false;
         }
 
-        return $menuarr;
+        return $pages;
     }    
 
     /**
@@ -191,7 +198,6 @@ class Menu {
      */
     private function expand_menu_item(&$menuitem, $backend = false, $first = false) {
         global $DB;
-
         
         $pagedata = $DB->get_record(static::TABLE_PAGES, array(
             'id' => $menuitem['id'],
@@ -200,6 +206,7 @@ class Menu {
         ), '*', IGNORE_MULTIPLE);
 
         $menuitem['title'] = $first && !$backend ? 'Home' : $pagedata->title;
+        $menuitem['title'] = empty($menuitem['title']) ? 'No title' : $menuitem['title'];
 
         //$cmid
         $url = new \moodle_url('/mod/website/site.php', array(
@@ -207,6 +214,7 @@ class Menu {
             'page' => $pagedata->id,
         ));
         $menuitem['url'] = $url->out(false);
+        $menuitem['children'] = empty($menuitem['children']) ? [] : $menuitem['children'];
         $menuitem['haschildren'] = count($menuitem['children']);
 
         foreach ($menuitem['children'] as &$childitem) {

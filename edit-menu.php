@@ -70,8 +70,14 @@ $PAGE->add_body_class('limitedwidth');
 // Initialise the form.
 $formsitemenu = new form_sitemenu($thisurl->out(false), array(
     'menu' => $site->menu->export(['backend' => true]),
-    'unusedpages' => $site->get_unused_pages(),
-    'allpages' => $site->get_all_pages(),
+    'unusedpages' => $site->menu->export([
+        'pages' => $site->get_unused_pages(), 
+        'backend' => true
+    ]),
+    'allpages' => $site->menu->export([
+        'pages' => $site->get_all_pages(), 
+        'backend' => true
+    ]),
 ), 'post', '', array('data-form' => 'website-sitemenu'));
 
 // Check if it is cancelled.
