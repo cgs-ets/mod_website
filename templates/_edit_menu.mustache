@@ -24,84 +24,31 @@
   <div class="left">
     <div class="active">
       <h4>Menu</h4>
-      <div class="menu-list list-group nested-sortable list-move list-active">
-        {{#menu}}
-          <div class="list-group-item" data-pageid="{{id}}">
-            <div class="page-details">
-              <span>{{title}}</span>
-              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-            </div>
-            <div class="list-group nested-sortable list-move list-active">
-              {{#children}}
-                <div class="list-group-item" data-pageid="{{id}}">
-                  <div class="page-details">
-                    <span>{{title}}</span>
-                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                  </div>
-                  <div class="list-group nested-sortable list-move list-active"></div>
-                </div>
-              {{/children}}
-            </div>
-          </div>
-        {{/menu}}
-      </div>
+      {{#menu}}
+        <div class="menu-list list-group nested-sortable {{classes}}">
+            {{>mod_website/_edit_menu_items}}
+        </div>
+      {{/menu}}
     </div>
-    <!--<div class="bin">
-      <div class="menu-list list-group nested-sortable move">
-          <h4><i class="fa fa-trash" aria-hidden="true"></i></h4>
-      </div>
-    </div>-->
   </div>
 
   <div class="right">
     <div class="inactive">
       <h4>Inactive pages</h4>
-      <div class="menu-list list-group nested-sortable list-move list-inactive">
-        {{#unusedpages}}
-          <div class="list-group-item" data-pageid="{{id}}">
-            <div class="page-details">
-              <span>{{title}}</span>
-              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-            </div>
-            <div class="list-group nested-sortable list-move list-inactive">
-              {{#children}}
-                <div class="list-group-item" data-pageid="{{id}}">
-                  <div class="page-details">
-                    <span>{{title}}</span>
-                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                  </div>
-                  <div class="list-group nested-sortable list-move list-inactive"></div>
-                </div>
-              {{/children}}
-            </div>
-          </div>
-        {{/unusedpages}}
-      </div>
+      {{#unusedpages}}
+        <div class="menu-list list-group nested-sortable {{classes}}">
+            {{>mod_website/_edit_menu_items}}
+        </div>
+      {{/unusedpages}}
     </div>
 
     <div class="all">
       <h4>All pages</h4>
-      <div class="menu-list list-group nested-sortable list-clone list-all">
-        {{#allpages}}
-          <div class="list-group-item" data-pageid="{{id}}">
-            <div class="page-details">
-              <span>{{title}}</span>
-              <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-            </div>
-            <div class="list-group nested-sortable list-move list-all">
-              {{#children}}
-                <div class="list-group-item" data-pageid="{{id}}">
-                  <div class="page-details">
-                    <span>{{title}}</span>
-                    <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                  </div>
-                  <div class="list-group nested-sortable list-move list-all"></div>
-                </div>
-              {{/children}}
-            </div>
-          </div>
-        {{/allpages}}
-      </div>
+      {{#allpages}}
+        <div class="menu-list list-group nested-sortable {{classes}}">
+          {{>mod_website/_edit_menu_items}}
+        </div>
+      {{/allpages}}
     </div>
 
   </div>
@@ -137,6 +84,20 @@
 .list-group-item .page-details {
   display: flex;
   justify-content: space-between;
+}
+.list-group-item .options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.list-group-item[data-hidden="1"] {
+  opacity: 0.7;
+}
+.list-group-item[data-hidden="1"] .visibility-visible {
+  display: none;
+}
+.list-group-item[data-hidden="0"] .visibility-hidden {
+  display: none;
 }
 .menu-list .list-group-item > .nested-sortable > .list-group-item {
   background-color: #cccccc;
