@@ -21,23 +21,26 @@
 }}
 {{#items}}
 <div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}">
+  {{#haschildren}}{{#hidden}}<i><small>Item and subitems are not visible</small></i>{{/hidden}}{{/haschildren}}
+  {{^haschildren}}{{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}{{/haschildren}}
   <div class="page-details">
     <span>{{title}}</span>
     <span class="options">
-      <i class="visibility-visible fa fa-eye" aria-hidden="true"></i>
-      <i class="visibility-hidden fa fa-eye-slash" aria-hidden="true"></i>
-      <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+      <a class="visibility-visible" href="#"><i class="fa fa-eye" aria-hidden="true"></i></a>
+      <a class="visibility-hidden" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+      <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
     </span>
   </div>
   <div class="list-group nested-sortable {{classes}}">
     {{#children}}
       <div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}">
+        {{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}
         <div class="page-details">
           <span>{{title}}</span>
           <span class="options">
-            <i class="visibility-visible fa fa-eye" aria-hidden="true"></i>
-            <i class="visibility-hidden fa fa-eye-slash" aria-hidden="true"></i>
-            <a href="{{url}}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            <a class="visibility-visible" href="#"><i class="fa fa-eye" aria-hidden="true"></i></a>
+            <a class="visibility-hidden" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+            <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
           </span>
         </div>
         <div class="list-group nested-sortable {{classes}}"></div>
