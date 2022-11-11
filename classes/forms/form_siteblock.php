@@ -55,7 +55,6 @@ class form_siteblock extends \moodleform {
         *   Content editor
         *----------------------*/
         $group = array();
-        $title = get_string('content', 'mod_website');
         $group[] =& $mform->createElement('editor', 'content', '', null, static::editor_options());
         $mform->addGroup($group, 'editorgroup', '', array(''), false);
         $mform->hideIf('editorgroup', 'type', 'neq', 'editor');
@@ -68,6 +67,8 @@ class form_siteblock extends \moodleform {
         $group[] =& $mform->createElement('text', 'buttontitle', get_string('buttontitle', 'mod_website'), 'size="48"'); //Caption
         $group[] =& $mform->createElement('text', 'buttonurl', get_string('buttonurl', 'mod_website'), 'size="48"'); //URL
         $group[] =& $mform->createElement('filemanager', 'buttonpicture', '', null, static::picture_options()); //Image
+        $mform->setType('buttontitle', PARAM_TEXT);
+        $mform->setType('buttonurl', PARAM_TEXT);
 
         $mform->addGroup($group, 'picturebuttongroup', '', array(''), false);
         $mform->hideIf('picturebuttongroup', 'type', 'neq', 'picturebutton');

@@ -108,7 +108,7 @@ if ($sectionid) {
         'blocks' => $section->blocks,
         'hidetitle' => $options->hidetitle,
         'collapsible' => $options->collapsible,
-        'visibility' => $section->get_hidden(),
+        'visibility' => $section->hidden,
     ));
 }
 

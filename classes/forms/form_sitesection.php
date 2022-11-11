@@ -43,6 +43,9 @@ class form_sitesection extends \moodleform {
          *   Section title.
          *----------------------*/
         $mform->addElement('text', 'sectiontitle', get_string('sectiontitle', 'mod_website'), 'size="48"');
+        $mform->setType('sectiontitle', PARAM_TEXT);
+
+
         $mform->addElement('advcheckbox', 'hidetitle', get_string('hidetitle', 'mod_website'), ' ', array(), array(0, 1));
         $mform->addElement('advcheckbox', 'collapsible', get_string('collapsible', 'mod_website'), ' ', array(), array(0, 1));
         $mform->hideIf('collapsible', 'hidetitle', 'eq', 1);

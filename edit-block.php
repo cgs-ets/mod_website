@@ -114,7 +114,7 @@ if ($blockid) {
         $formsiteblock->set_data(array(
             'type' => 'editor',
             'content' => $content,
-            'visibility' => $block->get_hidden(),
+            'visibility' => $block->hidden,
         ));
     }
 
