@@ -55,6 +55,18 @@ class form_sitepage extends \moodleform {
         $mform->addElement($type, $name, $title, null, static::file_options());
         $mform->setType($name, PARAM_RAW);
 
+
+        /*----------------------
+        *   Visibility
+        *----------------------*/
+        $options = array(
+            0 => get_string('visible', 'mod_website'),
+            1 => get_string('privatepage', 'mod_website'),
+        );
+        $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
+        $select->setSelected(0);
+        $mform->addRule('visibility', null, 'required', null, 'client');
+
         /*----------------------
         *   Menu
         *----------------------*/

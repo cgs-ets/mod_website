@@ -22,7 +22,7 @@
 <div class="menuwrap mobile">
   <ul class="menu">
     {{#menu}}
-      <li class="menuitem {{#haschildren}}haschildren{{/haschildren}}">
+      <li class="menuitem {{#haschildren}}haschildren{{/haschildren}}" data-hidden="{{hidden}}">
         <a href="{{url}}">{{title}} 
           {{#haschildren}}
             <svg class="caret" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
@@ -31,13 +31,8 @@
           {{/haschildren}}
         </a>
         <ul class="submenu">
-          {{#haschildren}}
-            <li class="menuitem parentcopy">
-              <a href="{{url}}">{{title}}</a>
-            </li>
-          {{/haschildren}}
           {{#children}}
-            <li class="menuitem">
+            <li class="menuitem" data-hidden="{{hidden}}">
               <a href="{{url}}">{{title}}</a>
             </li>
           {{/children}}

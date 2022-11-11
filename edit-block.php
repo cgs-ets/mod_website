@@ -84,6 +84,7 @@ if (!empty($formdata)) {
     // Save the block record.
     $formdata->id = $blockid;
     $formdata->siteid = $site->get_id();
+    $formdata->hidden = $formdata->visibility;
     $block = new \mod_website\block();
     $blockid = $block->save($formdata, $modulecontext);
 
@@ -113,6 +114,7 @@ if ($blockid) {
         $formsiteblock->set_data(array(
             'type' => 'editor',
             'content' => $content,
+            'visibility' => $block->get_hidden(),
         ));
     }
 

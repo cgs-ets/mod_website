@@ -81,6 +81,7 @@ $formdata = $form->get_data();
 if (!empty($formdata)) {
 
     $formdata->siteid = $site->get_id();
+    $formdata->hidden = $formdata->visibility;
     $page->save($formdata, $modulecontext);
     $gobackurl->param('page', $page->get_id());
 
@@ -110,6 +111,7 @@ file_prepare_draft_area($draftitemid, $modulecontext->id, 'mod_website', 'banner
 $form->set_data(array(
     'title' => $page->get_title(),
     'bannerimage' => $draftitemid,
+    'visibility' => $page->get_hidden(),
 ));
 
 echo $OUTPUT->header();

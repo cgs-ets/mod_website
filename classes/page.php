@@ -101,6 +101,7 @@ class Page {
             //Read and update existing.
             $this->read($this->data->id);
             $this->data->title = $data->title;
+            $this->data->hidden = $data->hidden;
             $this->data->timemodified = time();
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
@@ -229,6 +230,10 @@ class Page {
   
     public function get_title() {
         return $this->data->title;
+    }
+  
+    public function get_hidden() {
+        return $this->data->hidden;
     }
 
     public function get_sections() {

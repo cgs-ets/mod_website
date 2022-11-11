@@ -40,6 +40,11 @@ $string['distribution'] = 'Distribution';
 $string['pagetitle'] = 'Page title';
 $string['editpage'] = 'Edit page';
 $string['addtomenu'] = 'Site menu';
+$string['visibility'] = 'Visibility';
+$string['visible'] = 'Visible';
+$string['privatepage'] = 'Private (only you will be able to access this page)';
+$string['privatesection'] = 'Private (only you will be able to see this section)';
+$string['privateblock'] = 'Private (only you will be able to see this block)';
 $string['bannerimage'] = 'Banner image';
 
 $string['nopermissiontoview'] = 'You do not have permission to view this website.';

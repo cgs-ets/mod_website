@@ -86,6 +86,7 @@ if (!empty($formdata)) {
         'collapsible' => $formdata->collapsible,
     ));
     $formdata->title = $formdata->sectiontitle;
+    $formdata->hidden = $formdata->visibility;
     $section = new \mod_website\section();
     $sectionid = $section->save($formdata);
     // Add the section to the page.
@@ -107,6 +108,7 @@ if ($sectionid) {
         'blocks' => $section->blocks,
         'hidetitle' => $options->hidetitle,
         'collapsible' => $options->collapsible,
+        'visibility' => $section->get_hidden(),
     ));
 }
 

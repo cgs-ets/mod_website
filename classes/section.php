@@ -96,11 +96,6 @@ class Section {
 
         if (empty($data->id)) {
             // Create new
-            //$this->data = $data;
-            //$this->data->timemodified = time();
-            //$this->data->timecreated = time();
-            //$this->validate_data();
-            //$this->data->id = $DB->insert_record(static::TABLE, $this->data);
             $this->create($data);
         } else {
             //Read and update existing.
@@ -109,6 +104,7 @@ class Section {
             $this->data->layout = $data->layout;
             $this->data->sectionoptions = $data->sectionoptions;
             $this->data->timemodified = time();
+            $this->data->hidden = $data->hidden;
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
         }
@@ -219,6 +215,10 @@ class Section {
 
     public function get_blocks() {
         return json_decode($this->data->blocks);
+    }
+    
+    public function get_hidden() {
+        return $this->data->hidden;
     }
 
     public function add_block_to_section($blockid) {

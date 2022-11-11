@@ -105,6 +105,7 @@ class Block {
         $this->read($data->id);
         $this->data->timemodified = time();
         $this->data->type = $data->type;
+        $this->data->hidden = $data->hidden;
         $this->validate_data();
         
         if ($data->type == 'editor') {
@@ -255,6 +256,10 @@ class Block {
         if (isset($this->data->id)) {
             return $this->data->id;
         }
+    }
+    
+    public function get_hidden() {
+        return $this->data->hidden;
     }
 
      /**

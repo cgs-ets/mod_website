@@ -37,7 +37,7 @@
       display: block;
     }
   }
-  &.parentcopy {
+  &[data-hidden="1"] {
     display: none;
   }
 }
@@ -73,11 +73,6 @@
   }
   .menu.expanded, .menuitem.expanded .submenu {
     display: block;
-  }
-  .menuitem {
-    &.parentcopy {
-      display: block;
-    }
   }
 }
 

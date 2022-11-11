@@ -72,6 +72,17 @@ class form_siteblock extends \moodleform {
         $mform->addGroup($group, 'picturebuttongroup', '', array(''), false);
         $mform->hideIf('picturebuttongroup', 'type', 'neq', 'picturebutton');
 
+        /*----------------------
+        *   Visibility
+        *----------------------*/
+        $options = array(
+            0 => get_string('visible', 'mod_website'),
+            1 => get_string('privateblock', 'mod_website'),
+        );
+        $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
+        $select->setSelected(0);
+        $mform->addRule('visibility', null, 'required', null, 'client');
+
         
         /*----------------------
         *   Buttons

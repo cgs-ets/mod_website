@@ -180,11 +180,13 @@ class Menu {
             $pages = $this->menu_to_array();
         }
         
-        $backend = isset($related['backend']) ? $related['backend'] : false;
-        $first = true;
+        $backend = !empty($related['backend']) ? $related['backend'] : false;
+        $editing = !$backend && !empty($related['mode']) ? $related['mode'] : false;
+        $first = !$backend ? true : false;
+
         foreach ($pages as &$menuitem) {
             $menuitem = (array) $menuitem;
-            $this->expand_menu_item($menuitem, $backend, $first);
+            $this->expand_menu_item($menuitem, $backend, $first, $editing);
             $first = false;
         }
 
@@ -196,16 +198,25 @@ class Menu {
      *
      * @return array
      */
-    private function expand_menu_item(&$menuitem, $backend = false, $first = false) {
+    private function expand_menu_item(&$menuitem, $backend, $first, $editing) {
         global $DB;
         
-        $pagedata = $DB->get_record(static::TABLE_PAGES, array(
+        $params = array(
             'id' => $menuitem['id'],
-            'hidden' => 0,
             'deleted' => 0,
-        ), '*', IGNORE_MULTIPLE);
+        );
+        // Show hidden pages to editor. Do not show them to viewers.
+        // Always export details in backend.
+        if (!$backend && !$editing) {
+            $params['hidden'] = 0;
+        }
+        $pagedata = $DB->get_record(static::TABLE_PAGES, $params, '*', IGNORE_MULTIPLE);
 
-        $menuitem['title'] = $first && !$backend ? 'Home' : $pagedata->title;
+        if (empty($pagedata)) {
+            return;
+        }
+
+        $menuitem['title'] = $first ? 'Home' : $pagedata->title;
         $menuitem['title'] = empty($menuitem['title']) ? 'No title' : $menuitem['title'];
 
         //$cmid
@@ -216,9 +227,10 @@ class Menu {
         $menuitem['url'] = $url->out(false);
         $menuitem['children'] = empty($menuitem['children']) ? [] : $menuitem['children'];
         $menuitem['haschildren'] = count($menuitem['children']);
+        $menuitem['hidden'] = $pagedata->hidden;
 
         foreach ($menuitem['children'] as &$childitem) {
-            $this->expand_menu_item($childitem);
+            $this->expand_menu_item($childitem, $backend, false, $editing);
         }
     }
 

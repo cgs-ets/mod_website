@@ -320,7 +320,9 @@ class Site {
 
         // Menu
         if ($this->menu->get_id()) {
-            $menu = $this->menu->export([]);
+            $menu = $this->menu->export(array(
+                'mode' => $related['mode'],
+            ));
         }
 
         // Current page

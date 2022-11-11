@@ -256,6 +256,10 @@
 #page-mod-website-site .site-root[data-mode="edit"] .site-section .section-title .caret {
   display: none;
 }
+#page-mod-website-site .site-root[data-mode="edit"] .menuitem[data-hidden="1"] {
+  display: block;
+  opacity: 0.6;
+}
 #page-mod-website-site .site-editor {
   display: flex;
   justify-content: right;
@@ -606,7 +610,7 @@ https://codepen.io/steveeeie/pen/NVWMEM
 #page-mod-website-site .menuitem:hover .submenu {
   display: block;
 }
-#page-mod-website-site .menuitem.parentcopy {
+#page-mod-website-site .menuitem[data-hidden="1"] {
   display: none;
 }
 #page-mod-website-site .menuwrap .menutoggle {
@@ -635,9 +639,6 @@ https://codepen.io/steveeeie/pen/NVWMEM
 }
 #page-mod-website-site .menuwrap.mobile .menu.expanded,
 #page-mod-website-site .menuwrap.mobile .menuitem.expanded .submenu {
-  display: block;
-}
-#page-mod-website-site .menuwrap.mobile .menuitem.parentcopy {
   display: block;
 }
 #page-mod-website-site .menuwrap.checkingsize {
