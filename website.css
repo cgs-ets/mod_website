@@ -179,6 +179,7 @@
   border-color: #0091F7;
   border-style: solid;
   transform: scale(1.01);
+  z-index: 1;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .editzone.nopadding {
   padding: 0 !important;
