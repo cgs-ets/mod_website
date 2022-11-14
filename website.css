@@ -484,7 +484,6 @@ https://codepen.io/steveeeie/pen/NVWMEM
   color: white;
   font-size: 60px;
   font-weight: 100;
-  line-height: 1.05;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   right: 20px;
   max-height: 196px;
@@ -521,6 +520,7 @@ https://codepen.io/steveeeie/pen/NVWMEM
   background: #ccc;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure.nopicture h2 {
   opacity: 1;
