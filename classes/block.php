@@ -76,12 +76,14 @@ class Block {
     public function create($data) {
         global $DB;
 
-        $this->data = (object) $data;
+        $this->data = clone($data);
+        $this->data = (object) $this->data;
         $this->data->timecreated = time();
         $this->data->timemodified = time();
+        $this->data->content = '';
 
         $this->validate_data();
-        
+
         $id = $DB->insert_record(static::TABLE, $this->data);
 
         return $this->read($id);
@@ -124,8 +126,21 @@ class Block {
         if ($data->type == 'picturebutton') {
             $this->data->content = json_encode(array(
                 'buttontitle' => $data->buttontitle,
+                'linktype' => $data->buttonlinktypegroup['buttonlinktype'],
                 'buttonurl' => $data->buttonurl,
+                'includepicture' => $data->includepicturegroup['includepicture'],
             ));
+            // Save the file.
+            if ($data->buttonfile) {
+                file_save_draft_area_files(
+                    $data->buttonfile, 
+                    $modulecontext->id, 
+                    'mod_website', 
+                    'buttonfile', 
+                    $this->data->id, 
+                    form_siteblock::file_options()
+                );
+            }
             // Save the picture.
             if ($data->buttonpicture) {
                 file_save_draft_area_files(
@@ -199,11 +214,16 @@ class Block {
         if ($this->data->type == 'picturebutton') {
             if ($this->get_id()) {
                 $image = $this->export_buttonpicture($related);
+                $fileurl = $this->get_buttonfileurl($related);
                 $settings = json_decode($this->data->content);
                 $buttondata = array(
-                    'buttonpicture' => $image,
                     'buttontitle' => $settings->buttontitle,
+                    'isfile' => $settings->linktype == 'file',
+                    'isurl' => $settings->linktype == 'url',
                     'buttonurl' => $settings->buttonurl,
+                    'buttonfile' => $fileurl,
+                    'includepicture' => $settings->includepicture,
+                    'buttonpicture' => $image,
                 );
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
             }
@@ -239,7 +259,7 @@ class Block {
                 'id' => $file->get_id(),
                 'postid' => $file->get_itemid(),
                 'filename' => $filename,
-                'formattedfilename' => format_text($filename, FORMAT_HTML, array('context'=>$this->related['context'])),
+                'formattedfilename' => format_text($filename, FORMAT_HTML, array('context'=>$related['modulecontext'])),
                 'mimetype' => $mimetype,
                 'path' => $path,
                 'isimage' => $isimage,
@@ -249,6 +269,24 @@ class Block {
             );
         }
 	    return $image;
+	}
+
+
+    private function get_buttonfileurl($related) {
+		global $CFG;
+
+		$url = '';
+        $plugin = 'mod_website';
+        $filearea = 'buttonfile';
+	    $fs = get_file_storage();
+	    $files = $fs->get_area_files($related['modulecontext']->id, $plugin, $filearea, $this->data->id, "filename", false);
+        if (count($files)) {
+            // Get first file. Should only be one.
+            $file = reset($files);
+            $filename = $file->get_filename();
+            $url = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$related['modulecontext']->id.'/'.$plugin.'/'.$filearea.'/'.$this->data->id.'/'.$filename);
+        }
+	    return $url;
 	}
 
 

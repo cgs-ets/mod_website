@@ -77,7 +77,7 @@
       } else {
         self.rootel.dataset.mode = 'view'
         // Disable block sorting.
-        const sections = document.querySelectorAll('.site-section')
+        const sections = document.querySelectorAll('.section-blocks')
         sections.forEach(section => {
           let sortable = Sortable.get(section)
           if (sortable !== undefined) {

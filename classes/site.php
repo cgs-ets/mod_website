@@ -294,6 +294,14 @@ class Site {
             $canedit = true;
         }
 
+        // Check availaibility conditions.
+        if (
+            ($related['website']->alloweditingfromdate && $related['website']->alloweditingfromdate > time()) ||
+            ($related['website']->cutoffdate && $related['website']->cutoffdate <= time())
+        ) {
+            $canedit = false;
+        }
+
         // Editing URLs
         $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
             'site' => $this->data->id,
@@ -386,7 +394,8 @@ class Site {
     }
 
     public function can_user_view() {
-
+        global $USER;
+        
         // Single site
         if ($this->get_website()->distribution === '0') {
             // Everyone can view.

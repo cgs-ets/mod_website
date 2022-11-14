@@ -162,6 +162,30 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102604, 'website');
     }
 
+    if ($oldversion < 2022102605) {
+
+        // Define field alloweditingfromdate to be added to website.
+        $field = new xmldb_field('alloweditingfromdate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'grade');
+        $table = new xmldb_table('website');
+
+        // Conditionally launch add field cutoffdate.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field cutoffdate to be added to website.
+        $field = new xmldb_field('cutoffdate', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'alloweditingfromdate');
+
+        // Conditionally launch add field alloweditingfromdate.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022102605, 'website');
+    }
+
+
 
 
     return true;

@@ -46,6 +46,11 @@ $string['privatepage'] = 'Private (only you will be able to access this page)';
 $string['privatesection'] = 'Private (only you will be able to see this section)';
 $string['privateblock'] = 'Private (only you will be able to see this block)';
 $string['bannerimage'] = 'Banner image';
+$string['alloweditingfromdate'] = 'Allow editing from';
+$string['alloweditingfromdate_help'] = 'If enabled, students will not be able to edit their website before this date. If disabled, students will be able to start editing right away.';
+$string['cutoffdate'] = 'Cut-off date';
+$string['cutoffdate_help'] = 'If set, the website will not be editable after this date.';
+
 
 $string['nopermissiontoview'] = 'You do not have permission to view this website.';
 $string['nopermissiontoedit'] = 'You do not have permission to edit this website.';
@@ -59,10 +64,18 @@ $string['collapsible'] = 'Section collapsible?';
 
 $string['editblock'] = 'Edit block';
 $string['blocktype'] = 'Block type';
-$string['wysiwyg'] = 'WYSIWYG editor';
+$string['wysiwyg'] = 'Content editor';
+$string['button'] = 'Button';
 $string['picturebutton'] = 'Picture button';
-$string['buttontitle'] = 'Title';
+
+$string['buttontitle'] = 'Button caption';
+$string['buttonlinktype'] = 'What would you like to link to?';
+$string['buttonfile'] = 'File';
 $string['buttonurl'] = 'URL';
+$string['uploadfile'] = 'Upload file';
+$string['includepicture'] = 'Would you like a picture for your button?';
+$string['buttonpicture'] = 'Button picture';
+$string['buttonlinkedfile'] = 'Button file';
 
 $string['studentnameheader'] = 'Student';
 $string['websitelinkheader'] = 'Website link';

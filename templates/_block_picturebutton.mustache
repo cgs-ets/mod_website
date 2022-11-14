@@ -19,8 +19,8 @@
 
     A picture button.
 }}
-<a class="picturebutton" href="{{buttonurl}}">
-  <figure class="image-block" style="background-image: url({{buttonpicture.path}})">
+<a target="_blank" class="picturebutton" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{^isfile}}{{buttonurl}}{{/isfile}}">
+  <figure class="image-block {{^includepicture}}nopicture{{/includepicture}}" {{#includepicture}}style="background-image: url({{buttonpicture.path}})"{{/includepicture}}>
     <h2>{{buttontitle}}</h2>
     <figcaption>
       <h3>

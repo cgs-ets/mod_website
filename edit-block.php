@@ -120,19 +120,29 @@ if ($blockid) {
 
     if ($block->type == 'picturebutton') {
         $settings = json_decode($block->content);
-        // Set up filemanager.
-        $draftitemid = file_get_submitted_draft_itemid('picturebutton');
-        file_prepare_draft_area($draftitemid, $modulecontext->id, 'mod_website', 'picturebutton', $blockid, form_siteblock::picture_options());
+
+        // Button file filemanager.
+        $draftfileitemid = file_get_submitted_draft_itemid('buttonfile');
+        file_prepare_draft_area($draftfileitemid, $modulecontext->id, 'mod_website', 'buttonfile', $blockid, form_siteblock::file_options());
+
+        // Button image filemanager.
+        $draftpictureitemid = file_get_submitted_draft_itemid('picturebutton');
+        file_prepare_draft_area($draftpictureitemid, $modulecontext->id, 'mod_website', 'picturebutton', $blockid, form_siteblock::picture_options());
+        
         $formsiteblock->set_data(array(
             'type' => $block->type,
             'buttontitle' => $settings->buttontitle,
+            'buttonlinktypegroup[buttonlinktype]' => $settings->linktype,
             'buttonurl' => $settings->buttonurl,
-            'buttonpicture' => $draftitemid,
+            'buttonfile' => $draftfileitemid,
+            'includepicturegroup[includepicture]' => $settings->includepicture,
+            'buttonpicture' => $draftpictureitemid,
         ));
     }
     
     
 }
+$PAGE->requires->js_call_amd('mod_website/editblock', 'init');
 
 echo $OUTPUT->header();
 

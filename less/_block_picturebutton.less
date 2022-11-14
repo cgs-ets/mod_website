@@ -7,6 +7,7 @@ https://codepen.io/steveeeie/pen/NVWMEM
 */
 
 a.picturebutton {
+  text-decoration: none;
   figure {
     position: relative;
     display: flex;
@@ -21,12 +22,6 @@ a.picturebutton {
     &:hover {
       box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
       transform: scale(1.05);
-      figcaption {
-        top: 220px;
-      }
-      h2 {
-        opacity: 0;
-      }
     }
     h2 {
       position: absolute;
@@ -70,6 +65,23 @@ a.picturebutton {
     }
     h2 {
       opacity: 0;
+    }
+    &.nopicture {
+      background: #ccc;
+      display: flex;
+      justify-content: center;
+      h2 {
+        opacity: 1;
+        color: #000;
+        font-size: 36px;
+        position: relative;
+        top: 0;
+        left: 0;
+        text-decoration: none;
+      }
+      figcaption {
+        display: none;
+      }
     }
   }
 }

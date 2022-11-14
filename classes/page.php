@@ -207,7 +207,7 @@ class Page {
                     'id' => $file->get_id(),
                     'postid' => $file->get_itemid(),
 	            	'filename' => $filename,
-	            	'formattedfilename' => format_text($filename, FORMAT_HTML, array('context'=>$this->related['context'])),
+	            	'formattedfilename' => format_text($filename, FORMAT_HTML, array('context'=>$related['modulecontext'])),
 	            	'mimetype' => $mimetype,
 	            	'path' => $path,
 	            	'isimage' => $isimage,
@@ -237,7 +237,8 @@ class Page {
     }
 
     public function get_sections() {
-        return json_decode($this->data->sections);
+        $sections = json_decode($this->data->sections);
+        return $sections ? $sections : array();
     }
     
     public function add_section_to_page($sectionid) {
@@ -251,7 +252,7 @@ class Page {
             throw new \coding_exception('Add section to page: page id is missing.');
         }
         $sections = $this->get_sections();
-        if ( ! in_array($sectionid, $sections)) {
+        if ( empty($sections) || !in_array($sectionid, $sections)) {
             $sections[] = $sectionid;
             $this->data->sections = json_encode($sections);
             $DB->update_record(static::TABLE, $this->data);

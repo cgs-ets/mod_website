@@ -44,35 +44,49 @@ class form_siteblock extends \moodleform {
         *   Type of block
         *----------------------*/
         $typearray=array();
-        $typearray[] = $mform->createElement('radio', 'type', '', get_string('wysiwyg', 'mod_website'), 'editor');
-        $typearray[] = $mform->createElement('radio', 'type', '', get_string('picturebutton', 'mod_website'), 'picturebutton');
-        $typearray[] = $mform->createElement('html', '<hr style="margin-top: 30px;">');
+        $typearray[] = $mform->createElement('radio', 'type', '', get_string('wysiwyg', 'mod_website') . '&nbsp&nbsp;', 'editor', array('class' => 'blocktype'));
+        $typearray[] = $mform->createElement('radio', 'type', '', get_string('button', 'mod_website'), 'picturebutton', array('class' => 'blocktype'));
         $mform->addGroup($typearray, 'typearray', get_string('blocktype', 'mod_website'), array(' '), false);
         $mform->setDefault('type', 'editor');
+        $mform->addElement('html', '<hr style="margin: 25px 0;">');
+
 
 
         /*----------------------
         *   Content editor
         *----------------------*/
-        $group = array();
-        $group[] =& $mform->createElement('editor', 'content', '', null, static::editor_options());
-        $mform->addGroup($group, 'editorgroup', '', array(''), false);
-        $mform->hideIf('editorgroup', 'type', 'neq', 'editor');
-
+        $mform->addElement('editor', 'content', '', null, static::editor_options());
 
         /*----------------------
         *   Picture button
         *----------------------*/
-        $group = array();
-        $group[] =& $mform->createElement('text', 'buttontitle', get_string('buttontitle', 'mod_website'), 'size="48"'); //Caption
-        $group[] =& $mform->createElement('text', 'buttonurl', get_string('buttonurl', 'mod_website'), 'size="48"'); //URL
-        $group[] =& $mform->createElement('filemanager', 'buttonpicture', '', null, static::picture_options()); //Image
+        // Button caption
+        $mform->addElement('text', 'buttontitle', get_string('buttontitle', 'mod_website'), 'size="48"'); 
         $mform->setType('buttontitle', PARAM_TEXT);
+
+        // What are you linking to?
+        $buttonlinktype=array();
+        $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonfile', 'mod_website'), 'file', array('class' => 'linktype'));
+        $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonurl', 'mod_website'), 'url', array('class' => 'linktype'));
+        $mform->addGroup($buttonlinktype, 'buttonlinktypegroup', get_string('buttonlinktype', 'mod_website'));
+
+        // URL
+        $mform->addElement('text', 'buttonurl', get_string('buttonurl', 'mod_website'), 'size="48"');
         $mform->setType('buttonurl', PARAM_TEXT);
 
-        $mform->addGroup($group, 'picturebuttongroup', '', array(''), false);
-        $mform->hideIf('picturebuttongroup', 'type', 'neq', 'picturebutton');
+        // Link to file
+        $mform->addElement('filemanager', 'buttonfile', get_string('uploadfile', 'mod_website'), get_string('buttonfile', 'mod_website'), static::file_options()); 
 
+        // Would you like a button photo?
+        $includepicture=array();
+        $includepicture[] = $mform->createElement('radio', 'includepicture', null, 'Yes', 1, array('class' => 'includepicture'));
+        $includepicture[] = $mform->createElement('radio', 'includepicture', null, 'No', 0, array('class' => 'includepicture'));
+        $mform->addGroup($includepicture, 'includepicturegroup', get_string('includepicture', 'mod_website'));
+
+        // Button photo
+        $mform->addElement('filemanager', 'buttonpicture', get_string('buttonpicture', 'mod_website'), get_string('buttonpicture', 'mod_website'), static::picture_options());
+      
+        
         /*----------------------
         *   Visibility
         *----------------------*/
@@ -123,6 +137,22 @@ class form_siteblock extends \moodleform {
             'subdirs' => 0,
             'maxbytes' => $CFG->maxbytes,
             'accepted_types' => array('jpeg','jpg','png'),
+            'return_types' => FILE_INTERNAL | FILE_CONTROLLED_LINK
+        );
+    }
+
+    /**
+     * Returns the options array to use in editor
+     *
+     * @return array
+     */
+    public static function file_options() {
+        global $CFG;
+
+        return array(
+            'maxfiles' => 1,
+            'subdirs' => 0,
+            'maxbytes' => $CFG->maxbytes,
             'return_types' => FILE_INTERNAL | FILE_CONTROLLED_LINK
         );
     }

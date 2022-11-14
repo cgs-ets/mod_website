@@ -75,6 +75,24 @@ class mod_website_mod_form extends moodleform_mod {
         $select->setSelected('0');
         $mform->addRule('distribution', null, 'required', null, 'client');
 
+        
+        // Availability
+        $mform->addElement('header', 'availability', get_string('availability', 'assign'));
+        $mform->setExpanded('availability', true);
+
+        $name = get_string('alloweditingfromdate', 'mod_website');
+        $options = array('optional'=>true);
+        $mform->addElement('date_time_selector', 'alloweditingfromdate', $name, $options);
+        $mform->addHelpButton('alloweditingfromdate', 'alloweditingfromdate', 'mod_website');
+
+        $name = get_string('cutoffdate', 'mod_website');
+        $mform->addElement('date_time_selector', 'cutoffdate', $name, array('optional'=>true));
+        $mform->addHelpButton('cutoffdate', 'cutoffdate', 'mod_website');
+
+        $mform->hideIf('availability', 'distribution', 'eq', '0');
+        $mform->hideIf('alloweditingfromdate', 'distribution', 'eq', '0');
+        $mform->hideIf('cutoffdate', 'distribution', 'eq', '0');
+
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

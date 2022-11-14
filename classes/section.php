@@ -151,17 +151,16 @@ class Section {
      */
     final public function read_blocks() {
         global $DB;
-        
-        if ( !$this->data->layout) {
-            return;
-        }
+
+        $this->blocks = array();
 
         $blockids = json_decode($this->data->blocks);
 
-        $this->blocks = array();
-        foreach($blockids as $blockid) {
-            if (intval($blockid)) {
-                $this->blocks[] = new \mod_website\block($blockid);
+        if ( $this->data->layout && !empty($blockids) ) {
+            foreach($blockids as $blockid) {
+                if (intval($blockid)) {
+                    $this->blocks[] = new \mod_website\block($blockid);
+                }
             }
         }
 
@@ -214,7 +213,8 @@ class Section {
     }
 
     public function get_blocks() {
-        return json_decode($this->data->blocks);
+        $blocks = json_decode($this->data->blocks);
+        return $blocks ? $blocks : array();
     }
     
     public function get_hidden() {

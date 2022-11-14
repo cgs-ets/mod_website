@@ -1,20 +1,16 @@
 /* Group field labels, e.g. Picture button Title and URL */
-label.col-form-label.sr-only {
+label.col-form-label {
   position: relative;
   width: auto;
   height: auto;
   margin-right: 15px;
 }
 
-/* Groups */
-.d-flex.flex-wrap.align-items-center {
-  display: block !important;
+// Align all options to left.
+.form-check-inline {
+  justify-content: start !important;
 }
 
-/* Fields */
-.form-group.fitem  {
-  margin-bottom: 15px;
-}
 
 /* Block type */
 #fgroup_id_typearray {
@@ -23,11 +19,52 @@ label.col-form-label.sr-only {
   .col-form-label {
     padding-top: 0;
   }
-  label.form-check-inline.form-check-label.fitem {
-    justify-content: left;
-    margin: 0 0 10px 0;
+}
+#fitem_id_content, 
+#fitem_id_buttonurl, 
+#fitem_id_file,
+#fitem_id_buttontitle, 
+#fgroup_id_buttonlinktypegroup, 
+#fgroup_id_includepicturegroup,
+#fitem_id_buttonpicture, 
+#fitem_id_visibility, 
+#fgroup_id_buttonar, 
+.fdescription.required {
+  display: none;
+}
+form[data-blocktype="picturebutton"] {
+  #fitem_id_buttontitle, 
+  #fgroup_id_buttonlinktypegroup, 
+  #fitem_id_visibility, 
+  #fgroup_id_buttonar {
+    display: flex;
+  }
+  &[data-linktype="url"] {
+    #fitem_id_buttonurl, 
+    #fgroup_id_includepicturegroup {
+      display: flex;
+    }
+  }
+  &[data-linktype="file"] {
+    #fitem_id_file, 
+    #fgroup_id_includepicturegroup {
+      display: flex;
+    }
+  }
+  &[data-includepicture="1"] {
+    #fitem_id_buttonpicture {
+      display: flex;
+    }
   }
 }
+form[data-blocktype="editor"] {
+  #fitem_id_content,
+  #fitem_id_visibility, 
+  #fgroup_id_buttonar {
+    display: flex;
+  }
+}
+
 
 /* Section layout */
 #fgroup_id_layoutar {
