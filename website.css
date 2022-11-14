@@ -25,7 +25,7 @@
 }
 .path-mod-website #fitem_id_content,
 .path-mod-website #fitem_id_buttonurl,
-.path-mod-website #fitem_id_file,
+.path-mod-website #fitem_id_buttonfile,
 .path-mod-website #fitem_id_buttontitle,
 .path-mod-website #fgroup_id_buttonlinktypegroup,
 .path-mod-website #fgroup_id_includepicturegroup,
@@ -45,7 +45,7 @@
 .path-mod-website form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_includepicturegroup {
   display: flex;
 }
-.path-mod-website form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_file,
+.path-mod-website form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile,
 .path-mod-website form[data-blocktype="picturebutton"][data-linktype="file"] #fgroup_id_includepicturegroup {
   display: flex;
 }
