@@ -632,7 +632,6 @@ https://codepen.io/steveeeie/pen/NVWMEM
 }
 #page-mod-website-site .menuitem {
   position: relative;
-  white-space: nowrap;
 }
 #page-mod-website-site .menuitem a {
   display: flex;
