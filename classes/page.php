@@ -233,15 +233,15 @@ class Page {
 	}
     
     public function get_id() {
-        return $this->data->id;
+        return isset($this->data->id) ? $this->data->id : null;
     }
   
     public function get_title() {
-        return $this->data->title;
+        return isset($this->data->title) ? $this->data->title : null;
     }
   
     public function get_hidden() {
-        return $this->data->hidden;
+        return isset($this->data->hidden) ? $this->data->hidden : null;
     }
 
     public function get_sections() {
