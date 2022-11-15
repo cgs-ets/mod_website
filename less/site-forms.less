@@ -12,58 +12,63 @@ label.col-form-label {
 }
 
 
-/* Block type */
-#fgroup_id_typearray {
-  padding: 0;
-  font-size: 18px;
-  .col-form-label {
-    padding-top: 0;
+/* EDIT BLOCK FORM */
+#page-mod-website-edit-block {
+  #fgroup_id_typearray {
+    padding: 0;
+    font-size: 18px;
+    .col-form-label {
+      padding-top: 0;
+    }
   }
-}
-#fitem_id_content, 
-#fitem_id_buttonurl, 
-#fitem_id_buttonfile,
-#fitem_id_buttontitle, 
-#fgroup_id_buttonlinktypegroup, 
-#fgroup_id_includepicturegroup,
-#fitem_id_buttonpicture, 
-#fitem_id_visibility, 
-#fgroup_id_buttonar, 
-.fdescription.required {
-  display: none;
-}
-form[data-blocktype="picturebutton"] {
+  #fitem_id_content, 
+  #fitem_id_buttonurl, 
+  #fitem_id_buttonfile,
   #fitem_id_buttontitle, 
   #fgroup_id_buttonlinktypegroup, 
+  #fgroup_id_includepicturegroup,
+  #fitem_id_buttonpicture, 
   #fitem_id_visibility, 
-  #fgroup_id_buttonar {
-    display: flex;
+  #fgroup_id_buttonar, 
+  .fdescription.required {
+    display: none;
   }
-  &[data-linktype="url"] {
-    #fitem_id_buttonurl, 
-    #fgroup_id_includepicturegroup {
+  form[data-blocktype="picturebutton"] {
+    #fitem_id_buttontitle, 
+    #fgroup_id_buttonlinktypegroup, 
+    #fitem_id_visibility, 
+    #fgroup_id_buttonar {
       display: flex;
     }
-  }
-  &[data-linktype="file"] {
-    #fitem_id_buttonfile, 
-    #fgroup_id_includepicturegroup {
-      display: flex;
+    &[data-linktype="url"] {
+      #fitem_id_buttonurl, 
+      #fgroup_id_includepicturegroup {
+        display: flex;
+      }
+    }
+    &[data-linktype="file"] {
+      #fitem_id_buttonfile, 
+      #fgroup_id_includepicturegroup {
+        display: flex;
+      }
+    }
+    &[data-includepicture="1"] {
+      #fitem_id_buttonpicture {
+        display: flex;
+      }
     }
   }
-  &[data-includepicture="1"] {
-    #fitem_id_buttonpicture {
+  form[data-blocktype="editor"] {
+    #fitem_id_content,
+    #fitem_id_visibility, 
+    #fgroup_id_buttonar {
       display: flex;
     }
   }
 }
-form[data-blocktype="editor"] {
-  #fitem_id_content,
-  #fitem_id_visibility, 
-  #fgroup_id_buttonar {
-    display: flex;
-  }
-}
+
+
+
 
 
 /* Section layout */

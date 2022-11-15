@@ -1,7 +1,7 @@
 .path-mod-website {
   /* Hide completion accross the plugin */
   /* Group field labels, e.g. Picture button Title and URL */
-  /* Block type */
+  /* EDIT BLOCK FORM */
   /* Section layout */
 }
 .path-mod-website .activity-header {
@@ -16,45 +16,45 @@
 .path-mod-website .form-check-inline {
   justify-content: start !important;
 }
-.path-mod-website #fgroup_id_typearray {
+.path-mod-website #page-mod-website-edit-block #fgroup_id_typearray {
   padding: 0;
   font-size: 18px;
 }
-.path-mod-website #fgroup_id_typearray .col-form-label {
+.path-mod-website #page-mod-website-edit-block #fgroup_id_typearray .col-form-label {
   padding-top: 0;
 }
-.path-mod-website #fitem_id_content,
-.path-mod-website #fitem_id_buttonurl,
-.path-mod-website #fitem_id_buttonfile,
-.path-mod-website #fitem_id_buttontitle,
-.path-mod-website #fgroup_id_buttonlinktypegroup,
-.path-mod-website #fgroup_id_includepicturegroup,
-.path-mod-website #fitem_id_buttonpicture,
-.path-mod-website #fitem_id_visibility,
-.path-mod-website #fgroup_id_buttonar,
-.path-mod-website .fdescription.required {
+.path-mod-website #page-mod-website-edit-block #fitem_id_content,
+.path-mod-website #page-mod-website-edit-block #fitem_id_buttonurl,
+.path-mod-website #page-mod-website-edit-block #fitem_id_buttonfile,
+.path-mod-website #page-mod-website-edit-block #fitem_id_buttontitle,
+.path-mod-website #page-mod-website-edit-block #fgroup_id_buttonlinktypegroup,
+.path-mod-website #page-mod-website-edit-block #fgroup_id_includepicturegroup,
+.path-mod-website #page-mod-website-edit-block #fitem_id_buttonpicture,
+.path-mod-website #page-mod-website-edit-block #fitem_id_visibility,
+.path-mod-website #page-mod-website-edit-block #fgroup_id_buttonar,
+.path-mod-website #page-mod-website-edit-block .fdescription.required {
   display: none;
 }
-.path-mod-website form[data-blocktype="picturebutton"] #fitem_id_buttontitle,
-.path-mod-website form[data-blocktype="picturebutton"] #fgroup_id_buttonlinktypegroup,
-.path-mod-website form[data-blocktype="picturebutton"] #fitem_id_visibility,
-.path-mod-website form[data-blocktype="picturebutton"] #fgroup_id_buttonar {
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_buttontitle,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"] #fgroup_id_buttonlinktypegroup,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_visibility,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"] #fgroup_id_buttonar {
   display: flex;
 }
-.path-mod-website form[data-blocktype="picturebutton"][data-linktype="url"] #fitem_id_buttonurl,
-.path-mod-website form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_includepicturegroup {
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fitem_id_buttonurl,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_includepicturegroup {
   display: flex;
 }
-.path-mod-website form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile,
-.path-mod-website form[data-blocktype="picturebutton"][data-linktype="file"] #fgroup_id_includepicturegroup {
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fgroup_id_includepicturegroup {
   display: flex;
 }
-.path-mod-website form[data-blocktype="picturebutton"][data-includepicture="1"] #fitem_id_buttonpicture {
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="picturebutton"][data-includepicture="1"] #fitem_id_buttonpicture {
   display: flex;
 }
-.path-mod-website form[data-blocktype="editor"] #fitem_id_content,
-.path-mod-website form[data-blocktype="editor"] #fitem_id_visibility,
-.path-mod-website form[data-blocktype="editor"] #fgroup_id_buttonar {
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_content,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_visibility,
+.path-mod-website #page-mod-website-edit-block form[data-blocktype="editor"] #fgroup_id_buttonar {
   display: flex;
 }
 .path-mod-website #fgroup_id_layoutar img {

@@ -206,6 +206,7 @@ class Section {
             'newblockurl' => $newblockurl->out(false),
             'title' => $this->data->title,
             'layout' => $this->data->layout,
+            'hidden' => $this->data->hidden,
             'id' => $this->data->id,
             'options' => json_decode($this->data->sectionoptions),
         );

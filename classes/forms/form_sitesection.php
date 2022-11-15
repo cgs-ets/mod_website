@@ -89,10 +89,6 @@ class form_sitesection extends \moodleform {
         /*----------------------
         *   Hidden
         *----------------------*/
-        //$mform->addElement('hidden', 'sectionid');
-        //$mform->setType('sectionid', PARAM_INT);
-        //$mform->addElement('hidden', 'pageid');
-        //$mform->setType('pageid', PARAM_INT);
         $mform->addElement('hidden', 'blocks');
         $mform->setType('blocks', PARAM_TEXT);
     }
