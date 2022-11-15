@@ -138,7 +138,7 @@ class Section {
     final public function read($id) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
         $this->read_blocks();
 
         return $this;
@@ -159,7 +159,10 @@ class Section {
         if ( $this->data->layout && !empty($blockids) ) {
             foreach($blockids as $blockid) {
                 if (intval($blockid)) {
-                    $this->blocks[] = new \mod_website\block($blockid);
+                    $block = new \mod_website\block($blockid);
+                    if ( $block->get_id() ) {
+                        $this->blocks[] = $block;
+                    }
                 }
             }
         }

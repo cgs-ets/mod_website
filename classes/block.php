@@ -167,10 +167,49 @@ class Block {
     final public function read($id) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
 
         return $this;
     }
+
+    /**
+     * Soft delete the block.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function delete($id = 0) {
+        global $DB;
+
+        if ( ! empty($id)) {
+            $this->read($id);
+        }
+
+        if (empty($this->data->id)) {
+            return;
+        }
+
+        $this->data->deleted = 1;
+        $this->update();
+    }
+
+    /**
+     * update block data.
+     *
+     * @param $data
+     * @return static
+     */
+    public function update() {
+        global $DB;
+
+        if ($this->data->id) {
+            $this->validate_data();
+            $DB->update_record(static::TABLE, $this->data);
+        }
+        
+        return $this->data->id;
+    }
+
 
     /**
      * Serialise data based on related info to a structure ready for rendering.
@@ -229,11 +268,9 @@ class Block {
             }
         }
 
-
-
-
         return array(
             'blockid' => $this->get_id(),
+            'hidden' => $this->get_hidden(),
             'html' => $html,
             'blockurl' => $blockurl->out(false),
         );

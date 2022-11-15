@@ -39,6 +39,8 @@ class form_siteblock extends \moodleform {
         global $CFG, $OUTPUT, $USER, $DB;
 
         $mform =& $this->_form;
+        $blockid = $this->_customdata['blockid'];
+        $returnurl = $this->_customdata['returnurl'];
 
         /*----------------------
         *   Type of block
@@ -103,6 +105,10 @@ class form_siteblock extends \moodleform {
         *   Buttons
         *----------------------*/
         $this->add_action_buttons();
+        
+        if ($blockid) {
+            $mform->addElement('html', '<a data-blockid="' . $blockid . '" data-returnurl="' . $returnurl . '" class="btn-delete   btn btn-danger float-right">Delete block</a>');
+        }
 
     }
 

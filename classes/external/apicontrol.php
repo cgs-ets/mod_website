@@ -84,6 +84,12 @@ trait apicontrol {
             $section->update();
             return 1;
         }
+
+        if ($action == 'delete_block') {
+            $block = new \mod_website\block($data);
+            $block->delete();
+            return 1;
+        }
         
 
         return 0;

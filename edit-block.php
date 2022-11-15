@@ -70,7 +70,16 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 $PAGE->add_body_class('limitedwidth');
 
 // Initialise the form.
-$formsiteblock = new form_siteblock($thisurl->out(false), array(), 'post', '', array('data-form' => 'website-siteblock'));
+$formsiteblock = new form_siteblock(
+    $thisurl->out(false), 
+    array(
+        'blockid' => $blockid,
+        'returnurl' => $gobackurl->out(),
+    ), 
+    'post', 
+    '', 
+    array('data-form' => 'website-siteblock')
+);
 
 // Check if it is cancelled.
 if ($formsiteblock->is_cancelled()) {

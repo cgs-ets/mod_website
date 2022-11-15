@@ -25,8 +25,8 @@
 /**
  * @module mod_website/editblock
  */
- define(['core/log'], 
- function(Log) {    
+ define(['core/log', 'core/ajax', 'core/notification'], 
+ function(Log, Ajax, Notification) {    
   'use strict';
 
   /**
@@ -77,8 +77,24 @@
       includepicture[i].addEventListener('change', (e) => {self.checkIncludePicture()})
     }
 
-  };
+    let deletebutton = document.querySelector('.btn-delete')
+    deletebutton.addEventListener('click', e => {
+      e.preventDefault();
+      Ajax.call([{
+        methodname: 'mod_website_apicontrol',
+        args: { 
+            action: 'delete_block',
+            data: deletebutton.dataset.blockid,
+        },
+        done: function (e) {
+          window.location.href = deletebutton.dataset.returnurl
+        },
+        fail: Notification.exception
+      }]);
+    })
+    
 
+  };
 
   // Determine block type.
   Editblock.prototype.checkBlockType = function () {
