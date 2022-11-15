@@ -67,7 +67,11 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 $PAGE->add_body_class('limitedwidth');
 
 // Initialise the form.
-$formsitesection = new form_sitesection($thisurl->out(false), array(), 'post', '', array('data-form' => 'website-sitesection'));
+$formsitesection = new form_sitesection($thisurl->out(false), 
+    array(
+        'sectionid' => $sectionid,
+        'returnurl' => $gobackurl->out(),
+    ), 'post', '', array('data-form' => 'website-sitesection'));
 
 // Check if it is cancelled.
 if ($formsitesection->is_cancelled()) {
@@ -112,6 +116,7 @@ if ($sectionid) {
     ));
 }
 
+$PAGE->requires->js_call_amd('mod_website/editsection', 'init');
 echo $OUTPUT->header();
 
 echo "<br>";

@@ -91,6 +91,11 @@ trait apicontrol {
             return 1;
         }
         
+        if ($action == 'delete_section') {
+            $section = new \mod_website\section($data);
+            $section->delete();
+            return 1;
+        }
 
         return 0;
     }

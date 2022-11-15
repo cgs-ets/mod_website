@@ -38,6 +38,8 @@ class form_sitesection extends \moodleform {
         global $CFG, $OUTPUT, $USER, $DB;
 
         $mform =& $this->_form;
+        $sectionid = $this->_customdata['sectionid'];
+        $returnurl = $this->_customdata['returnurl'];
 
         /*----------------------
          *   Section title.
@@ -85,6 +87,13 @@ class form_sitesection extends \moodleform {
         *   Buttons
         *----------------------*/
         $this->add_action_buttons();
+        
+        /*----------------------
+        *   Delete
+        *----------------------*/
+        if ($sectionid) {
+            $mform->addElement('html', '<a data-sectionid="' . $sectionid . '" data-returnurl="' . $returnurl . '" class="btn-delete   btn btn-danger float-right">Delete section</a>');
+        }
 
         /*----------------------
         *   Hidden

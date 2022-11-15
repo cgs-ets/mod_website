@@ -154,6 +154,10 @@ class Section {
 
         $this->blocks = array();
 
+        if ( empty($this->data->blocks) ) {
+            return array();
+        }
+
         $blockids = json_decode($this->data->blocks);
 
         if ( $this->data->layout && !empty($blockids) ) {
@@ -168,6 +172,27 @@ class Section {
         }
 
         return $this->blocks;
+    }
+
+    /**
+     * Soft delete the section.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function delete($id = 0) {
+        global $DB;
+
+        if (!empty($id)) {
+            $this->read($id);
+        }
+
+        if (empty($this->data->id)) {
+            return;
+        }
+
+        $this->data->deleted = 1;
+        $this->update();
     }
 
     /**
@@ -213,7 +238,9 @@ class Section {
     }    
 
     public function get_id() {
-        return $this->data->id;
+        if (isset($this->data->id)) {
+            return $this->data->id;
+        }
     }
 
     public function get_blocks() {

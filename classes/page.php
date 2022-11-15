@@ -145,15 +145,23 @@ class Page {
     final public function read_sections() {
         global $DB;
 
+        $this->sections = array();
+
         if ( empty($this->data->sections) ) {
-            return;
+            return array();
         }
 
         $sectionids = json_decode($this->data->sections);
 
-        $this->sections = array();
-        foreach ($sectionids as $id) {
-            $this->sections[] = new \mod_website\section($id);
+        if (!empty($sectionids) ) {
+            foreach ($sectionids as $id) {
+                if (intval($id)) {
+                    $section = new \mod_website\section($id);
+                    if ( $section->get_id() ) {
+                        $this->sections[] = new \mod_website\section($id);
+                    }
+                }
+            }
         }
 
         return $this->sections;
