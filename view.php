@@ -64,13 +64,13 @@ if ($website->distribution === '1') {
     if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
         echo $OUTPUT->header();
-        $website = new Website($cm->instance, $cm->id);
+        $website = new Website($website->id, $cm->id);
         $website->render_student_sites_table();
         echo $OUTPUT->footer();
     } else {
         // Get and display the site for this user.
         $site = new Site();
-        $site->read_for_studentid($USER->id);
+        $site->read_for_studentid($website->id, $USER->id);
         $url = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
         redirect($url->out(false));
 	    exit;

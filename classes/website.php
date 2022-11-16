@@ -40,9 +40,11 @@ use mod_website\utils;
 class Website {
 
     const TABLE = 'website';
+    const TABLE_SITES = 'website_sites';
 
     private $cmid;
     private $data;
+    private $sites;
 
     /**
      * Create an instance of this class.
@@ -75,13 +77,31 @@ class Website {
         return $this;
     }
 
+    public function load_sites() {
+        global $DB;
 
+        $this->sites = array();
+    
+        $sites = $DB->get_records(static::TABLE_SITES, array(
+            'websiteid' => $this->data->id,
+            'cmid' => $this->cmid,
+            'deleted' => 0,
+        ));
+
+
+        // Get the site instances.
+        foreach($sites as $site) {
+            $site = new Site($site->id);
+            $this->sites[] = $site;
+        }
+    }
 
     public function render_student_sites_table() {
         global $OUTPUT;
 
-        $students = utils::get_enrolled_students($this->data->course);
-        foreach ($students as $studentid) {
+        $this->load_sites();
+        foreach ($this->sites as $site) {
+            $studentid = $site->get_userid();
             $student = \core_user::get_user($studentid);
             $picture = $OUTPUT->user_picture($student, array(
                 'course' => $this->data->course,
@@ -89,7 +109,7 @@ class Website {
                 'class' => 'userpicture',
             ));
 
-            $grading_info = grade_get_grades($this->data->course, 'mod', 'website', $this->cmid, [$studentid]);
+            $grading_info = grade_get_grades($this->data->course, 'mod', 'website', $this->cmid, array($studentid));
             $grade = null;
             if ($grading_info->items) {
                 if ($grading_info->items[0]->grades)  {
@@ -103,11 +123,7 @@ class Website {
                 'userid' => $studentid
             ));
 
-            // Get the site instance.
-            $site = new Site();
-            $site->read_for_studentid($studentid);
             $siteurl = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
-            
             $data['students'][] = [
                 'picture' => $picture,
                 'fullname' => fullname($student),
@@ -197,7 +213,11 @@ class Website {
     }
 
     public function get_id() {
-        return $this->data->id;
+        return isset($this->data->id) ? $this->data->id : null;
+    }
+
+    public function get_groups() {
+        return isset($this->data->groups) ? json_decode($this->data->groups) : null;
     }
 
     public function get_course() {
@@ -208,7 +228,11 @@ class Website {
         return $this->data->name;
     }
 
-    function get_grade_comments($websiteid, $userid) {
+    public function get_sites() {
+        return $this->sites;
+    }
+
+    public function get_grade_comments($websiteid, $userid) {
         global $DB;
 
         $sql = "SELECT comments.commenttext as comment, grades.grade as gradevalue 
@@ -249,6 +273,23 @@ class Website {
         }
 
         return $users;
+    }
+
+
+    public function create_sites_for_students($students, $data) {
+        foreach ($students as $studentid) {
+            $data = (object) $data;
+            $sitedata = array(
+                'websiteid' => $data->websiteid,
+                'cmid' => $data->cmid,
+                'creatorid' => $data->creatorid,
+                'userid' => $studentid,
+                'title' => $data->name,
+                'siteoptions' => '',
+            );
+            $site = new \mod_website\site();
+            $site->create($sitedata);
+        }
     }
 
 }

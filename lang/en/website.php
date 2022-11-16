@@ -35,6 +35,7 @@ $string['pluginadministration'] = 'Website administration';
 $string['websitename_help'] = 'Create a course website without code';
 $string['websitesettings'] = 'Website Settings';
 $string['websitefieldset'] = 'Website Fieldset';
+$string['website:addinstance'] = 'Add a new website instance';
 
 $string['distribution'] = 'Distribution';
 $string['pagetitle'] = 'Page title';
@@ -87,3 +88,19 @@ $string['viewgrading'] = 'View all submissions';
 $string['savingchanges'] = 'Saving changes';
 $string['nousersselected'] = 'No users selected';
 
+$string['groups'] = 'Groups';
+$string['groupings'] = '---- GROUPINGS ----';
+$string['groupsoptionheading'] = '---- GROUPS ----';
+$string['groupheader'] = 'Groups';
+$string['group_select'] = 'Groups  Selection';
+$string['description'] = 'Description';
+$string['group_select_help'] = '<strong>Everyone</strong>: All Students enrolled in the course. <br> <strong>Groups</strong>: Students belonging to any of the available groups. <br>'
+    . '<strong>Groupings</strong>: Groups belonging to any of the groupings in the course.';
+$string['everyone'] = 'Everyone';
+$string['all_groups'] = 'All Groups';
+$string['all_groupings'] = 'All Groupings';
+$string['groupsinvalidselection'] = 'Please select group value(s)';
+$string['groupingsinvalid'] = 'You have chosen All Groupings and a particular grouping. Either select All Groupings or the grouping you want to share a file with.';
+$string['groupingsinvalidselection'] = 'Please Select Grouping value(s)';
+$string['std_invalid_selection'] = 'The selected combination is invalid.';
+$string['groupsgroupingsheader'] = 'Groups - Groupings';

@@ -180,10 +180,13 @@ class Site {
      *
      * @return static
      */
-    final public function read_for_studentid($studentid) {
+    final public function read_for_studentid($websiteid, $studentid) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('userid' => $studentid, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+        $this->data = $DB->get_record(static::TABLE, array(
+            'userid' => $studentid, 
+            'deleted' => 0
+        ), '*', IGNORE_MULTIPLE);
 
         $this->read_siteoptions();
         $this->load_page();
@@ -222,6 +225,9 @@ class Site {
         }
 
         $siteoptions = json_decode($this->data->siteoptions);
+        if (empty($siteoptions)) {
+            return;
+        }
 
         // Homepage id.
         if (property_exists($siteoptions, 'homepage')) {
@@ -417,11 +423,11 @@ class Site {
     }
 
     public function get_id() {
-        return $this->data->id;
+        return isset($this->data->id) ? $this->data->id : null;
     }
 
     public function get_websiteid() {
-        return $this->data->websiteid;
+        return isset($this->data->websiteid) ? $this->data->websiteid : null;
     }
 
     public function get_website() {
@@ -435,11 +441,11 @@ class Site {
     }
     
     public function get_cmid() {
-        return $this->data->cmid;
+        return isset($this->data->cmid) ? $this->data->cmid : null;
     }
 
     public function get_userid() {
-        return $this->data->userid;
+        return isset($this->data->userid) ? $this->data->userid : null;
     }
 
     public function get_section($id) {

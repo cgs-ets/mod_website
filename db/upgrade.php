@@ -185,7 +185,20 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102605, 'website');
     }
 
+    if ($oldversion < 2022102606) {
 
+        // Define field groups to be added to website.
+        $field = new xmldb_field('groups', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table = new xmldb_table('website');
+
+        // Conditionally launch add field groups.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022102606, 'website');
+    }
 
 
     return true;

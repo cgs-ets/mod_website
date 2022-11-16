@@ -39,9 +39,16 @@ class mod_website_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $PAGE;
+
+        $update = optional_param('update', 0, PARAM_INT);
 
         $mform = $this->_form;
+        $course_groups = groups_get_all_groups($PAGE->course->id);
+        $course_grouping = groups_get_all_groupings($PAGE->course->id);
+
+        $mform->addElement('hidden', 'update', $update);
+        $mform->setType('update', PARAM_RAW);
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -69,14 +76,65 @@ class mod_website_mod_form extends moodleform_mod {
         // Distribution
         $options = array(
             '0' => 'Single teacher-driven website, viewable by all students',
-            '1' => 'Copy for each student, editable and viewable by the student',
+            '1' => 'Site for each student, editable and viewable by the student',
+            '2' => 'Page for each student, editable and viewable by the student',
         );
         $select = $mform->addElement('select', 'distribution', get_string('distribution', 'mod_website'), $options);
         $select->setSelected('0');
-        $mform->addRule('distribution', null, 'required', null, 'client');
 
-        
-        // Availability
+        /************************
+        * Groups
+        *************************/
+        $groups = array();
+        if (!empty($course_groups)) {
+            $groups['00_everyone'] = get_string('everyone', 'mod_website');
+            $groups['0_group'] = get_string('groupsoptionheading', 'mod_website');
+        }
+
+        $count_empty = 0;
+        foreach ($course_groups as $g) {
+            // Skip empty groups.
+            if (!groups_get_members($g->id, 'u.id')) {
+                $count_empty++;
+                continue;
+            }
+            $groups[$g->id . '_group'] = $g->name;
+        }
+
+        $not_show = false;
+        if ($count_empty == count($course_groups)) {
+            $not_show = true;
+        }
+
+        // Grouping.
+        if (!empty($course_grouping)) {
+            $groups['0_grouping'] = get_string('groupings', 'mod_website');
+        }
+
+        foreach ($course_grouping as $g) {
+            // Only list those groupings with groups in it.
+            if (empty(groups_get_grouping_members($g->id))) {
+                continue;
+            }
+            $groups[$g->id . '_grouping'] = $g->name;
+        }
+
+        if (!empty($course_groups) && !$not_show) {
+            $selectgroups = $mform->addElement('select', 'groups', get_string('groups', 'mod_website'), $groups, array('size' => 10));
+            $mform->setDefault('groups', '00_everyone');
+            $selectgroups->setMultiple(true);
+            $mform->addHelpButton('groups', 'group_select', 'mod_website');
+            $mform->hideIf('groups', 'distribution', 'eq', '0');
+        }
+
+        if ($update) {
+            $mform->disabledIf('distribution', 'update', 'neq', '0'); 
+            $mform->disabledIf('groups', 'update', 'neq', '0'); 
+        }
+
+        /************************
+        * Availability
+        *************************/
         $mform->addElement('header', 'availability', get_string('availability', 'assign'));
         $mform->setExpanded('availability', true);
 
@@ -103,4 +161,37 @@ class mod_website_mod_form extends moodleform_mod {
         // Add standard buttons.
         $this->add_action_buttons();
     }
+
+    /**
+     * Validates forms elements.
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        if (isset($data['groups']) && $this->group_validation($data)) {
+            $errors['groups'] = get_string('std_invalid_selection', 'mod_website');
+        }
+
+        return $errors;
+    }
+
+    public function group_validation($data) {
+        $everyone_group_grouping = in_array('00_everyone', $data['groups']) && count($data['groups']) > 1;
+        return $everyone_group_grouping;
+    }
+
+    public function set_data($default_values) {
+
+        $selectedgroups = array();        
+        if (isset($default_values->groups)) {
+            $selectedgroups = json_decode($default_values->groups);
+        }
+        if (empty($selectedgroups)) {
+            $selectedgroups = array('00_everyone');
+        }
+        $default_values->groups = $selectedgroups;
+
+        parent::set_data($default_values);
+    }
+
 }

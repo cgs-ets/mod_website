@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\website;
 
 /**
  * Provides utility functions for this plugin.
@@ -97,6 +98,51 @@ class utils {
         return array_map('intval', array_column($users, 'id'));
     }
 
-    
 
+    public static function get_students_from_groups($groups, $courseid) {
+        $students = array();
+        if (! array_search('00_everyone', $groups) ) 
+        {
+            // Specific groups or groupings.
+            foreach ( $groups as $groupselection ) {
+                $split = explode('_', $groupselection);
+                if (intval($split[0]) === 0) {
+                    continue;
+                }
+                if ($split[1] === 'group') {
+                    $students = array_merge($students, array_column(groups_get_members($split[0], 'u.id'), 'id'));
+                }
+                if ($split[1] === 'grouping') {
+                    $students = array_merge($students, array_column(groups_get_grouping_members($split[0], 'u.id')));
+                }
+            }
+        }
+        else
+        {
+            // Everyone - Get all students in course.
+            $students = static::get_enrolled_students($courseid);
+        }
+        return $students;
+    }
+
+    public static function sync_student_sites($websiteid, $groups, $courseid, $cmid, $creatorid, $newname) {
+        $newstudents = static::get_students_from_groups($groups, $courseid);
+        $website = new Website($websiteid, $cmid);
+        $website->load_sites();
+        foreach ($website->get_sites() as $site) {
+            if ( $i = array_search($site->get_userid(), $newstudents) ) {
+                unset($newstudents[$i]);
+                continue;
+            } else {
+                //$site->delete();
+            }
+        }
+        // Create the left over.
+        $website->create_sites_for_students($newstudents, array(
+            'websiteid' => $websiteid,
+            'cmid' => $cmid,
+            'creatorid' => $creatorid,
+            'name' => $newname,
+        ));
+    }
 }

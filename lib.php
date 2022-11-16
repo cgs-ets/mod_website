@@ -63,15 +63,16 @@ function website_supports($feature) {
 function website_add_instance($moduleinstance, $mform = null) {
     global $DB, $USER;
 
-    $moduleinstance->timecreated = time();
-
     // Create the website record.
-    $id = $DB->insert_record('website', $moduleinstance);
-   
+    $moduleinstance->timecreated = time();
+    $moduleinstance->groupsraw = $moduleinstance->groups;
+    $moduleinstance->groups = json_encode($moduleinstance->groups);
+    $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
+
     if ($moduleinstance->distribution === '0') {
         // Single teacher site.
         $sitedata = array(
-            'websiteid' => $id,
+            'websiteid' => $moduleinstance->id,
             'cmid' => $moduleinstance->coursemodule,
             'creatorid' => $USER->id,
             'userid' => $USER->id,
@@ -82,27 +83,19 @@ function website_add_instance($moduleinstance, $mform = null) {
         $site->create($sitedata);
     } else {
         // Student sites.
-        // Get students in course.
-        $students = utils::get_enrolled_students($moduleinstance->course);
-        foreach ($students as $studentid) {
-            $sitedata = array(
-                'websiteid' => $id,
-                'cmid' => $moduleinstance->coursemodule,
-                'creatorid' => $USER->id,
-                'userid' => $studentid,
-                'title' => $moduleinstance->name,
-                'siteoptions' => '',
-            );
-            $site = new \mod_website\site();
-            $site->create($sitedata);
-        }
-        
-
+        $students = utils::get_students_from_groups($moduleinstance->groupsraw, $moduleinstance->course);
+        $website = new \mod_website\website();
+        $website->create_sites_for_students($students, array(
+            'websiteid' => $moduleinstance->id,
+            'cmid' => $moduleinstance->coursemodule,
+            'creatorid' => $USER->id,
+            'name' => $moduleinstance->name,
+        ));
     }
 
     website_grade_item_update($moduleinstance);
 
-    return $id;
+    return $moduleinstance->id;
 }
 
 /**
@@ -116,13 +109,22 @@ function website_add_instance($moduleinstance, $mform = null) {
  * @return bool True if successful, false otherwise.
  */
 function website_update_instance($moduleinstance, $mform = null) {
-    global $DB;
+    global $DB, $USER;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+    if (empty($moduleinstance->groups)) {
+        $website = new \mod_website\website($moduleinstance->id, $moduleinstance->coursemodule);
+        $moduleinstance->groups = $website->get_groups();
+    }
+    $moduleinstance->groupsraw = $moduleinstance->groups;
+    $moduleinstance->groups = json_encode($moduleinstance->groups);
 
     // Once set, distribution cannot be changed.
     unset($moduleinstance->distribution);
+
+    // Sync student sites.
+    utils::sync_student_sites($moduleinstance->id, $moduleinstance->groupsraw, $moduleinstance->course, $moduleinstance->coursemodule, $USER->id, $moduleinstance->name);
 
     return $DB->update_record('website', $moduleinstance);
 }
