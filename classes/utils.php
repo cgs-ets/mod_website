@@ -101,7 +101,7 @@ class utils {
 
     public static function get_students_from_groups($groups, $courseid) {
         $students = array();
-        if (! array_search('00_everyone', $groups) ) 
+        if (array_search('00_everyone', $groups) !== false )
         {
             // Specific groups or groupings.
             foreach ( $groups as $groupselection ) {
