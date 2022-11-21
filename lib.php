@@ -65,8 +65,7 @@ function website_add_instance($moduleinstance, $mform = null) {
 
     // Create the website record.
     $moduleinstance->timecreated = time();
-    $moduleinstance->groupsraw = $moduleinstance->groups;
-    $moduleinstance->groups = json_encode($moduleinstance->groups);
+    $moduleinstance->groups = json_encode($moduleinstance->distgroups);
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 
     if ($moduleinstance->distribution === '0') {
@@ -83,7 +82,7 @@ function website_add_instance($moduleinstance, $mform = null) {
         $site->create($sitedata);
     } else {
         // Student sites.
-        $students = utils::get_students_from_groups($moduleinstance->groupsraw, $moduleinstance->course);
+        $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
         $website->create_sites_for_students($students, array(
             'websiteid' => $moduleinstance->id,
@@ -113,18 +112,17 @@ function website_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
-    if (empty($moduleinstance->groups)) {
+    if (empty($moduleinstance->distgroups)) {
         $website = new \mod_website\website($moduleinstance->id, $moduleinstance->coursemodule);
         $moduleinstance->groups = $website->get_groups();
     }
-    $moduleinstance->groupsraw = $moduleinstance->groups;
-    $moduleinstance->groups = json_encode($moduleinstance->groups);
+    $moduleinstance->groups = json_encode($moduleinstance->distgroups);
 
     // Once set, distribution cannot be changed.
     unset($moduleinstance->distribution);
 
     // Sync student sites.
-    utils::sync_student_sites($moduleinstance->id, $moduleinstance->groupsraw, $moduleinstance->course, $moduleinstance->coursemodule, $USER->id, $moduleinstance->name);
+    utils::sync_student_sites($moduleinstance->id, $moduleinstance->distgroups, $moduleinstance->course, $moduleinstance->coursemodule, $USER->id, $moduleinstance->name);
 
     return $DB->update_record('website', $moduleinstance);
 }

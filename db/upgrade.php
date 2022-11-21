@@ -200,6 +200,31 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102606, 'website');
     }
 
+    if ($oldversion < 2022102607) {
+
+        // Define table website_permissions to be created.
+        $table = new xmldb_table('website_permissions');
+
+        // Adding fields to table website_permissions.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('type', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('level', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('resourcekey', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('ownerid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+
+        // Adding keys to table website_permissions.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for website_permissions.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022102607, 'website');
+    }
+
 
     return true;
 }

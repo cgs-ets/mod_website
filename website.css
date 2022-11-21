@@ -76,6 +76,9 @@
   height: 22px;
   overflow: hidden;
 }
+.path-mod-website select {
+  width: 100%;
+}
 #page-mod-website-site {
   /* Make site fullscreen */
   /* The switch - the box around the slider */

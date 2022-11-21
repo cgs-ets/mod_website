@@ -44,8 +44,6 @@ class mod_website_mod_form extends moodleform_mod {
         $update = optional_param('update', 0, PARAM_INT);
 
         $mform = $this->_form;
-        $course_groups = groups_get_all_groups($PAGE->course->id);
-        $course_grouping = groups_get_all_groupings($PAGE->course->id);
 
         $mform->addElement('hidden', 'update', $update);
         $mform->setType('update', PARAM_RAW);
@@ -85,6 +83,8 @@ class mod_website_mod_form extends moodleform_mod {
         /************************
         * Groups
         *************************/
+        $course_groups = groups_get_all_groups($PAGE->course->id);
+        $course_grouping = groups_get_all_groupings($PAGE->course->id);
         $groups = array();
         if (!empty($course_groups)) {
             $groups['00_everyone'] = get_string('everyone', 'mod_website');
@@ -101,9 +101,9 @@ class mod_website_mod_form extends moodleform_mod {
             $groups[$g->id . '_group'] = $g->name;
         }
 
-        $not_show = false;
+        $showgroups = true;
         if ($count_empty == count($course_groups)) {
-            $not_show = true;
+            $showgroups = false;
         }
 
         // Grouping.
@@ -119,17 +119,17 @@ class mod_website_mod_form extends moodleform_mod {
             $groups[$g->id . '_grouping'] = $g->name;
         }
 
-        if (!empty($course_groups) && !$not_show) {
-            $selectgroups = $mform->addElement('select', 'groups', get_string('groups', 'mod_website'), $groups, array('size' => 10));
-            $mform->setDefault('groups', '00_everyone');
+        if (!empty($course_groups) && $showgroups) {
+            $selectgroups = $mform->addElement('select', 'distgroups', get_string('groups', 'mod_website'), $groups, array('size' => 10, 'style' => 'width:100%;'));
+            $mform->setDefault('distgroups', '00_everyone');
             $selectgroups->setMultiple(true);
-            $mform->addHelpButton('groups', 'group_select', 'mod_website');
-            $mform->hideIf('groups', 'distribution', 'eq', '0');
+            $mform->addHelpButton('distgroups', 'group_select', 'mod_website');
+            $mform->hideIf('distgroups', 'distribution', 'eq', '0');
         }
 
         if ($update) {
             $mform->disabledIf('distribution', 'update', 'neq', '0'); 
-            $mform->disabledIf('groups', 'update', 'neq', '0'); 
+            $mform->disabledIf('distgroups', 'update', 'neq', '0'); 
         }
 
         /************************
@@ -151,6 +151,59 @@ class mod_website_mod_form extends moodleform_mod {
         $mform->hideIf('alloweditingfromdate', 'distribution', 'eq', '0');
         $mform->hideIf('cutoffdate', 'distribution', 'eq', '0');
 
+        /************************
+        * Sharing
+        *************************/
+        /*$mform->addElement('header', 'sharing', get_string('sharing', 'mod_website'));
+        $mform->setExpanded('sharing', false);
+
+        $el =& $mform->createElement('html', get_string('distsinglesharing', 'mod_website'));
+        $formgroup = array($el);
+        $mform->addGroup($formgroup, 'distsinglesharing');
+        $mform->hideIf('distsinglesharing', 'distribution', 'neq', '0');
+
+        $el =& $mform->createElement('html', get_string('distmultisharing', 'mod_website'));
+        $formgroup = array($el);
+        $mform->addGroup($formgroup, 'distmultisharing');
+        $mform->hideIf('distmultisharing', 'distribution', 'eq', '0');
+
+        $sharegroups = $groups;
+        unset($sharegroups['00_everyone']);
+        unset($sharegroups['0_group']);
+        if (!empty($sharegroups)) {
+            $select = $mform->addElement('select', 'sharinggroups', get_string('groups', 'mod_website'), $sharegroups, array('size' => 10, 'style' => 'width:100%;'));
+            $select->setMultiple(true);
+            $mform->addHelpButton('sharinggroups', 'group_select', 'mod_website');
+            $mform->hideIf('sharinggroups', 'distribution', 'neq', '0');
+        }
+
+        $roles = array();
+        $course_roles = get_roles_used_in_context(context_course::instance($PAGE->course->id), false);
+        foreach ($course_roles as $r) {
+            $roles[$r->id . '_role'] = $r->shortname;
+        }
+        if (!empty($roles)) {
+            $select = $mform->addElement('select', 'sharingroles', get_string('roles', 'mod_website'), $roles, array('size' => 10, 'style' => 'width:100%;'));
+            $select->setMultiple(true);
+            $mform->hideIf('sharingroles', 'distribution', 'neq', '0');
+        }
+
+        $users = array();
+        foreach ($course_roles as $role) {
+            $users[$role->id . '_roleheading'] = '---- ' . $role->shortname . ' ----';
+            $roleusers = get_role_users($role->id, context_course::instance($PAGE->course->id));
+            foreach ($roleusers as $u) {
+                $users[$u->id . '_user'] = $u->lastname . ', ' . $u->firstname;
+            }
+        }
+        if (!empty($users)) {
+            $select = $mform->addElement('select', 'sharingusers', get_string('users', 'mod_website'), $users, array('size' => 10, 'style' => 'width:100%;'));
+            $select->setMultiple(true);
+            $mform->hideIf('sharingusers', 'distribution', 'neq', '0');
+        }*/
+        /************************
+        * End of sharing area
+        *************************/
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
@@ -168,15 +221,15 @@ class mod_website_mod_form extends moodleform_mod {
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 
-        if (isset($data['groups']) && $this->group_validation($data)) {
-            $errors['groups'] = get_string('std_invalid_selection', 'mod_website');
+        if (isset($data['distgroups']) && $this->group_validation($data)) {
+            $errors['distgroups'] = get_string('std_invalid_selection', 'mod_website');
         }
 
         return $errors;
     }
 
     public function group_validation($data) {
-        $everyone_group_grouping = in_array('00_everyone', $data['groups']) && count($data['groups']) > 1;
+        $everyone_group_grouping = in_array('00_everyone', $data['distgroups']) && count($data['distgroups']) > 1;
         return $everyone_group_grouping;
     }
 

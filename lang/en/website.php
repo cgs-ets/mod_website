@@ -104,3 +104,9 @@ $string['groupingsinvalid'] = 'You have chosen All Groupings and a particular gr
 $string['groupingsinvalidselection'] = 'Please Select Grouping value(s)';
 $string['std_invalid_selection'] = 'The selected combination is invalid.';
 $string['groupsgroupingsheader'] = 'Groups - Groupings';
+
+$string['sharing'] = 'Sharing';
+$string['distsinglesharing'] = '<p class="alert alert-warning">By default this website is editable by you only. <br> You may allow other people to edit by selecting users, groups, or roles below.</p>';
+$string['distmultisharing'] = '<p class="alert alert-warning">This feature only applies to single site ditributions.</p>';
+$string['roles'] = 'Roles';
+$string['users'] = 'Users';
