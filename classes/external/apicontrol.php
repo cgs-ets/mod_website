@@ -85,6 +85,14 @@ trait apicontrol {
             return 1;
         }
 
+        if ($action == 'reorder_sections') {
+            $data = json_decode($data);
+            $page = new \mod_website\page($data->pageid);
+            $page->set('sections', $data->sections);
+            $page->update();
+            return 1;
+        }
+
         if ($action == 'delete_block') {
             $block = new \mod_website\block($data);
             $block->delete();

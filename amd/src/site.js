@@ -76,14 +76,8 @@
         self.setupEditing();
       } else {
         self.rootel.dataset.mode = 'view'
-        // Disable block sorting.
-        const sections = document.querySelectorAll('.section-blocks')
-        sections.forEach(section => {
-          let sortable = Sortable.get(section)
-          if (sortable !== undefined) {
-            sortable.option("disabled", true)
-          }
-        })
+        self.disableBlockSorting();
+        self.disableSectionSorting();
       }
       Ajax.call([{
         methodname: 'mod_website_apicontrol',
@@ -159,7 +153,7 @@
       })
     })
 
-    // Sections Toggle.
+    // Collapse/expand sections toggle.
     document.querySelectorAll('.site-section[data-collapsible="true"] .section-title').forEach(a => {
       a.addEventListener('click', e => {
         if ( e.currentTarget .parentNode.classList.contains('collapsed') ) {
@@ -168,6 +162,20 @@
           e.currentTarget .parentNode.classList.add('collapsed')
         }
       })
+    })
+
+    // Toggle section sorting.
+    let sectionsortingtoggle = document.querySelector('.btn-sort-sections');
+    sectionsortingtoggle && sectionsortingtoggle.addEventListener('click', e => {
+      e.preventDefault();
+      const sectionswrap = document.querySelector('.site-sections');
+      if (sectionswrap.classList.contains('sorting')) {
+        self.disableSectionSorting();
+        sectionswrap.classList.remove('sorting');
+      } else {
+        self.enableSectionSorting();
+        sectionswrap.classList.add('sorting');
+      }
     })
 
   };
@@ -214,41 +222,16 @@
 
     // Check if already set up.
     if ( self.editingsetup ) { 
-      // Enable block sorting
-      sections.forEach(section => {
-        let sortable = Sortable.get(section)
-        if (sortable !== undefined) {
-          sortable.option("disabled", false)
-          return
-        }
-      })
+      self.enableBlockSorting();
+      self.enableSectionSorting();
     }
 
     // Only setup once.
     self.editingsetup = true;
     
-    // Setup block sorting.
-    sections.forEach(section => {
-      new Sortable(section, {
-        group: 'sharedsections',
-        draggable: ".site-block",
-        animation: 150,
-        ghostClass: 'reordering',
-        onStart: self.BlockSortStart,
-        onEnd: self.BlockSortEnd,
-      })
-    })
-
-    // Setup section sorting.
-    /*const sectionswrap = document.querySelector('.site-sections');
-    new Sortable(sectionswrap, {
-      draggable: ".site-section",
-      animation: 150,
-      ghostClass: 'reordering',
-      onStart: self.SectionSortStart,
-      onEnd: self.SectionSortEnd,
-    })*/
-
+    // Setup sorting.
+    self.initBlockSorting()
+    self.initSectionSorting()
   }
 
   Site.prototype.BlockSortStart = function (e) {
@@ -333,6 +316,90 @@
     if ( rootel.dataset.mode !== 'edit') { return; }
 
     rootel.classList.remove("sorting-sections")
+    
+    // Save the new order.
+    let order = [];
+    const sections = document.querySelectorAll('.site-section')
+    sections.forEach(section => {
+      if (section.dataset.sectionid) {
+        order.push(section.dataset.sectionid)
+      }
+    })
+    Ajax.call([{
+      methodname: 'mod_website_apicontrol',
+      args: { 
+          action: 'reorder_sections',
+          data: JSON.stringify({
+              pageid: rootel.dataset.currentpage,
+              sections: JSON.stringify(order)
+          }),
+      }
+    }])
+  }
+
+  Site.prototype.initBlockSorting = function () {
+    let self = this;
+    const sections = document.querySelectorAll('.section-blocks')
+    sections.forEach(section => {
+      new Sortable(section, {
+        group: 'sharedsections',
+        draggable: ".site-block",
+        animation: 150,
+        ghostClass: 'reordering',
+        onStart: self.BlockSortStart,
+        onEnd: self.BlockSortEnd,
+      })
+    })
+  }
+
+  Site.prototype.disableBlockSorting = function () {
+    const sections = document.querySelectorAll('.section-blocks')
+    sections.forEach(section => {
+      let sortable = Sortable.get(section)
+      if (sortable !== undefined) {
+        sortable.option("disabled", true)
+      }
+    })
+  }
+
+  Site.prototype.enableBlockSorting = function () {
+    const sections = document.querySelectorAll('.section-blocks');
+    sections.forEach(section => {
+      let sortable = Sortable.get(section)
+      if (sortable !== undefined) {
+        sortable.option("disabled", false)
+        return
+      }
+    })
+  }
+
+  Site.prototype.initSectionSorting = function () {
+    let self = this;
+    const sectionswrap = document.querySelector('.site-sections');
+    new Sortable(sectionswrap, {
+      draggable: ".site-section",
+      animation: 150,
+      ghostClass: 'reordering',
+      onStart: self.SectionSortStart,
+      onEnd: self.SectionSortEnd,
+    })
+  }
+
+  Site.prototype.disableSectionSorting = function () {
+    const sectionswrap = document.querySelector('.site-sections');
+    let sectionssortable = Sortable.get(sectionswrap)
+    if (sectionssortable !== undefined) {
+      sectionssortable.option("disabled", true)
+    }
+  }
+
+  Site.prototype.enableSectionSorting = function () {
+    const sectionswrap = document.querySelector('.site-sections');
+    let sectionsortable = Sortable.get(sectionswrap)
+    if (sectionsortable !== undefined) {
+      sectionsortable.option("disabled", false)
+      return
+    }
   }
 
   return {

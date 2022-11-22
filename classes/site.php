@@ -421,6 +421,10 @@ class Site {
 
         return false;
     }
+    
+    public function set($property, $value) {
+        $this->data->$property = $value;
+    }
 
     public function get_id() {
         return isset($this->data->id) ? $this->data->id : null;

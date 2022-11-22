@@ -86,6 +86,23 @@ class Page {
     }
 
     /**
+     * create a section record in the db and return the id.
+     *
+     * @param $data
+     * @return static
+     */
+    public function update() {
+        global $DB;
+
+        if ($this->data->id) {
+            $this->validate_data();
+            $DB->update_record(static::TABLE, $this->data);
+        }
+        
+        return $this->data->id;
+    }
+
+    /**
      * create a new site record in the db and return a site instance.
      * 
      * @param $formdata
@@ -189,6 +206,7 @@ class Page {
         $bannerimage = $this->export_bannerimage($related);
 
         return array(
+            'id' => $this->get_id(),
             'title' => $this->get_title(),
             'bannerimage' => $bannerimage,
             'sections' => $sections,
@@ -231,6 +249,10 @@ class Page {
 
 	    return $bannerimages;
 	}
+
+    public function set($property, $value) {
+        $this->data->$property = $value;
+    }
     
     public function get_id() {
         return isset($this->data->id) ? $this->data->id : null;
