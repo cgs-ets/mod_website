@@ -67,6 +67,7 @@
     // Set up editing.
     self.setupEditing();
 
+    // Edit mode switch.
     let editswitch = document.querySelector('.site-editor-switch')
     editswitch && editswitch.addEventListener('change', (e) => {
       let mode = 0
@@ -90,18 +91,50 @@
       }])
     })
 
+    // Full screen toggler.
+    let fullscreentoggle = document.querySelector('.btn-fullscreen')
+    fullscreentoggle && fullscreentoggle.addEventListener('click', (e) => {
+      if (document.body.classList.contains('fullscreen')) {
+        document.body.classList.remove('fullscreen')
+      } else {
+        document.body.classList.add('fullscreen')
+      }
+    })
+    
+
     if (self.rootel.dataset.canedit == '1') {
-      document.querySelectorAll('.editzone').forEach(item => {
+
+      // Embedded forms.
+      document.querySelectorAll('[data-formurl]').forEach(item => {
         item.addEventListener('click', e => {
+          e.preventDefault();
           e.stopPropagation();
+
           if ( self.rootel.dataset.mode !== 'edit') { return; }
-          // redirect.
-          let url = e.currentTarget.dataset.url
-          if (url) {
-            window.location.href = url;
+          
+          if (document.querySelector('.site-sections').classList.contains('sorting')) { return; }
+
+          let formurl = e.currentTarget.dataset.formurl
+          if (formurl) {
+            //window.location.href = url;
+            let modalbody = document.querySelector('#modal-embeddedform .modal__body');
+            if (modalbody.dataset.currentform != formurl) {
+              modalbody.dataset.currentform = formurl
+              modalbody.innerHTML = '<iframe src="' + formurl + '"></iframe>';
+            }
+            let modalstate = document.getElementById('modal-state-embeddedform');
+            modalstate.checked = true;
           }
         })
+      })
+
+      // Edit zone hovering.
+      document.querySelectorAll('.editzone').forEach(item => {
         item.addEventListener('mouseenter', e => {
+          e.stopPropagation();
+          
+          if ( self.rootel.dataset.mode !== 'edit') { return; }
+
           // When going from a parent into a child, mouseleave is not triggered on the parent, so here we need to remove all existing hovers when entering a new editzone.
           document.querySelectorAll('.editzone.hover').forEach(z => {
             z.classList.remove("hover")
@@ -119,6 +152,7 @@
           }
         })
       })
+
     }
 
     // Check menu width.

@@ -210,6 +210,7 @@ class Page {
             'title' => $this->get_title(),
             'bannerimage' => $bannerimage,
             'sections' => $sections,
+            'numsections' => count($sections),
         );
 
     }
@@ -264,6 +265,19 @@ class Page {
   
     public function get_hidden() {
         return isset($this->data->hidden) ? $this->data->hidden : null;
+    }
+
+    public function toggle_hide($visibility) {
+        if ( ! $this->data->siteid ) {
+            throw new \coding_exception('Toggle hide: siteid is missing.');
+        }
+        $site = new \mod_website\site($this->data->siteid);
+        if ($site->homepageid == $this->data->id) {
+            return 'Cannot hide site homepage.';
+        }
+        $this->data->hidden = $visibility;
+        $this->update();
+        return 'success';
     }
 
     public function get_sections() {

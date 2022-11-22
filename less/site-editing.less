@@ -2,7 +2,7 @@
   .editoption {
     display: none;
   }
-  .options {
+  .page-options, .section-options {
     display: none;
   }
 }
@@ -102,14 +102,14 @@
   }
 
   .site-body {
-    .options {
+    .page-options, .section-options {
       padding: 10px 0;
       text-align: center;
     }
   }
   
   .site-section {
-    .options {
+    .section-options {
       display: block;
       position: absolute;
       bottom: 5px;
@@ -152,6 +152,7 @@
   }
 
   .btn-sort-sections {
+    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -164,7 +165,6 @@
     cursor: pointer;
     width: 35px;
     height: 35px;
-    display: block;
     text-align: center;
     transition: all ease 0.2s;
     line-height: 35px;
@@ -174,6 +174,11 @@
     }
     .fa-check {
       display: none;
+    }
+  }
+  .site-sections.has-sections {
+    .btn-sort-sections {
+      display: block;
     }
   }
   .site-sections.sorting {
@@ -189,11 +194,12 @@
       padding: 10px 20px 0 !important;
       background: #ddd;
       cursor: move;
-      .options {
+      * { cursor: move; }
+      .section-options, .section-blocks {
         display: none;
       }
-      * {
-        cursor: move;
+      &.reordering {
+        background: #fff;
       }
       &:hover {
         border-color: #bbb;
@@ -202,7 +208,5 @@
     }
   }
 
+
 }
-
-
-

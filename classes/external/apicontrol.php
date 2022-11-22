@@ -105,6 +105,13 @@ trait apicontrol {
             return 1;
         }
 
+        if ($action == 'page_visibility') {
+            $data = json_decode($data);
+            $page = new \mod_website\page($data->pageid);
+            $result = $page->toggle_hide($data->hidden);
+            return $result;
+        }
+    
         return 0;
     }
 

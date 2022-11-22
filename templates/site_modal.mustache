@@ -19,36 +19,11 @@
 
     A modal for the site.
 }}
-
-{{! // PHP - If returned from a page save there will sometimes be a modal to suggest a next step.
-if ($wizard == 'editmenu') {
-    $modal = array (
-        'body' => 'Do you want to update the site menu?',
-        'buttons' => array (
-            array (
-                'title' => 'No',
-                'url' => '#',
-                'class' => 'close',
-            ),
-            array (
-                'title' => 'Yes',
-                'url' => '#',
-                'class' => '',
-            ),
-        ),
-    );
-    $data['modal'] = $OUTPUT->render_from_template('mod_website/site_modal', $modal);
-}
-}}
-
-<div class="modal">
-  <label class="modal__bg" for="modal"></label>
+<input class="modal-state" id="modal-state-{{id}}" type="checkbox" />
+<div class="modal" id="modal-{{id}}" >
+  <label class="modal__bg" for="modal-state-{{id}}"></label>
   <div class="modal__inner">
-    <label class="modal__close" for="modal"></label>
-    <p>{{{body}}}</p>
-    {{#buttons}}
-      <a href="{{url}}" class="btn {{}}">{{title}}</a>
-    {{/buttons}}
+    <label class="modal__close" for="modal-state-{{id}}"></label>
+    <div class="modal__body">{{{body}}}</div>
   </div>
 </div>
-

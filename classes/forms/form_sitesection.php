@@ -40,6 +40,7 @@ class form_sitesection extends \moodleform {
         $mform =& $this->_form;
         $sectionid = $this->_customdata['sectionid'];
         $returnurl = $this->_customdata['returnurl'];
+        $embed = $this->_customdata['embed'];
 
         /*----------------------
          *   Section title.
@@ -81,12 +82,12 @@ class form_sitesection extends \moodleform {
         );
         $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
         $select->setSelected(0);
-        $mform->addRule('visibility', null, 'required', null, 'client');
+        //$mform->addRule('visibility', null, 'required', null, 'client');
 
         /*----------------------
         *   Buttons
         *----------------------*/
-        $this->add_action_buttons();
+        $this->add_action_buttons(!$embed);
         
         /*----------------------
         *   Delete

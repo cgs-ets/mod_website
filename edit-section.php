@@ -32,6 +32,7 @@ use mod_website\forms\form_sitesection;
 $siteid = required_param('site', PARAM_INT);
 $pageid = required_param('page', PARAM_INT);
 $sectionid = optional_param('section', 0, PARAM_INT);
+$embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
 
@@ -71,7 +72,8 @@ $formsitesection = new form_sitesection($thisurl->out(false),
     array(
         'sectionid' => $sectionid,
         'returnurl' => $gobackurl->out(),
-    ), 'post', '', array('data-form' => 'website-sitesection'));
+        'embed' => $embed,
+    ), 'post', '', array('target' => '_top', 'data-form' => 'website-sitesection'));
 
 // Check if it is cancelled.
 if ($formsitesection->is_cancelled()) {
@@ -117,6 +119,11 @@ if ($sectionid) {
 }
 
 $PAGE->requires->js_call_amd('mod_website/editsection', 'init');
+
+if ($embed) {
+    $PAGE->add_body_classes(['fullscreen','embedded']);
+}
+
 echo $OUTPUT->header();
 
 echo "<br>";

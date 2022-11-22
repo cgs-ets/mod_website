@@ -32,6 +32,7 @@ use mod_website\forms\form_sitemenu;
 $siteid = required_param('site', PARAM_INT);
 $menuid = required_param('menu', PARAM_INT);
 $pageid = optional_param('page', 0, PARAM_INT); // Go back to this page.
+$embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
 
@@ -89,7 +90,8 @@ $formsitemenu = new form_sitemenu($thisurl->out(false), array(
         )),
         'classes' => 'list-clone list-all'
     ),
-), 'post', '', array('data-form' => 'website-sitemenu'));
+    'embed' => $embed,
+), 'post', '', array('target' => '_top', 'data-form' => 'website-sitemenu'));
 
 // Check if it is cancelled.
 if ($formsitemenu->is_cancelled()) {
@@ -116,6 +118,10 @@ $formsitemenu->set_data(array(
 // Add js.
 $PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
 $PAGE->requires->js_call_amd('mod_website/editmenu', 'init');
+
+if ($embed) {
+    $PAGE->add_body_classes(['fullscreen','embedded']);
+}
 
 echo $OUTPUT->header();
 

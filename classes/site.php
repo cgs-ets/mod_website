@@ -294,6 +294,8 @@ class Site {
     public function export($related) {
         $this->validate_related($related);
 
+        $output = array();
+
         // Is this user an editor?
         $canedit = false;
         if ($this->data->userid == $related['user']->id) {
@@ -348,11 +350,11 @@ class Site {
             ));
         }
 
-        return array(
+        $output = array(
             'canedit' => $canedit,
             'editpageurl' => $editpageurl->out(false),
             'newpageurl' => $newpageurl->out(false),
-            'editmenuurl' => $editmenuurl ? $editmenuurl->out(false) : '',
+            'editmenuurl' => $editmenuurl->out(false),
             'newsectionurl' => $newsectionurl->out(false),
             'id' => $this->data->id,
             'websiteid' => $this->data->websiteid,
@@ -366,6 +368,18 @@ class Site {
             'mode' => $related['mode'],
             'editing' => $related['mode'] == 'edit',
         );
+
+        // Embedded Form URLs.
+        $editpageurl->param('embed', 1);
+        $newpageurl->param('embed', 1);
+        $editmenuurl->param('embed', 1);
+        $newsectionurl->param('embed', 1);
+        $output['embedded_editpageurl'] = $editpageurl->out(false);
+        $output['embedded_newpageurl'] = $newpageurl->out(false);
+        $output['embedded_editmenuurl'] = $editmenuurl->out(false);
+        $output['embedded_newsectionurl'] = $newsectionurl->out(false);
+
+        return (object) $output;
     }
 
     /**

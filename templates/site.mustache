@@ -36,27 +36,23 @@
     </div>
     <div class="topbar-right flex">
       {{>mod_website/site_menu}}
-      {{#canedit}}<a href="{{editmenuurl}}" class="btn-edit-menu editoption">Edit menu</a>{{/canedit}}
-      {{#canedit}}<a href="{{newpageurl}}" class="btn-add-site-page editoption">New page</a>{{/canedit}}
+      {{#canedit}}<a data-formurl="{{embedded_editmenuurl}}" href="{{editmenuurl}}" class="btn-edit-menu editoption">Edit menu</a>{{/canedit}}
+      {{#canedit}}<a data-formurl="{{embedded_newpageurl}}" href="{{newpageurl}}" class="btn-add-site-page editoption">New page</a>{{/canedit}}
     </div>
   </div>
   {{#page}}
     {{>mod_website/site_header}}
     <div class="site-body">
-      <div class="site-sections">
+      <div class="site-sections {{#numsections}}has-sections{{/numsections}}">
         <a class="btn-sort-sections editoption" title="Change section ordering" href="#"><i class="fa fa-sort" aria-hidden="true"></i><i class="fa fa-check" aria-hidden="true"></i></a>
         {{#sections}}
           {{>mod_website/site_section}}
         {{/sections}}
       </div>
-      <div class="options">
-        {{#canedit}}<a href="{{newsectionurl}}" class="btn-add-site-section editoption">Add section</a>{{/canedit}}
+      <div class="page-options">
+        {{#canedit}}<a data-formurl="{{embedded_newsectionurl}}" href="{{newsectionurl}}" class="btn-add-site-section editoption">Add section</a>{{/canedit}}
       </div>
     </div>
   {{/page}}
-
-  {{#modal}}
-    {{{modal}}}
-  {{/modal}}
 
 </div>

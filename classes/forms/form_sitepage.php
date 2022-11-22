@@ -39,6 +39,8 @@ class form_sitepage extends \moodleform {
         global $CFG, $OUTPUT, $USER, $DB;
 
         $mform =& $this->_form;
+        $ishomepage = $this->_customdata['ishomepage'];
+        $embed = $this->_customdata['embed'];
 
         /*----------------------
          *   Page title.
@@ -59,13 +61,15 @@ class form_sitepage extends \moodleform {
         /*----------------------
         *   Visibility
         *----------------------*/
-        $options = array(
-            0 => get_string('visible', 'mod_website'),
-            1 => get_string('privatepage', 'mod_website'),
-        );
-        $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
-        $select->setSelected(0);
-        $mform->addRule('visibility', null, 'required', null, 'client');
+        if (!$ishomepage) {
+            $options = array(
+                0 => get_string('visible', 'mod_website'),
+                1 => get_string('privatepage', 'mod_website'),
+            );
+            $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
+            $select->setSelected(0);
+            //$mform->addRule('visibility', null, 'required', null, 'client');
+        }
 
         /*----------------------
         *   Menu
@@ -77,13 +81,11 @@ class form_sitepage extends \moodleform {
         );
         $select = $mform->addElement('select', 'addtomenu', get_string('addtomenu', 'mod_website'), $options);
         $select->setSelected(0);
-        $mform->addRule('addtomenu', null, 'required', null, 'client');
-
 
         /*----------------------
         *   Buttons
         *----------------------*/
-        $this->add_action_buttons();
+        $this->add_action_buttons(!$embed);
 
         /*----------------------
         *   Hidden

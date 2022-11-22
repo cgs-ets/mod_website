@@ -67,6 +67,8 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 // Add vendor js.
 $PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
 
+$PAGE->add_body_class('fullscreen');
+
 // Wrap it in moodle.
 echo $OUTPUT->header();
 
@@ -84,7 +86,29 @@ $data = $site->export(array(
     'modulecontext' => $modulecontext,
 ));
 
-// Render it. 
+// Render the site. 
 echo $OUTPUT->render_from_template('mod_website/site', $data);
+
+if ($data->canedit) {
+
+    $modal = array('id' => 'embeddedform', 'body' => '');
+    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
+
+    /*// Prerender edit page modal.
+    $modal = array('id' => 'modal-editpage', 'body' => '<iframe src="' . $data->embedded_editpageurl . '"></iframe>');
+    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
+
+    // Prerender edit menu modal.
+    $modal = array('id' => 'modal-editmenu', 'body' => '<iframe src="' . $data->embedded_editmenuurl . '"></iframe>');
+    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
+
+    // Prerender new page modal.
+    $modal = array('id' => 'modal-newpage', 'body' => '<iframe src="' . $data->embedded_newpageurl . '"></iframe>');
+    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
+
+    // Prerender new section modal.
+    $modal = array('id' => 'modal-newsection', 'body' => '<iframe src="' . $data->embedded_newsectionurl . '"></iframe>');
+    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);*/
+}
 
 echo $OUTPUT->footer();

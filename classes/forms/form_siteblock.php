@@ -41,6 +41,7 @@ class form_siteblock extends \moodleform {
         $mform =& $this->_form;
         $blockid = $this->_customdata['blockid'];
         $returnurl = $this->_customdata['returnurl'];
+        $embed = $this->_customdata['embed'];
 
         /*----------------------
         *   Type of block
@@ -98,13 +99,13 @@ class form_siteblock extends \moodleform {
         );
         $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
         $select->setSelected(0);
-        $mform->addRule('visibility', null, 'required', null, 'client');
+        //$mform->addRule('visibility', null, 'required', null, 'client');
 
         
         /*----------------------
         *   Buttons
         *----------------------*/
-        $this->add_action_buttons();
+        $this->add_action_buttons(!$embed);
         
         if ($blockid) {
             $mform->addElement('html', '<a data-blockid="' . $blockid . '" data-returnurl="' . $returnurl . '" class="btn-delete   btn btn-danger float-right">Delete block</a>');

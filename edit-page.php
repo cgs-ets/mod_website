@@ -31,6 +31,7 @@ use mod_website\forms\form_sitepage;
 // Course module id.
 $siteid = required_param('site', PARAM_INT);
 $pageid = optional_param('page', 0, PARAM_INT);
+$embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
 
@@ -68,7 +69,13 @@ $PAGE->add_body_class('limitedwidth');
 $page = new \mod_website\page($pageid);
 
 // Initialise the form.
-$form = new form_sitepage($thisurl->out(false), array(), 'post', '', array('data-form' => 'website-sitepage'));
+$form = new form_sitepage($thisurl->out(false), 
+    array( 
+        'ishomepage' => ($pageid == $site->homepageid),
+        'embed' => $embed, 
+    ), 
+    'post', '', array('target' => '_top', 'data-form' => 'website-sitepage')
+);
 
 // Check if it is cancelled.
 if ($form->is_cancelled()) {
@@ -81,7 +88,7 @@ $formdata = $form->get_data();
 if (!empty($formdata)) {
 
     $formdata->siteid = $site->get_id();
-    $formdata->hidden = $formdata->visibility;
+    $formdata->hidden = intval($formdata->visibility);
     $page->save($formdata, $modulecontext);
     $gobackurl->param('page', $page->get_id());
 
@@ -113,6 +120,10 @@ $form->set_data(array(
     'bannerimage' => $draftitemid,
     'visibility' => $page->get_hidden(),
 ));
+
+if ($embed) {
+    $PAGE->add_body_classes(['fullscreen','embedded']);
+}
 
 echo $OUTPUT->header();
 

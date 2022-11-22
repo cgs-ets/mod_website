@@ -20,7 +20,7 @@
     A single section.
 }}
 <div class="site-section editzone" 
-    {{#canedit}}data-url="{{sectionurl}}"{{/canedit}} 
+    {{#canedit}}data-formurl="{{embedded_sectionurl}}"{{/canedit}} 
     data-sectionid="{{id}}" 
     data-layout="{{layout}}"
     data-hidden="{{hidden}}"
@@ -42,8 +42,8 @@
     {{/blocks}}
   </div>
 
-  <span class="options">
-    {{#canedit}}<a href="{{newblockurl}}" class="btn-add-site-block editoption">+</a>{{/canedit}}
+  <span class="section-options">
+    {{#canedit}}<a data-formurl="{{embedded_newblockurl}}" href="{{newblockurl}}" class="btn-add-site-block editoption">+</a>{{/canedit}}
   </span>
 
 </div>

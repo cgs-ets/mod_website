@@ -41,6 +41,7 @@ class form_sitemenu extends \moodleform {
         $menu = $this->_customdata['menu'];
         $unusedpages = $this->_customdata['unusedpages'];
         $allpages = $this->_customdata['allpages'];
+        $embed = $this->_customdata['embed'];
         
         $mform->addElement('text', 'menujson', 'MenuJSON');
         $mform->setType('menujson', PARAM_RAW);
@@ -56,7 +57,7 @@ class form_sitemenu extends \moodleform {
         /*----------------------
         *   Buttons
         *----------------------*/
-        $this->add_action_buttons();
+        $this->add_action_buttons(!$embed);
     }
 
 }

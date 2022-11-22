@@ -228,6 +228,9 @@ class Block {
             'block' => $this->get_id() ? $this->get_id() : 0,
         ));
 
+        $embeddedblockurl = clone($blockurl);
+        $embeddedblockurl->param('embed', 1);
+
         // Generate the block html.
         $html = '';
         if ($this->data->type == 'editor' || empty($this->data->type)) {
@@ -273,6 +276,7 @@ class Block {
             'hidden' => $this->get_hidden(),
             'html' => $html,
             'blockurl' => $blockurl->out(false),
+            'embedded_blockurl' => $embeddedblockurl->out(false),
         );
     }
 

@@ -182,8 +182,8 @@ class Menu {
         
         $backend = !empty($related['backend']) ? $related['backend'] : false;
         $editing = !$backend && !empty($related['mode']) ? $related['mode'] : false;
-        $first = !$backend ? true : false;
 
+        $first = true;
         foreach ($pages as &$menuitem) {
             $menuitem = (array) $menuitem;
             $this->expand_menu_item($menuitem, $backend, $first, $editing);
@@ -216,7 +216,12 @@ class Menu {
             return;
         }
 
-        $menuitem['title'] = $first ? 'Home' : $pagedata->title;
+        $site = new \mod_website\site($this->data->siteid);
+        $ishomepage = ($pagedata->id == $site->homepageid);
+
+        // On the front end, the homepage is renamed to "home" if it is the first menu item.
+        $menuitem['title'] = !$backend && $ishomepage && $first ? 'Home' : $pagedata->title;
+        // Pages without a title are labeled "No title" by default.
         $menuitem['title'] = empty($menuitem['title']) ? 'No title' : $menuitem['title'];
 
         //$cmid
@@ -228,6 +233,7 @@ class Menu {
         $menuitem['children'] = empty($menuitem['children']) ? [] : $menuitem['children'];
         $menuitem['haschildren'] = count($menuitem['children']);
         $menuitem['hidden'] = $pagedata->hidden;
+        $menuitem['ishomepage'] = $ishomepage;
 
         foreach ($menuitem['children'] as &$childitem) {
             $this->expand_menu_item($childitem, $backend, false, $editing);

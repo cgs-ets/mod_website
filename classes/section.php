@@ -208,11 +208,15 @@ class Section {
             'page' => $related['pageid'],
             'section' => $this->data->id,
         ));
+        $embeddedsectionurl = clone($sectionurl);
+        $embeddedsectionurl->param('embed', 1);
         $newblockurl = new \moodle_url('/mod/website/edit-block.php', array(
             'site' => $this->data->siteid,
             'page' => $related['pageid'],
             'section' => $this->data->id,
         ));
+        $embeddednewblockurl = clone($newblockurl);
+        $embeddednewblockurl->param('embed', 1);
 
         $blocks = array();
         foreach ($this->blocks as $block) {
@@ -229,6 +233,8 @@ class Section {
             'blocks' => $blocks,
             'sectionurl' => $sectionurl->out(false),
             'newblockurl' => $newblockurl->out(false),
+            'embedded_sectionurl' => $embeddedsectionurl->out(false),
+            'embedded_newblockurl' => $embeddednewblockurl->out(false),
             'title' => $this->data->title,
             'layout' => $this->data->layout,
             'hidden' => $this->data->hidden,

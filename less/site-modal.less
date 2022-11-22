@@ -1,7 +1,6 @@
 /* [Object] Modal
  * =============================== */
- .modal {
-  display: block;
+.modal {
   opacity: 0;
   visibility: hidden;
   position: fixed;
@@ -10,10 +9,9 @@
   bottom: 0;
   left: 0;
   text-align: left;
-  background: rgba(0,0,0, .9);
+  background: rgba(0,0,0,.5);
   transition: opacity .25s ease;
-  opacity: 1;
-  visibility: visible;
+  display: block;
 }
 
 .modal__bg {
@@ -29,6 +27,27 @@
   display: none;
 }
 
+.modal-state:checked + .modal {
+  opacity: 1;
+  visibility: visible;
+  .modal__body {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    iframe {
+      width: 100%;
+      position: absolute;
+      height: 100%;
+      border: none;
+      padding: 0;
+    }
+  }
+}
+
+.modal-state:checked + .modal .modal__inner {
+  top: 0;
+}
+
 .modal__inner {
   transition: top .25s ease;
   position: absolute;
@@ -36,13 +55,13 @@
   right: 0;
   bottom: 0;
   left: 0;
-  width: 50%;
+  width: 90%;
+  height: 90%;
   margin: auto;
   overflow: auto;
   background: #fff;
   border-radius: 5px;
-  padding: 1em 2em;
-  height: 50%;
+  box-sizing: border-box;
 }
 
 .modal__close {
@@ -52,6 +71,7 @@
   width: 1.1em;
   height: 1.1em;
   cursor: pointer;
+  z-index: 10;
 }
 
 .modal__close:after,
@@ -77,10 +97,17 @@
   transform: rotate(-45deg);
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (min-width: 900px) {
   .modal__inner {
-    width: 90%;
-    height: 90%;
+    width: 75%;
+    height: 85%;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .modal__inner {
+    width: 50%;
     box-sizing: border-box;
   }
 }

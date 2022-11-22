@@ -85,13 +85,16 @@
   display: flex;
   justify-content: space-between;
 }
-.list-group-item .options {
+.list-group-item .item-options {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 .visibility-visible, .visibility-hidden {
   display: block;
+}
+.list-group-item[data-hidden="0"] > i {
+  display: none;
 }
 .list-group-item[data-hidden="1"] > .page-details .visibility-visible {
   display: none;

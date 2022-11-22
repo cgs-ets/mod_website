@@ -25,8 +25,8 @@
 /**
  * @module mod_website/editmenu
  */
- define(['core/log'], 
- function(Log) {    
+ define(['core/log', 'core/ajax'], 
+ function(Log, Ajax) {    
   'use strict';
 
   /**
@@ -87,6 +87,42 @@
         onEnd: self.SortEnd,
       });
     }
+
+    // Page visibility.
+    let btnvisible = document.querySelector('.visibility-visible');
+    btnvisible && btnvisible.addEventListener('click', e => {
+      e.preventDefault();
+      Ajax.call([{
+        methodname: 'mod_website_apicontrol',
+        args: { 
+            action: 'page_visibility',
+            data: JSON.stringify({
+                pageid: btnvisible.dataset.pageid,
+                hidden: 1,
+            }),
+        }
+      }])
+      document.querySelectorAll('.list-group-item[data-pageid="' + btnvisible.dataset.pageid + '"]').forEach(item => {
+        item.dataset.hidden = 1
+      })
+    })
+    let btnhide = document.querySelector('.visibility-hidden');
+    btnhide && btnhide.addEventListener('click', e => {
+      e.preventDefault();
+      Ajax.call([{
+        methodname: 'mod_website_apicontrol',
+        args: { 
+            action: 'page_visibility',
+            data: JSON.stringify({
+                pageid: btnvisible.dataset.pageid,
+                hidden: 0,
+            }),
+        }
+      }])
+      document.querySelectorAll('.list-group-item[data-pageid="' + btnvisible.dataset.pageid + '"]').forEach(item => {
+        item.dataset.hidden = 0
+      })
+    })
 
   };
 

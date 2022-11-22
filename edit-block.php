@@ -33,6 +33,7 @@ $siteid = required_param('site', PARAM_INT);
 $sectionid = required_param('section', PARAM_INT);
 $blockid = optional_param('block', 0, PARAM_INT);
 $pageid = optional_param('page', 0, PARAM_INT);
+$embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
 
@@ -75,10 +76,11 @@ $formsiteblock = new form_siteblock(
     array(
         'blockid' => $blockid,
         'returnurl' => $gobackurl->out(),
+        'embed' => $embed,
     ), 
     'post', 
     '', 
-    array('data-form' => 'website-siteblock')
+    array('target' => '_top', 'data-form' => 'website-siteblock')
 );
 
 // Check if it is cancelled.
@@ -152,6 +154,10 @@ if ($blockid) {
     
 }
 $PAGE->requires->js_call_amd('mod_website/editblock', 'init');
+
+if ($embed) {
+    $PAGE->add_body_classes(['fullscreen','embedded']);
+}
 
 echo $OUTPUT->header();
 

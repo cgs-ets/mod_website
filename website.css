@@ -80,7 +80,6 @@
   width: 100%;
 }
 #page-mod-website-site {
-  /* Make site fullscreen */
   /* The switch - the box around the slider */
   /* Hide default HTML checkbox */
   /* The slider */
@@ -95,72 +94,11 @@
 #page-mod-website-site .w-100 {
   width: 100%;
 }
-#page-mod-website-site.path-mod-website {
-  background-color: #fff;
-  overflow: hidden;
-}
-#page-mod-website-site.path-mod-website .modal-backdrop.in.show {
-  display: none !important;
-}
-#page-mod-website-site.path-mod-website .drawers-bottom-region-wrap {
-  margin: 0 !important;
-}
-#page-mod-website-site.path-mod-website .drawer {
-  display: none !important;
-}
-#page-mod-website-site.path-mod-website .drawer-toggler {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #maincontent {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #region-main {
-  border: 0 none;
-  overflow: visible;
-}
-#page-mod-website-site.path-mod-website nav {
-  display: none;
-}
-#page-mod-website-site.path-mod-website footer {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #page-header {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #nav-drawer {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #page {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  margin: 0;
-  padding: 0 !important;
-  z-index: 10;
-}
-#page-mod-website-site.path-mod-website #page #page-content {
-  padding: 0 !important;
-}
-#page-mod-website-site.path-mod-website div[role="main"] {
-  padding: 0 !important;
-}
-#page-mod-website-site.path-mod-website .activity-header {
-  display: none;
-}
-#page-mod-website-site.path-mod-website .secondary-navigation {
-  display: none;
-}
-#page-mod-website-site.path-mod-website #topofscroll {
-  margin: 0;
-  padding: 0;
-}
 #page-mod-website-site .site-root[data-mode="view"] .editoption {
   display: none;
 }
-#page-mod-website-site .site-root[data-mode="view"] .options {
+#page-mod-website-site .site-root[data-mode="view"] .page-options,
+#page-mod-website-site .site-root[data-mode="view"] .section-options {
   display: none;
 }
 #page-mod-website-site .site-root[data-mode="edit"] {
@@ -250,11 +188,12 @@
 #page-mod-website-site .site-root[data-mode="edit"] .site-body .btn-add-site-section:hover {
   background-color: #1d87da;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-body .options {
+#page-mod-website-site .site-root[data-mode="edit"] .site-body .page-options,
+#page-mod-website-site .site-root[data-mode="edit"] .site-body .section-options {
   padding: 10px 0;
   text-align: center;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-section .options {
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options {
   display: block;
   position: absolute;
   bottom: 5px;
@@ -263,7 +202,7 @@
   height: 35px;
   margin: 5px;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-section .options .btn-add-site-block {
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options .btn-add-site-block {
   background-color: #2196F3;
   color: #fff;
   border-radius: 20px;
@@ -278,7 +217,7 @@
   text-align: center;
   transition: all ease 0.2s;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-section .options .btn-add-site-block:hover {
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options .btn-add-site-block:hover {
   background-color: #1d87da;
   transform: scale(1.2);
 }
@@ -292,6 +231,7 @@
   opacity: 0.6;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .btn-sort-sections {
+  display: none;
   position: absolute;
   top: 0;
   right: 0;
@@ -304,7 +244,6 @@
   cursor: pointer;
   width: 35px;
   height: 35px;
-  display: block;
   text-align: center;
   transition: all ease 0.2s;
   line-height: 35px;
@@ -315,6 +254,9 @@
 }
 #page-mod-website-site .site-root[data-mode="edit"] .btn-sort-sections .fa-check {
   display: none;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-sections.has-sections .btn-sort-sections {
+  display: block;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .btn-sort-sections .fa-check {
   display: inline-block;
@@ -327,11 +269,15 @@
   background: #ddd;
   cursor: move;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section .options {
-  display: none;
-}
 #page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section * {
   cursor: move;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section .section-options,
+#page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section .section-blocks {
+  display: none;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section.reordering {
+  background: #fff;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section:hover {
   border-color: #bbb;
@@ -593,7 +539,6 @@ https://codepen.io/steveeeie/pen/NVWMEM
   display: none;
 }
 #page-mod-website-site .modal {
-  display: block;
   opacity: 0;
   visibility: hidden;
   position: fixed;
@@ -602,10 +547,9 @@ https://codepen.io/steveeeie/pen/NVWMEM
   bottom: 0;
   left: 0;
   text-align: left;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.5);
   transition: opacity 0.25s ease;
-  opacity: 1;
-  visibility: visible;
+  display: block;
 }
 #page-mod-website-site .modal__bg {
   position: absolute;
@@ -618,6 +562,25 @@ https://codepen.io/steveeeie/pen/NVWMEM
 #page-mod-website-site .modal-state {
   display: none;
 }
+#page-mod-website-site .modal-state:checked + .modal {
+  opacity: 1;
+  visibility: visible;
+}
+#page-mod-website-site .modal-state:checked + .modal .modal__body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+#page-mod-website-site .modal-state:checked + .modal .modal__body iframe {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  border: none;
+  padding: 0;
+}
+#page-mod-website-site .modal-state:checked + .modal .modal__inner {
+  top: 0;
+}
 #page-mod-website-site .modal__inner {
   transition: top 0.25s ease;
   position: absolute;
@@ -625,13 +588,13 @@ https://codepen.io/steveeeie/pen/NVWMEM
   right: 0;
   bottom: 0;
   left: 0;
-  width: 50%;
+  width: 90%;
+  height: 90%;
   margin: auto;
   overflow: auto;
   background: #fff;
   border-radius: 5px;
-  padding: 1em 2em;
-  height: 50%;
+  box-sizing: border-box;
 }
 #page-mod-website-site .modal__close {
   position: absolute;
@@ -640,6 +603,7 @@ https://codepen.io/steveeeie/pen/NVWMEM
   width: 1.1em;
   height: 1.1em;
   cursor: pointer;
+  z-index: 10;
 }
 #page-mod-website-site .modal__close:after,
 #page-mod-website-site .modal__close:before {
@@ -661,10 +625,16 @@ https://codepen.io/steveeeie/pen/NVWMEM
 #page-mod-website-site .modal__close:before {
   transform: rotate(-45deg);
 }
-@media screen and (max-width: 600px) {
+@media screen and (min-width: 900px) {
   #page-mod-website-site .modal__inner {
-    width: 90%;
-    height: 90%;
+    width: 75%;
+    height: 85%;
+    box-sizing: border-box;
+  }
+}
+@media screen and (min-width: 1400px) {
+  #page-mod-website-site .modal__inner {
+    width: 50%;
     box-sizing: border-box;
   }
 }
@@ -1011,4 +981,88 @@ form#gradeform {
   body#page-mod-website-view_grading_app {
     overflow: auto !important;
   }
+}
+/* Make site fullscreen */
+.path-mod-website.fullscreen {
+  background-color: #fff;
+  overflow: hidden;
+}
+.path-mod-website.fullscreen .modal-backdrop.in.show {
+  display: none !important;
+}
+.path-mod-website.fullscreen .drawers-bottom-region-wrap {
+  margin: 0 !important;
+}
+.path-mod-website.fullscreen .drawer {
+  display: none !important;
+}
+.path-mod-website.fullscreen .drawer-toggler {
+  display: none;
+}
+.path-mod-website.fullscreen #maincontent {
+  display: none;
+}
+.path-mod-website.fullscreen #region-main {
+  border: 0 none;
+  overflow: visible;
+}
+.path-mod-website.fullscreen nav {
+  display: none;
+}
+.path-mod-website.fullscreen footer {
+  display: none;
+}
+.path-mod-website.fullscreen #page-header {
+  display: none;
+}
+.path-mod-website.fullscreen #nav-drawer {
+  display: none;
+}
+.path-mod-website.fullscreen #page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 10;
+}
+.path-mod-website.fullscreen #page #page-content {
+  padding: 0 !important;
+}
+.path-mod-website.fullscreen div[role="main"] {
+  padding: 0 !important;
+}
+.path-mod-website.fullscreen .activity-header {
+  display: none;
+}
+.path-mod-website.fullscreen .secondary-navigation {
+  display: none;
+}
+.path-mod-website.fullscreen #topofscroll {
+  margin: 0;
+  padding: 0;
+}
+.path-mod-website.embedded #page {
+  padding: 1em 2em !important;
+  background: #fff !important;
+}
+/* fullscreen toggle */
+.path-mod-website .btn-fullscreen {
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1;
+  margin: 0 15px 0 0;
+  padding: 2px;
+}
+.path-mod-website .btn-fullscreen .fa-compress {
+  display: none;
+}
+.path-mod-website.fullscreen .btn-fullscreen .fa-compress {
+  display: block;
+}
+.path-mod-website.fullscreen .btn-fullscreen .fa-expand {
+  display: none;
 }
