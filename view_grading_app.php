@@ -65,7 +65,7 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 // Output starts here.
 echo $OUTPUT->header();
 
-$website->view_grading_app($userid);
+$website->view_grading_app($website->get_id(), $userid);
 
 // Finish the page.
 echo $OUTPUT->footer();

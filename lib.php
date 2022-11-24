@@ -63,12 +63,24 @@ function website_supports($feature) {
 function website_add_instance($moduleinstance, $mform = null) {
     global $DB, $USER;
 
+    $templatesiteid = 0;
+    if (!empty($moduleinstance->useexistingurl)) {
+        $regex = '/\/mod\/website\/site\.php\?site\=(\d)/';
+        preg_match($regex, $moduleinstance->useexistingurl, $matches);
+        if (empty($matches) || count($matches) < 2) {
+            echo "Template error"; 
+            return;
+        }
+        $templatesiteid = $matches[1];
+    }
+
     // Create the website record.
     $moduleinstance->timecreated = time();
     $moduleinstance->groups = json_encode($moduleinstance->distgroups);
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 
     if ($moduleinstance->distribution === '0') {
+
         // Single teacher site.
         $sitedata = array(
             'websiteid' => $moduleinstance->id,
@@ -79,17 +91,25 @@ function website_add_instance($moduleinstance, $mform = null) {
             'siteoptions' => '',
         );
         $site = new \mod_website\site();
-        $site->create($sitedata);
+        if (!$templatesiteid) {
+            $site->create($sitedata);
+        } else {
+            $site->create_from_template($sitedata, $templatesiteid);
+        }
     } else {
         // Student sites.
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
-        $website->create_sites_for_students($students, array(
-            'websiteid' => $moduleinstance->id,
-            'cmid' => $moduleinstance->coursemodule,
-            'creatorid' => $USER->id,
-            'name' => $moduleinstance->name,
-        ));
+        $website->create_sites_for_students(
+            $students, 
+            array(
+                'websiteid' => $moduleinstance->id,
+                'cmid' => $moduleinstance->coursemodule,
+                'creatorid' => $USER->id,
+                'name' => $moduleinstance->name,
+            ),
+            $templatesiteid
+        );
     }
 
     website_grade_item_update($moduleinstance);

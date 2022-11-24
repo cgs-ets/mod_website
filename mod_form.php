@@ -39,7 +39,11 @@ class mod_website_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-        global $CFG, $PAGE;
+        global $CFG, $PAGE, $OUTPUT;
+
+        // Add the javascript required to enhance this mform.
+        $PAGE->requires->js_call_amd('mod_website/modform', 'init');
+        $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 
         $update = optional_param('update', 0, PARAM_INT);
 
@@ -133,10 +137,18 @@ class mod_website_mod_form extends moodleform_mod {
         }
 
         /************************
+        * Template
+        *************************/
+        $mform->addElement('header', 'template', get_string('template', 'mod_website'));
+        $mform->addElement('text', 'useexistingurl', get_string('useexistingurl', 'mod_website'), array('size' => '64'));
+        $mform->setType('useexistingurl', PARAM_TEXT);
+        $mform->addHelpButton('useexistingurl', 'useexistingurl', 'mod_website');
+        $mform->addElement('html', $OUTPUT->render_from_template('mod_website/site_preview', array('siteurl' => '')));
+
+        /************************
         * Availability
         *************************/
         $mform->addElement('header', 'availability', get_string('availability', 'assign'));
-        $mform->setExpanded('availability', true);
 
         $name = get_string('alloweditingfromdate', 'mod_website');
         $options = array('optional'=>true);
@@ -146,10 +158,6 @@ class mod_website_mod_form extends moodleform_mod {
         $name = get_string('cutoffdate', 'mod_website');
         $mform->addElement('date_time_selector', 'cutoffdate', $name, array('optional'=>true));
         $mform->addHelpButton('cutoffdate', 'cutoffdate', 'mod_website');
-
-        $mform->hideIf('availability', 'distribution', 'eq', '0');
-        $mform->hideIf('alloweditingfromdate', 'distribution', 'eq', '0');
-        $mform->hideIf('cutoffdate', 'distribution', 'eq', '0');
 
         /************************
         * Sharing

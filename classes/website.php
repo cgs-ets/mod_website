@@ -88,7 +88,6 @@ class Website {
             'deleted' => 0,
         ));
 
-
         // Get the site instances.
         foreach($sites as $site) {
             $site = new Site($site->id);
@@ -96,10 +95,45 @@ class Website {
         }
     }
 
-    public function render_student_sites_table() {
+    
+    /**
+     * Load the data from the DB.
+     *
+     * @return static
+     */
+    final public function load_sites_for_studentids($studentids) {
+        global $DB;
+
+        $this->sites = array();
+
+        list($insql, $inparams) = $DB->get_in_or_equal($studentids);
+        $sql = "SELECT * 
+                FROM {" . static::TABLE_SITES . "}
+                WHERE websiteid = {$this->data->id}
+                AND cmid = {$this->cmid}
+                AND deleted = 0
+                AND userid {$insql}";
+
+
+        $sites = $DB->get_records_sql($sql, $inparams);
+
+        // Get site instances.
+        foreach($sites as $site) {
+            $site = new Site($site->id);
+            $this->sites[] = $site;
+        }
+
+        return $this;
+    }
+
+    public function render_sites_table($showgrading = true) {
         global $OUTPUT;
 
-        $this->load_sites();
+        $data = array(
+            'showgrading' => $showgrading,
+            'students' => array()
+        );
+
         foreach ($this->sites as $site) {
             $studentid = $site->get_userid();
             $student = \core_user::get_user($studentid);
@@ -109,38 +143,43 @@ class Website {
                 'class' => 'userpicture',
             ));
 
-            $grading_info = grade_get_grades($this->data->course, 'mod', 'website', $this->cmid, array($studentid));
-            $grade = null;
-            if ($grading_info->items) {
-                if ($grading_info->items[0]->grades)  {
-                    $grade = array_pop($grading_info->items[0]->grades)->grade;
-                }
-            }
-            $beengraded = $grade ? true : false;
-            $gradeurl = new \moodle_url('/mod/website/view_grading_app.php', array(
-                'id' => $this->cmid,
-                'action' => 'grader',
-                'userid' => $studentid
-            ));
-
             $siteurl = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
-            $data['students'][] = [
+            $studentdata = [
                 'picture' => $picture,
                 'fullname' => fullname($student),
                 'studentid' => $student->id,
                 'studentemail' => $student->email,
-                'gradeurl' => $gradeurl,
-                'beengraded' => $beengraded,
-                'grade' => $grade,
                 'siteurl' => $siteurl,
             ];
+
+            if ($showgrading) {
+                $grading_info = grade_get_grades($this->data->course, 'mod', 'website', $this->cmid, array($studentid));
+                $grade = null;
+                if ($grading_info->items) {
+                    if ($grading_info->items[0]->grades)  {
+                        $grade = array_pop($grading_info->items[0]->grades)->grade;
+                    }
+                }
+                $beengraded = $grade ? true : false;
+                $gradeurl = new \moodle_url('/mod/website/view_grading_app.php', array(
+                    'id' => $this->cmid,
+                    'action' => 'grader',
+                    'userid' => $studentid
+                ));
+
+                $studentdata['gradeurl'] = $gradeurl;
+                $studentdata['beengraded'] = $beengraded;
+                $studentdata['grade'] = $grade;
+            }
+
+            $data['students'][] = $studentdata;
         }
 
         echo $OUTPUT->render_from_template('mod_website/students_table', $data);
     }
 
 
-    public function view_grading_app($userid) {
+    public function view_grading_app($websiteid, $userid) {
         global $OUTPUT, $DB, $CFG;
 
         // Get the user record.
@@ -148,7 +187,7 @@ class Website {
 
         // Get the user's site.
         $site = new Site();
-        $site->read_for_studentid($userid);
+        $site->read_for_studentid($websiteid, $userid);
         $siteurl = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
 
         // Grade details.
@@ -276,7 +315,7 @@ class Website {
     }
 
 
-    public function create_sites_for_students($students, $data) {
+    public function create_sites_for_students($students, $data, $templatesiteid = 0) {
         foreach ($students as $studentid) {
             $data = (object) $data;
             $sitedata = array(
@@ -288,7 +327,11 @@ class Website {
                 'siteoptions' => '',
             );
             $site = new \mod_website\site();
-            $site->create($sitedata);
+            if (!$templatesiteid) {
+                $site->create($sitedata);
+            } else {
+                $site->create_from_template($sitedata, $templatesiteid);
+            }
         }
     }
 

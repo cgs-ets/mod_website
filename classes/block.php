@@ -330,6 +330,9 @@ class Block {
 	    return $url;
 	}
 
+    public function set($property, $value) {
+        $this->data->$property = $value;
+    }
 
     public function get_id() {
         if (isset($this->data->id)) {

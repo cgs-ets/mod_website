@@ -49,9 +49,12 @@ $string['privateblock'] = 'Private (only you will be able to see this block)';
 $string['bannerimage'] = 'Banner image';
 $string['alloweditingfromdate'] = 'Allow editing from';
 $string['alloweditingfromdate_help'] = 'If enabled, students will not be able to edit their website before this date. If disabled, students will be able to start editing right away.';
-$string['cutoffdate'] = 'Cut-off date';
+$string['cutoffdate'] = 'Editing cut-off date';
 $string['cutoffdate_help'] = 'If set, the website will not be editable after this date.';
 
+$string['template'] = 'Template';
+$string['useexistingurl'] = 'Template site URL';
+$string['useexistingurl_help'] = 'Copy and paste the URL of an existing site to use it as a template.';
 
 $string['nopermissiontoview'] = 'You do not have permission to view this website.';
 $string['nopermissiontoedit'] = 'You do not have permission to edit this website.';

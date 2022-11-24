@@ -69,9 +69,10 @@ $PAGE->add_body_class('limitedwidth');
 $page = new \mod_website\page($pageid);
 
 // Initialise the form.
+$ishomepage = ($pageid == $site->homepageid);
 $form = new form_sitepage($thisurl->out(false), 
     array( 
-        'ishomepage' => ($pageid == $site->homepageid),
+        'ishomepage' => $ishomepage,
         'embed' => $embed, 
     ), 
     'post', '', array('target' => '_top', 'data-form' => 'website-sitepage')
@@ -88,7 +89,7 @@ $formdata = $form->get_data();
 if (!empty($formdata)) {
 
     $formdata->siteid = $site->get_id();
-    $formdata->hidden = intval($formdata->visibility);
+    $formdata->hidden = $ishomepage ? 0 : intval($formdata->visibility);
     $page->save($formdata, $modulecontext);
     $gobackurl->param('page', $page->get_id());
 

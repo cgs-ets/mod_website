@@ -41,6 +41,7 @@ class Site {
     const TABLE_PAGES = 'website_site_pages';
     const TABLE_SECTIONS = 'website_site_sections';
     const TABLE_BLOCKS = 'website_site_blocks';
+    const TABLE_MENUS = 'website_site_menus';
     const TABLE_WEBSITE = 'website';
 
     private $data = array();
@@ -48,6 +49,7 @@ class Site {
     public $menu = null;
     public $currentpage = null;
     public $homepageid = 0;
+    public $menuid = 0;
     public $numpages = 0;
 
     private static function required_data() {
@@ -106,11 +108,6 @@ class Site {
         $menudata = array(
             'siteid' => $id,
             'json' => json_encode([]),
-            //    array(
-            //        'id' => $page->get_id(), 
-            //        'children' => []
-            //    )
-            //]),
         );
         $menu = new \mod_website\menu();
         $menu->create($menudata);
@@ -123,6 +120,239 @@ class Site {
         $DB->update_record(static::TABLE, $this->data);
 
         return $this;
+    }
+
+    /**
+     * create a new site record in the db and return a site instance.
+     *
+     * @param $data
+     * @return static
+     */
+    public function create_from_template($data, $siteid) {
+        global $DB;
+
+        // First check if siteid exists.
+        $oldsite = new \mod_website\site($siteid);
+        if (!$oldsite->get_id()) {
+            return false;
+        }
+
+        /*****
+         * Create the new site.
+         *****/
+        $this->data = $data;
+        $this->validate_data();
+        $this->data['timecreated'] = time();
+        $this->data['timemodified'] = time();
+        $pagetitle = $this->data['title'];
+        unset($this->data['title']);
+        $id = $DB->insert_record(static::TABLE, $this->data);
+        $this->read($id);
+
+        /*****
+         * Copy everything from template site.
+         *****/
+        // Copy menus.
+        $menucopies = $this->copy_menus_from($siteid);
+
+        // Copy pages.
+        $pagecopies = $this->copy_pages_from($siteid);
+
+        // Copy sections.
+        $sectioncopies = $this->copy_sections_from($siteid);
+
+        // Copy blocks.
+        $blockcopies = $this->copy_blocks_from($siteid);
+
+        /*****
+         * Update id references throughout.
+         *****/
+        // Sites siteoptions have a homepage and menu.
+        $this->data->siteoptions = json_encode(array(
+            'homepage' => $pagecopies[$oldsite->homepageid],
+            'menu' => $menucopies[$oldsite->menuid],
+        ));
+        $DB->update_record(static::TABLE, $this->data);
+        $this->read($id);
+
+        // Menus have pages.
+        foreach ($menucopies as $copy) {
+            if ($copy == 0) { continue; }
+            $newmenu = new \mod_website\menu($copy);
+            $items = $newmenu->menu_to_array();
+            foreach ($items as &$item) {
+                $oldid = $item['id'];
+                $item['id'] = $menucopies[$oldid];
+                foreach ($item['children'] as &$child) {
+                    $oldid = $child['id'];
+                    $child['id'] = $menucopies[$oldid];
+                }
+            }
+            $newmenu->update_menu_from_array($items);
+        }
+        
+        // Pages have sections.
+        foreach ($pagecopies as $copy) {
+            if ($copy == 0) { continue; }
+            $newpage = new \mod_website\page($copy);
+            $sections = $newpage->get_sections();
+            foreach($sections as &$section) {
+                $section = $sectioncopies[$section];
+            }
+            $newpage->set('sections', json_encode($sections));
+            $newpage->update();
+        }
+
+        // Sections have blocks.
+        foreach ($sectioncopies as $copy) {
+            if ($copy == 0) { continue; }
+            $newsection = new \mod_website\section($copy);
+            $blocks = $newsection->get_blocks();
+            foreach($blocks as &$block) {
+                $block = $blockcopies[$block];
+            }
+            $newsection->set('blocks', json_encode($blocks));
+            $newsection->update();
+        }
+
+        /*****
+         * Copy files.
+         *****/
+        $modulecontext = \context_module::instance($this->data->cmid);
+        $fs = get_file_storage();
+        // Page banners.
+        foreach ($pagecopies as $oldid => $newid) {
+            if ($oldid == 0) { continue; }
+            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'bannerimage', $oldid, "filename", true)) {
+                foreach ($files as $file) {
+                    $newrecord = new \stdClass();
+                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->itemid = $newid;
+                    $fs->create_file_from_storedfile($newrecord, $file);
+                }
+            }
+        }
+        
+        // Block button link to file.
+        foreach ($blockcopies as $oldid => $newid) {
+            if ($oldid == 0) { continue; }
+            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
+                foreach ($files as $file) {
+                    $newrecord = new \stdClass();
+                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->itemid = $newid;
+                    $fs->create_file_from_storedfile($newrecord, $file);
+                }
+            }
+        }
+
+        // Block button picture.
+        foreach ($blockcopies as $oldid => $newid) {
+            if ($oldid == 0) { continue; }
+            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
+                foreach ($files as $file) {
+                    $newrecord = new \stdClass();
+                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->itemid = $newid;
+                    $fs->create_file_from_storedfile($newrecord, $file);
+                }
+            }
+        }
+
+        // Block content files.
+        foreach ($blockcopies as $oldid => $newid) {
+            if ($oldid == 0) { continue; }
+            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
+                foreach ($files as $file) {
+                    $newrecord = new \stdClass();
+                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->itemid = $newid;
+                    $fs->create_file_from_storedfile($newrecord, $file);
+                }
+            }
+        }
+
+        // Update links to self within content....
+
+        return $this;
+    }
+
+    public function copy_menus_from($siteid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $menus = $DB->get_records(static::TABLE_MENUS, array(
+            'siteid' => $siteid,
+        ));
+        foreach ($menus as $menu) {
+            // Keep track of the old id.
+            $oldid = $menu->id;
+            unset($menu->id);
+            // Update the data.
+            $menu->siteid = $this->get_id();
+            $newmenu = new \mod_website\menu();
+            $newmenu = $newmenu->create($menu);
+            $copies[$oldid] = intval($newmenu->get_id());
+        }
+        return $copies;
+    }
+
+    public function copy_pages_from($siteid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $pages = $DB->get_records(static::TABLE_PAGES, array(
+            'siteid' => $siteid,
+        ));
+        foreach ($pages as $page) {
+            // Keep track of the old id.
+            $oldid = $page->id;
+            unset($page->id);
+            // Update the data.
+            $page->siteid = $this->get_id();
+            $newpage = new \mod_website\page();
+            $newpage = $newpage->create($page);
+            $copies[$oldid] = intval($newpage->get_id());
+        }
+        return $copies;
+    }
+
+    public function copy_sections_from($siteid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $sections = $DB->get_records(static::TABLE_SECTIONS, array(
+            'siteid' => $siteid,
+        ));
+        foreach ($sections as $section) {
+            // Keep track of the old id.
+            $oldid = $section->id;
+            unset($section->id);
+            // Update the data.
+            $section->siteid = $this->get_id();
+            $newsection = new \mod_website\section();
+            $newsection = $newsection->create($section);
+            $copies[$oldid] = intval($newsection->get_id());
+        }
+        return $copies;
+    }
+
+    public function copy_blocks_from($siteid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $blocks = $DB->get_records(static::TABLE_BLOCKS, array(
+            'siteid' => $siteid,
+        ));
+        foreach ($blocks as $block) {
+            // Keep track of the old id.
+            $oldid = $block->id;
+            unset($block->id);
+            // Update the data.
+            $block->siteid = $this->get_id();
+            $newblock = new \mod_website\block();
+            $newblock = $newblock->create($block);
+            $newblock->set('content', $block->content);
+            $newblock->update();
+            $copies[$oldid] = intval($newblock->get_id());
+        }
+        return $copies;
     }
 
     /**
@@ -220,7 +450,7 @@ class Site {
     final public function read_siteoptions() {
         global $DB;
 
-        if ( ! property_exists($this->data, 'siteoptions')) {
+        if ( !$this->data || !property_exists($this->data, 'siteoptions')) {
             return;
         }
 
@@ -230,16 +460,17 @@ class Site {
         }
 
         // Homepage id.
+        $this->homepageid = 0;
         if (property_exists($siteoptions, 'homepage')) {
             $this->homepageid = $siteoptions->homepage;
         }
 
         // Menu.
-        $menuid = 0;
+        $this->menuid = 0;
         if (property_exists($siteoptions, 'menu')) {
-            $menuid = $siteoptions->menu;
+            $this->menuid = $siteoptions->menu;
         }
-        $this->menu = new \mod_website\menu($menuid);
+        $this->menu = new \mod_website\menu($this->menuid);
 
         // Number of pages.
         $this->numpages = $DB->count_records(static::TABLE_PAGES, array(

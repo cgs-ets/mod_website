@@ -1,13 +1,21 @@
+// Across entire plugin.
 .path-mod-website {
   /* Hide completion accross the plugin */
   .activity-header {
     display: none;
   }
+
   @import "site-forms";
+  @import "site-preview";
+  @import "site-fullscreen";
+  @import "site-helpers";
 }
+
+// Site front end only.
 #page-mod-website-site {
   @import "site";
   @import "theme1";
 }
+
+// Everywhere plugin css is loaded.
 @import "site-grading";
-@import "site-fullscreen";

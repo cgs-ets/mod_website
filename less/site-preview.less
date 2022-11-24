@@ -1,0 +1,53 @@
+.site-preview-wrap {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  width: 311px;
+  height: 350px;
+  box-shadow: 1px 7px 21px -11px black;
+  margin-bottom: 25px;
+  margin-top: 5px;
+  &.show {
+    display: block;
+  }
+  .spinner {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+    z-index: 0;
+  }
+  .site-zoomout {
+    -ms-zoom: 0.4;
+    -moz-transform: scale(0.4);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.4);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.4);
+    -webkit-transform-origin: 0 0;
+  }
+  .site-preview {
+    height: 870px;
+    width: 790px;
+    min-width: 380px;
+    margin-right: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    border: 0 none;
+    z-index: 5;
+  }
+  .site-preview-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 790px;
+    height: 870px;
+    z-index: 10;
+    background-color: transparent !important;
+  }
+}

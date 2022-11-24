@@ -31,6 +31,7 @@ use mod_website\site;
 // Course module id.
 $siteid = required_param('site', PARAM_INT);
 $pageid = optional_param('page', 0, PARAM_INT);
+$mode = optional_param('mode', '', PARAM_TEXT);
 
 // Get the single site instance.
 $site = new Site($siteid);
@@ -40,16 +41,6 @@ $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST)
 $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
-
-if ( ! $site->can_user_view() ) {
-    notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
-}
-
-// Check edit mode preference.
-$mode = 'view';
-if ($site->can_user_edit() && website_is_editing_on()) {
-    $mode = 'edit';
-}
 
 $modulecontext = context_module::instance($cm->id);
 $url = new moodle_url('/mod/website/site.php', array(
@@ -61,6 +52,18 @@ $PAGE->set_url($url);
 $PAGE->set_title(format_string($website->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+
+if ( ! $site->can_user_view() ) {
+    notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
+
+// Check edit mode preference.
+if ($mode != 'preview') { // Used for iframe preview in mod_form.
+    $mode = 'view';
+    if ($site->can_user_edit() && website_is_editing_on()) {
+        $mode = 'edit';
+    }
+}
 
 // Add css.
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
@@ -80,35 +83,22 @@ $site->fetch($pageid);
 // Export the data. Also checks if this user is the site user (allowing editing)
 $data = $site->export(array(
     'user' => $USER,
-    'mode' => $mode,
+    'mode' => $mode == 'preview' ? 'view' : $mode,
     'course' => $course,
     'website' => $website,
     'modulecontext' => $modulecontext,
 ));
 
+if ($mode == 'preview') {
+    $data->canedit = false;
+}
+
 // Render the site. 
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 
 if ($data->canedit) {
-
     $modal = array('id' => 'embeddedform', 'body' => '');
     echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
-
-    /*// Prerender edit page modal.
-    $modal = array('id' => 'modal-editpage', 'body' => '<iframe src="' . $data->embedded_editpageurl . '"></iframe>');
-    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
-
-    // Prerender edit menu modal.
-    $modal = array('id' => 'modal-editmenu', 'body' => '<iframe src="' . $data->embedded_editmenuurl . '"></iframe>');
-    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
-
-    // Prerender new page modal.
-    $modal = array('id' => 'modal-newpage', 'body' => '<iframe src="' . $data->embedded_newpageurl . '"></iframe>');
-    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
-
-    // Prerender new section modal.
-    $modal = array('id' => 'modal-newsection', 'body' => '<iframe src="' . $data->embedded_newsectionurl . '"></iframe>');
-    echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);*/
 }
 
 echo $OUTPUT->footer();

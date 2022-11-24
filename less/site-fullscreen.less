@@ -1,5 +1,5 @@
 /* Make site fullscreen */
-.path-mod-website.fullscreen {
+&.fullscreen {
   background-color: #fff;
   overflow: hidden;
   .modal-backdrop.in.show {
@@ -61,7 +61,7 @@
     padding: 0;
   }
 }
-.path-mod-website.embedded {
+&.embedded {
   #page {
     padding: 1em 2em !important;
     background: #fff !important;
@@ -69,25 +69,23 @@
 }
 
 /* fullscreen toggle */
-.path-mod-website {
-  .btn-fullscreen {
-    cursor: pointer;
-    font-size: 17px;
-    line-height: 1;
-    margin: 0 15px 0 0;
-    padding: 2px;
-    .fa-compress {
-      display: none;
-    }
+.btn-fullscreen {
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1;
+  margin: 0 15px 0 0;
+  padding: 2px;
+  .fa-compress {
+    display: none;
   }
-  &.fullscreen {
-    .btn-fullscreen {
-      .fa-compress {
-        display: block;
-      }
-      .fa-expand {
-        display: none;
-      }
+}
+&.fullscreen {
+  .btn-fullscreen {
+    .fa-compress {
+      display: block;
+    }
+    .fa-expand {
+      display: none;
     }
   }
 }

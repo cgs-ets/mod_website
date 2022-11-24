@@ -68,7 +68,6 @@ class form_sitepage extends \moodleform {
             );
             $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
             $select->setSelected(0);
-            //$mform->addRule('visibility', null, 'required', null, 'client');
         }
 
         /*----------------------

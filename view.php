@@ -65,15 +65,39 @@ if ($website->distribution === '1') {
         // Get a list of sites (student copies) and print a table of links.
         echo $OUTPUT->header();
         $website = new Website($website->id, $cm->id);
-        $website->render_student_sites_table();
+        $website->load_sites();
+        $website->render_sites_table();
         echo $OUTPUT->footer();
     } else {
         // Get and display the site for this user.
         $site = new Site();
         $site->read_for_studentid($website->id, $USER->id);
-        $url = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
-        redirect($url->out(false));
-	    exit;
+        if ($site->get_id()) {
+            $url = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
+            redirect($url->out(false));
+            exit;
+        } else {
+            // Check if this is a mentor
+            $mentees = utils::get_users_mentees($USER->id, 'id');
+            if (count($mentees) > 1) {
+                echo $OUTPUT->header();
+                $website = new Website($website->id, $cm->id);
+                $website->load_sites_for_studentids($mentees);
+                $website->render_sites_table(false);
+                echo $OUTPUT->footer();
+            }
+            else if (count($mentees) == 1) {
+                $site = new Site();
+                $site->read_for_studentid($website->id, $mentees[0]);
+                $url = new \moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
+                redirect($url->out(false));
+                exit;
+            } else {
+                echo $OUTPUT->header();
+                notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+                echo $OUTPUT->footer();
+            }
+        }
     }
 } else {
     // Get the single site instance.

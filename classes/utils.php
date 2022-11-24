@@ -47,9 +47,10 @@ class utils {
         return false;
     }
 
-    public static function is_user_mentor_of_student($userid, $studentuserid) {
-        $mentors = static::get_users_mentors($userid, 'id');
-        return in_array($userid, $mentors);
+    public static function is_user_mentor_of_student($mentoruserid, $studentuserid) {
+        $mentors = static::get_users_mentors($studentuserid, 'id');
+
+        return in_array($mentoruserid, $mentors);
     }
 
     public static function get_users_mentors($userid, $field = 'username') {
@@ -70,6 +71,27 @@ class utils {
             $mentors = array_column($mentors, $field);
         }
         return $mentors;
+    }
+
+    public static function get_users_mentees($userid, $field = 'username') {
+        global $DB;
+
+        // Get mentees for user.
+        $mentees = array();
+        $menteessql = "SELECT u.*
+                         FROM {role_assignments} ra, {context} c, {user} u
+                        WHERE ra.userid = :mentorid
+                          AND ra.contextid = c.id
+                          AND c.instanceid = u.id
+                          AND c.contextlevel = :contextlevel";     
+        $menteesparams = array(
+            'mentorid' => $userid,
+            'contextlevel' => CONTEXT_USER
+        );
+        if ($mentees = $DB->get_records_sql($menteessql, $menteesparams)) {
+            $mentees = array_column($mentees, $field);
+        }
+        return $mentees;
     }
 
     public static function should_clean_content($website) {
