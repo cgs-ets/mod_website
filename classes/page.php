@@ -140,6 +140,20 @@ class Page {
     }
 
     /**
+     * Create an instance of this class.
+     *
+     * @param int $id If set, this is the id of an existing record, used to load the data.
+     */
+    public function read_for_site($siteid, $pageid) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $pageid, 'siteid' => $siteid, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+        $this->read_sections();
+
+        return $this;
+    }
+
+    /**
      * Load the data from the DB.
      *
      * @param $id

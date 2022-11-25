@@ -330,7 +330,7 @@ class Website {
             if (!$templatesiteid) {
                 $site->create($sitedata);
             } else {
-                $site->create_from_template($sitedata, $templatesiteid);
+                $site->create_from_template($sitedata, $templatesiteid, true);
             }
         }
     }

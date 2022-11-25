@@ -66,7 +66,8 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 $PAGE->add_body_class('limitedwidth');
 
 // Get the page.
-$page = new \mod_website\page($pageid);
+$page = new \mod_website\page();
+$page->read_for_site($siteid, $pageid);
 
 // Initialise the form.
 $ishomepage = ($pageid == $site->homepageid);

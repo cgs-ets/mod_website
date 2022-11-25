@@ -65,20 +65,11 @@ if ($mode != 'preview') { // Used for iframe preview in mod_form.
     }
 }
 
-// Add css.
-$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
-// Add vendor js.
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
-
-$PAGE->add_body_class('fullscreen');
-
-// Wrap it in moodle.
-echo $OUTPUT->header();
-
-// Add scripts.
-$PAGE->requires->js_call_amd('mod_website/site', 'init');
-
 $site->fetch($pageid);
+if (!$site->currentpage->get_id()) {
+    $url->param('page', 0);
+    redirect($url);
+}
 
 // Export the data. Also checks if this user is the site user (allowing editing)
 $data = $site->export(array(
@@ -92,6 +83,18 @@ $data = $site->export(array(
 if ($mode == 'preview') {
     $data->canedit = false;
 }
+
+// Add css.
+$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
+// Add vendor js.
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
+
+$PAGE->add_body_class('fullscreen');
+// Add scripts.
+$PAGE->requires->js_call_amd('mod_website/site', 'init');
+
+// Wrap it in moodle.
+echo $OUTPUT->header();
 
 // Render the site. 
 echo $OUTPUT->render_from_template('mod_website/site', $data);

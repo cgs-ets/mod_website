@@ -65,7 +65,7 @@ function website_add_instance($moduleinstance, $mform = null) {
 
     $templatesiteid = 0;
     if (!empty($moduleinstance->useexistingurl)) {
-        $regex = '/\/mod\/website\/site\.php\?site\=(\d)/';
+        $regex = '/\/mod\/website\/site\.php\?site\=(\d+)/';
         preg_match($regex, $moduleinstance->useexistingurl, $matches);
         if (empty($matches) || count($matches) < 2) {
             echo "Template error"; 
@@ -94,7 +94,7 @@ function website_add_instance($moduleinstance, $mform = null) {
         if (!$templatesiteid) {
             $site->create($sitedata);
         } else {
-            $site->create_from_template($sitedata, $templatesiteid);
+            $site->create_from_template($sitedata, $templatesiteid, true);
         }
     } else {
         // Student sites.

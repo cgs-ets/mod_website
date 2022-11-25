@@ -128,11 +128,11 @@ class Site {
      * @param $data
      * @return static
      */
-    public function create_from_template($data, $siteid) {
+    public function create_from_template($data, $oldsiteid, $attemptreplacelinks = false) {
         global $DB;
 
         // First check if siteid exists.
-        $oldsite = new \mod_website\site($siteid);
+        $oldsite = new \mod_website\site($oldsiteid);
         if (!$oldsite->get_id()) {
             return false;
         }
@@ -153,16 +153,17 @@ class Site {
          * Copy everything from template site.
          *****/
         // Copy menus.
-        $menucopies = $this->copy_menus_from($siteid);
+        $menucopies = $this->copy_menus_from($oldsiteid);
 
         // Copy pages.
-        $pagecopies = $this->copy_pages_from($siteid);
+        $pagecopies = $this->copy_pages_from($oldsiteid);
 
         // Copy sections.
-        $sectioncopies = $this->copy_sections_from($siteid);
+        $sectioncopies = $this->copy_sections_from($oldsiteid);
 
         // Copy blocks.
-        $blockcopies = $this->copy_blocks_from($siteid);
+        $blockcopies = $this->copy_blocks_from($oldsiteid);
+
 
         /*****
          * Update id references throughout.
@@ -181,11 +182,19 @@ class Site {
             $newmenu = new \mod_website\menu($copy);
             $items = $newmenu->menu_to_array();
             foreach ($items as &$item) {
-                $oldid = $item['id'];
-                $item['id'] = $menucopies[$oldid];
-                foreach ($item['children'] as &$child) {
-                    $oldid = $child['id'];
-                    $child['id'] = $menucopies[$oldid];
+                $oldpage = $item['id'];
+                if (isset($pagecopies[$oldpage])) {
+                    $item['id'] = $pagecopies[$oldpage];
+                    foreach ($item['children'] as &$child) {
+                        $oldpage = $child['id'];
+                        if (isset($pagecopies[$oldpage])) {
+                            $child['id'] = $pagecopies[$oldpage];
+                        } else {
+                            unset($child);
+                        }
+                    }
+                } else {
+                    unset($item);
                 }
             }
             $newmenu->update_menu_from_array($items);
@@ -218,28 +227,30 @@ class Site {
         /*****
          * Copy files.
          *****/
-        $modulecontext = \context_module::instance($this->data->cmid);
+        $oldcontext = \context_module::instance($oldsite->get_cmid());
+        $newcontext = \context_module::instance($this->get_cmid());
         $fs = get_file_storage();
+
         // Page banners.
         foreach ($pagecopies as $oldid => $newid) {
             if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'bannerimage', $oldid, "filename", true)) {
+            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'bannerimage', $oldid, "filename", true)) {
                 foreach ($files as $file) {
                     $newrecord = new \stdClass();
-                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->contextid = $newcontext->id;
                     $newrecord->itemid = $newid;
                     $fs->create_file_from_storedfile($newrecord, $file);
                 }
             }
         }
-        
+
         // Block button link to file.
         foreach ($blockcopies as $oldid => $newid) {
             if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
+            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
                 foreach ($files as $file) {
                     $newrecord = new \stdClass();
-                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->contextid = $newcontext->id;
                     $newrecord->itemid = $newid;
                     $fs->create_file_from_storedfile($newrecord, $file);
                 }
@@ -249,10 +260,10 @@ class Site {
         // Block button picture.
         foreach ($blockcopies as $oldid => $newid) {
             if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
+            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
                 foreach ($files as $file) {
                     $newrecord = new \stdClass();
-                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->contextid = $newcontext->id;
                     $newrecord->itemid = $newid;
                     $fs->create_file_from_storedfile($newrecord, $file);
                 }
@@ -262,17 +273,35 @@ class Site {
         // Block content files.
         foreach ($blockcopies as $oldid => $newid) {
             if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($modulecontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
+            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
                 foreach ($files as $file) {
                     $newrecord = new \stdClass();
-                    $newrecord->contextid = $modulecontext->id;
+                    $newrecord->contextid = $newcontext->id;
                     $newrecord->itemid = $newid;
                     $fs->create_file_from_storedfile($newrecord, $file);
                 }
             }
         }
 
-        // Update links to self within content....
+        // Attempt to replace links to old site within new site.
+        if ($attemptreplacelinks) {
+        foreach ($blockcopies as $blockid) {
+            if ($blockid == 0) { continue; }
+            $block = new \mod_website\block($blockid);
+            $content = $block->get_content();
+            
+            // Replace site param.
+            $content = str_replace('site=' . $oldsiteid, 'site=' . $this->get_id(), $content);
+
+            // Replace page params.
+            foreach ($pagecopies as $oldpageid => $newpageid) {
+                $content = str_replace('page=' . $oldpageid, 'page=' . $newpageid, $content);
+            }
+
+            $block->set('content', $content);
+            $block->update();
+        }
+    }
 
         return $this;
     }
@@ -507,11 +536,12 @@ class Site {
      * @return static
      */
     final public function load_page($pageid = 0) {
+        $page = new \mod_website\page();
         if ($pageid) {
-            $this->currentpage = new \mod_website\page($pageid);
+            $this->currentpage = $page->read_for_site($this->get_id(), $pageid);
         } else {
             if ($this->homepageid) {
-                $this->currentpage = new \mod_website\page($this->homepageid);
+                $this->currentpage = $page->read_for_site($this->get_id(), $this->homepageid);
             }
         }
     }

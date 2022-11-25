@@ -339,6 +339,10 @@ class Block {
             return $this->data->id;
         }
     }
+
+    public function get_content() {
+        return isset($this->data->content) ? $this->data->content : '';
+    }
     
     public function get_hidden() {
         return $this->data->hidden;
