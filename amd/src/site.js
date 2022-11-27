@@ -107,10 +107,10 @@
       // Embedded forms.
       document.querySelectorAll('[data-formurl]').forEach(item => {
         item.addEventListener('click', e => {
+          if (self.rootel.dataset.mode !== 'edit') { return; }
+
           e.preventDefault();
           e.stopPropagation();
-
-          if ( self.rootel.dataset.mode !== 'edit') { return; }
           
           if (document.querySelector('.site-sections').classList.contains('sorting')) { return; }
 
@@ -131,9 +131,9 @@
       // Edit zone hovering.
       document.querySelectorAll('.editzone').forEach(item => {
         item.addEventListener('mouseenter', e => {
+          if (self.rootel.dataset.mode !== 'edit') { return; }
+
           e.stopPropagation();
-          
-          if ( self.rootel.dataset.mode !== 'edit') { return; }
 
           // When going from a parent into a child, mouseleave is not triggered on the parent, so here we need to remove all existing hovers when entering a new editzone.
           document.querySelectorAll('.editzone.hover').forEach(z => {
