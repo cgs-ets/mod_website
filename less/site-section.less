@@ -47,8 +47,42 @@
     display: none;
   }
 
+  &.dzone {
+    .dz-preview-wrapper {
+      position: absolute;
+      right: 0;
+      bottom: 47px;
+      text-align: right;
+    }
+    .dz-preview {
+      margin: 5px;
+      min-height: 75px;
+      .dz-image {
+        height: 80px;
+        width: 80px;
+      }
+      .dz-details {
+        .dz-size {
+          display: none;
+        }
+      } 
+      .dz-success-mark svg, .dz-error-mark svg {
+        display: block;
+        width: 30px;
+        height: 30px;
+      }
+    }
+    &.dz-drag-hover {
+      border-color: #0091F7 !important;
+      border-style: solid !important;
+      transform: scale(1.01) !important;
+    }
+  }
+  
+
 }
 
+// Horiz divided
 .site-section[data-layout="1"] .section-blocks {
   @media (min-width: 780px) {
     display: flex;
@@ -67,48 +101,62 @@
   }
 }
 
-.site-section[data-layout="2"] .section-blocks {
-  display: block;
-  overflow: hidden;
-  position: relative;
-  @media (min-width: 780px) {
-    & > div:first-of-type {
-      float: left;
+// Left fixed
+.site-section[data-layout="2"] {
+  .section-title {
+    padding: 5px 20px;
+  }
+  .section-blocks {
+    display: block;
+    position: relative;
+    .site-block {
+      padding: 10px;
+      margin: 10px;
     }
-    & > .site-block {
-      width: calc(50% - 40px);
-      float: right;
-      clear: right;
+    @media (min-width: 780px) {
+      & > div:first-of-type {
+        float: left;
+      }
+      & > .site-block {
+        width: calc(50% - 40px);
+        float: right;
+        clear: right;
+      }
     }
   }
 }
 
-.site-section[data-layout="3"] .section-blocks {
-  display: block;
-  overflow: hidden;
-  position: relative;
-  @media (min-width: 780px) {
-    & > div:first-of-type {
-      float: right;
+// Right fixed 
+.site-section[data-layout="3"] {
+  .section-title {
+    padding: 5px 20px;
+  }
+  .section-blocks {
+    display: block;
+    position: relative;
+    .site-block {
+      padding: 10px;
+      margin: 10px;
     }
-    & > .site-block {
-      width: calc(50% - 40px);
-      float: left;
-      clear: left;
+    @media (min-width: 780px) {
+      & > div:first-of-type {
+        float: right;
+      }
+      & > .site-block {
+        width: calc(50% - 40px);
+        float: left;
+        clear: left;
+      }
     }
   }
 }
 
+
+// Responsive Grid
 .site-section[data-layout="4"] .section-blocks {
   position: relative;
   margin: 0 auto;
   display: grid;
-  //grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
   grid-template-columns: repeat(auto-fit, minmax(266px, 1fr));
   gap: 40px;
-  //padding: 20px;
-  & > .site-block {
-    //padding: 10px;
-    //margin: 10px;
-  }
 }

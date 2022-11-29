@@ -89,38 +89,62 @@
     }
 
     // Page visibility.
-    let btnvisible = document.querySelector('.visibility-visible');
-    btnvisible && btnvisible.addEventListener('click', e => {
-      e.preventDefault();
-      Ajax.call([{
-        methodname: 'mod_website_apicontrol',
-        args: { 
-            action: 'page_visibility',
-            data: JSON.stringify({
-                pageid: btnvisible.dataset.pageid,
-                hidden: 1,
-            }),
-        }
-      }])
-      document.querySelectorAll('.list-group-item[data-pageid="' + btnvisible.dataset.pageid + '"]').forEach(item => {
-        item.dataset.hidden = 1
+    document.querySelectorAll('.visibility-visible').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        Ajax.call([{
+          methodname: 'mod_website_apicontrol',
+          args: { 
+              action: 'page_visibility',
+              data: JSON.stringify({
+                  pageid: btn.dataset.pageid,
+                  hidden: 1,
+              }),
+          }
+        }])
+        document.querySelectorAll('.list-group-item[data-pageid="' + btn.dataset.pageid + '"]').forEach(item => {
+          item.dataset.hidden = 1
+        })
       })
     })
-    let btnhide = document.querySelector('.visibility-hidden');
-    btnhide && btnhide.addEventListener('click', e => {
-      e.preventDefault();
-      Ajax.call([{
-        methodname: 'mod_website_apicontrol',
-        args: { 
-            action: 'page_visibility',
-            data: JSON.stringify({
-                pageid: btnvisible.dataset.pageid,
-                hidden: 0,
-            }),
-        }
-      }])
-      document.querySelectorAll('.list-group-item[data-pageid="' + btnvisible.dataset.pageid + '"]').forEach(item => {
-        item.dataset.hidden = 0
+    document.querySelectorAll('.visibility-hidden').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        Ajax.call([{
+          methodname: 'mod_website_apicontrol',
+          args: { 
+              action: 'page_visibility',
+              data: JSON.stringify({
+                  pageid: btn.dataset.pageid,
+                  hidden: 0,
+              }),
+          }
+        }])
+        document.querySelectorAll('.list-group-item[data-pageid="' + btn.dataset.pageid + '"]').forEach(item => {
+          item.dataset.hidden = 0
+        })
+      })
+    })
+
+    // Page promote to homepage.
+    document.querySelectorAll('.promote-to-homepage').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        Ajax.call([{
+          methodname: 'mod_website_apicontrol',
+          args: { 
+            action: 'promotetohome',
+            data: btn.dataset.pageid
+          },
+          done: function (e) {
+            document.querySelectorAll('.list-group-item[data-ishomepage="1"]').forEach(item => {
+              item.dataset.ishomepage = 0
+            })
+            document.querySelectorAll('.list-group-item[data-pageid="' + btn.dataset.pageid + '"]').forEach(item => {
+              item.dataset.ishomepage = 1
+            })
+          },
+        }])
       })
     })
 

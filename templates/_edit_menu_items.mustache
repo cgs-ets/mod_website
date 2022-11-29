@@ -26,11 +26,10 @@
   <div class="page-details">
     <span>{{title}}</span>
     <span class="item-options">
-      {{^ishomepage}}
-        <a class="visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true"></i></a>
-        <a class="visibility-hidden" data-pageid="{{id}}" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-      {{/ishomepage}}
-      {{#ishomepage}}<span><i class="fa fa-home" aria-hidden="true"></i></span>{{/ishomepage}}
+      <a class="promote-to-homepage" data-pageid="{{id}}" href="#" style="margin-left:-4px;" title="Make homepage"><i class="fa fa-home" aria-hidden="true"></i><i class="fa fa-level-up" aria-hidden="true"></i></a>
+      <span class="current-homepage"><i class="fa fa-home" aria-hidden="true" title="Current homepage"></i></span>
+      <a class="option-visibility visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true" title="Make page hidden"></i></a>
+      <a class="option-visibility visibility-hidden" data-pageid="{{id}}" href="#"><i class="fa fa-eye-slash" aria-hidden="true" title="Make page visible"></i></a>
       <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
     </span>
   </div>
@@ -41,10 +40,10 @@
         <div class="page-details">
           <span>{{title}}</span>
           <span class="item-options">
-            {{^ishomepage}}
-              <a class="visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true"></i></a>
-              <a class="visibility-hidden" data-pageid="{{id}}" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-            {{/ishomepage}}
+            <a class="promote-to-homepage" data-pageid="{{id}}" href="#" style="margin-left:-4px;" title="Make homepage"><i class="fa fa-home" aria-hidden="true"></i><i class="fa fa-level-up" aria-hidden="true"></i></a>
+            <span class="current-homepage"><i class="fa fa-home" aria-hidden="true" title="Current homepage"></i></span>
+            <a class="visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true" title="Make page hidden"></i></a>
+            <a class="visibility-hidden" data-pageid="{{id}}" href="#"><i class="fa fa-eye-slash" aria-hidden="true" title="Make page visible"></i></a>
             <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
           </span>
         </div>

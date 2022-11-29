@@ -111,6 +111,16 @@ trait apicontrol {
             $result = $page->toggle_hide($data->hidden);
             return $result;
         }
+
+        if ($action == 'promotetohome') {
+            $page = new \mod_website\page($data);
+            $site = new \mod_website\site($page->get_siteid());
+            if ($page->get_id() && $site->get_id()) {
+                $site->promotetohome($page->get_id());
+                return 1;
+            }
+        }
+        
     
         return 0;
     }

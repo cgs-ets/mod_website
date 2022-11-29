@@ -76,11 +76,11 @@ class Block {
     public function create($data) {
         global $DB;
 
-        $this->data = clone($data);
-        $this->data = (object) $this->data;
+        $data = (object) $data; // Cast to obj first.
+        $this->data = clone($data); // Make a copy.
         $this->data->timecreated = time();
         $this->data->timemodified = time();
-        $this->data->content = '';
+        $this->data->content = is_string($data->content) ? $data->content : '';
 
         $this->validate_data();
 

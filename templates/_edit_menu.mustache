@@ -122,4 +122,14 @@
 .inactive .menu-list > .list-group-item > .nested-sortable , .all .menu-list > .list-group-item > .nested-sortable {
   display: none;
 }
+/* Hide/show options depending on whether item is homepage or not */
+.list-group-item[data-ishomepage="1"] .item-options .promote-to-homepage {
+  display: none;
+}
+.list-group-item[data-ishomepage="0"] .item-options .current-homepage {
+  display: none;
+}
+.list-group-item[data-ishomepage="1"] .item-options .option-visibility {
+  display: none;
+}
 </style>

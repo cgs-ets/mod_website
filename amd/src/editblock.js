@@ -87,7 +87,7 @@
             data: deletebutton.dataset.blockid,
         },
         done: function (e) {
-          window.location.href = deletebutton.dataset.returnurl
+          window.open(deletebutton.dataset.returnurl, '_top');
         },
         fail: Notification.exception
       }]);

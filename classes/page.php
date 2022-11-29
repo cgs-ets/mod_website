@@ -281,6 +281,10 @@ class Page {
         return isset($this->data->hidden) ? $this->data->hidden : null;
     }
 
+    public function get_siteid() {
+        return isset($this->data->siteid) ? $this->data->siteid : 0;
+    }
+
     public function toggle_hide($visibility) {
         if ( ! $this->data->siteid ) {
             throw new \coding_exception('Toggle hide: siteid is missing.');

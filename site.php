@@ -86,10 +86,15 @@ if ($mode == 'preview') {
 
 // Add css.
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
-// Add vendor js.
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
+
+// Add vendor code.
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/Sortable.min.js'), true );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/dropzone/dropzone.min.js'), true );
+$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/css/dropzone.css'));
+
 
 $PAGE->add_body_class('fullscreen');
+
 // Add scripts.
 $PAGE->requires->js_call_amd('mod_website/site', 'init');
 

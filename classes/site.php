@@ -53,7 +53,7 @@ class Site {
     public $numpages = 0;
 
     private static function required_data() {
-        return array('websiteid', 'cmid', 'creatorid', 'userid', 'title');
+        return array('websiteid', 'cmid', 'creatorid', 'userid');
     }
 
     private static function required_related() {
@@ -453,7 +453,22 @@ class Site {
         return $this;
     }
 
-    
+    /**
+     * update site data.
+     *
+     * @param $data
+     * @return static
+     */
+    public function update() {
+        global $DB;
+
+        if ($this->data->id) {
+            $this->validate_data();
+            $DB->update_record(static::TABLE, $this->data);
+        }
+        
+        return $this->data->id;
+    }
 
     /**
      * Fetch site and page.
@@ -649,8 +664,9 @@ class Site {
      * @return array
      */
     private function validate_data() {
+        $data = (array) $this->data;
         foreach (static::required_data() as $attribute) {
-            if ((! array_key_exists($attribute, $this->data)) || empty($this->data[$attribute])) {
+            if ((! array_key_exists($attribute, $data)) || empty($data[$attribute])) {
                 throw new \coding_exception('Site is missing required data: ' . $attribute);
             }
         }
@@ -662,6 +678,7 @@ class Site {
      * @return array
      */
     private function validate_related($related) {
+        $related = (array) $related;
         foreach (static::required_related() as $attribute) {
             if ((! array_key_exists($attribute, $related)) || empty($related[$attribute])) {
                 throw new \coding_exception('Site is missing required related data: ' . $attribute);
@@ -789,6 +806,23 @@ class Site {
         ));
 
         return array_values($pages);
+    }
+
+    public function promotetohome($pageid) {
+        // Make sure the page is real and visible.
+        $page = new \mod_website\page();
+        $page->read_for_site($this->get_id(), $pageid);
+        if (empty($page->get_id())) {
+            return;
+        }
+        $page->toggle_hide(0);
+
+        // Set as site homepage.
+        $this->homepageid = $pageid;
+        $siteoptions = json_decode($this->data->siteoptions, true);
+        $siteoptions['homepage'] = $pageid;
+        $this->data->siteoptions = json_encode($siteoptions);
+        $this->update();
     }
       
 

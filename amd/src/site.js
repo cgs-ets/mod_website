@@ -25,8 +25,8 @@
 /**
  * @module mod_website/site
  */
- define(['core/log', 'core/ajax'], 
- function(Log, Ajax) {    
+ define(['core/log', 'core/ajax', 'core/config'], 
+ function(Log, Ajax, Config) {    
   'use strict';
 
   /**
@@ -102,6 +102,7 @@
     })
     
 
+    // User is editor.
     if (self.rootel.dataset.canedit == '1') {
 
       // Embedded forms.
@@ -152,6 +153,33 @@
           }
         })
       })
+
+      // Dropzones
+      Dropzone.autoDiscover = false;
+      let rootel = document.querySelector(".site-root");
+      document.querySelectorAll('.site-section').forEach(section => {
+        let uploadURL = Config.wwwroot + "/mod/website/dropzone.php?site=" + rootel.dataset.siteid + "&section=" + section.dataset.sectionid + "&upload=1&sesskey=" + Config.sesskey
+        let dz  = new Dropzone(section, { 
+          url: uploadURL,
+          clickable: false,
+        });
+        dz.on("queuecomplete", function (file) {
+          setTimeout(location.reload(), 2000);
+        });
+        dz.on("error", function(file, message) {
+          console.log(message);
+        });
+        dz.on("addedfiles", function() {
+          let previews = document.getElementsByClassName('dz-preview');
+          let wrapper = document.createElement('div');
+          wrapper.className = "dz-preview-wrapper";
+          self.wrapAll(wrapper, previews);
+        });
+      });
+
+      
+
+      
 
     }
 
@@ -434,6 +462,24 @@
       sectionsortable.option("disabled", false)
       return
     }
+  }
+
+  /** 
+   * Wrap an HTMLElement around another set of elements 
+   * Modified global function based on Kevin Jurkowski's implementation 
+   * here: http://stackoverflow.com/questions/3337587/wrapping-a-dom-element-using-pure-javascript/13169465#13169465
+   */
+   Site.prototype.wrapAll = function(wrapper, elms) {
+    var el = elms.length ? elms[0] : elms,
+        parent  = el.parentNode;
+
+    wrapper.appendChild(el);
+
+    while (elms.length) {
+      wrapper.appendChild(elms[0]);
+    }
+
+    parent.appendChild(wrapper);
   }
 
   return {

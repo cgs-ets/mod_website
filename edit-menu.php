@@ -116,7 +116,7 @@ $formsitemenu->set_data(array(
 ));
 
 // Add js.
-$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/js/Sortable.min.js'), true );
+$PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/Sortable.min.js'), true );
 $PAGE->requires->js_call_amd('mod_website/editmenu', 'init');
 
 if ($embed) {

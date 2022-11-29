@@ -65,7 +65,7 @@
             data: deletebutton.dataset.sectionid,
         },
         done: function (e) {
-          window.location.href = deletebutton.dataset.returnurl
+          window.open(deletebutton.dataset.returnurl, '_top');
         },
         fail: Notification.exception
       }]);
