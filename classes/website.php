@@ -320,7 +320,7 @@ class Website {
         $data = (object) $data;
         $sitedata = array(
             'websiteid' => $data->websiteid,
-            'cmid' => $data->coursemodule,
+            'cmid' => $data->cmid,
             'creatorid' => $data->creatorid,
             'userid' => $data->creatorid,
             'title' => $data->name,
