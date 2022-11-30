@@ -65,12 +65,10 @@ function website_supports($feature) {
 function website_add_instance($moduleinstance, $mform = null) {
     global $DB, $USER;
 
-
-    echo "<pre>";
-    var_export($moduleinstance);
-    var_export($mform);
-    exit;
-    
+    //echo "<pre>";
+    //var_export($moduleinstance);
+    //var_export($mform);
+    //exit;
 
     $templatesiteid = 0;
     if (!empty($moduleinstance->useexistingurl)) {
