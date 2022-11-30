@@ -162,6 +162,7 @@ class mod_website_mod_form extends moodleform_mod {
         /************************
         * Sharing/Permissions
         *************************/
+        /*
         $mform->addElement('header', 'sharing', get_string('sharing', 'mod_website'));
         $mform->setExpanded('sharing', false);
 
