@@ -55,6 +55,12 @@
    EditSection.prototype.main = function () {
     const self = this;
 
+    let selectedlayout = document.querySelector('#fgroup_id_layoutar input:checked')
+    if (!selectedlayout) {
+      // Default is file.
+      document.querySelector('#fgroup_id_layoutar input[value="4"]').checked = true
+    }
+
     let deletebutton = document.querySelector('.btn-delete')
     deletebutton.addEventListener('click', e => {
       e.preventDefault();

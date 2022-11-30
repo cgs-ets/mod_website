@@ -207,8 +207,8 @@ function xmldb_website_upgrade($oldversion) {
 
         // Adding fields to table website_permissions.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-        $table->add_field('type', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
-        $table->add_field('level', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('permissiontype', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('resourcetype', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
         $table->add_field('resourcekey', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
         $table->add_field('ownerid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');

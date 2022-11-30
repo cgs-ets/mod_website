@@ -56,8 +56,13 @@
     const self = this;
 
     self.checkBlockType();
+    let selectedlinktype = document.querySelector('.linktype input:checked')
+    if (!selectedlinktype) {
+      // Default is file.
+      document.querySelector('.linktype input[value="file"]').checked = true
+    }
     self.checkLinkType();
-    self.checkIncludePicture();
+    //self.checkIncludePicture();
 
     // Block type changed.
     let blocktypes = document.querySelectorAll('.blocktype input')
@@ -72,10 +77,10 @@
     }
 
     // Link type type changed.
-    let includepicture = document.querySelectorAll('.includepicture input')
+    /*let includepicture = document.querySelectorAll('.includepicture input')
     for (var i = 0; i < includepicture.length; i++) {
       includepicture[i].addEventListener('change', (e) => {self.checkIncludePicture()})
-    }
+    }*/
 
     let deletebutton = document.querySelector('.btn-delete')
     deletebutton.addEventListener('click', e => {

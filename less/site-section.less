@@ -24,25 +24,6 @@
     }
   }
 
-  &[data-collapsible="true"] {
-    .section-title {
-      cursor: pointer;
-      .caret {
-        display: inline-block;
-      }
-    }
-
-    &.collapsed {
-      .section-blocks {
-        display: none;
-      }
-      .section-title .caret {
-        -webkit-transform: rotateX(180deg);
-            transform: rotateX(180deg);
-      }
-    }
-  }
-
   &[data-hidden="1"] {
     display: none;
   }
@@ -78,8 +59,30 @@
       transform: scale(1.01) !important;
     }
   }
-  
+}
 
+// View only
+.site-root[data-mode="view"] {
+  .site-section {
+    &[data-collapsible="true"] {
+      .section-title {
+        cursor: pointer;
+        .caret {
+          display: inline-block;
+        }
+      }
+  
+      &.collapsed {
+        .section-blocks {
+          display: none;
+        }
+        .section-title .caret {
+          -webkit-transform: rotateX(180deg);
+              transform: rotateX(180deg);
+        }
+      }
+    }
+  }
 }
 
 // Horiz divided

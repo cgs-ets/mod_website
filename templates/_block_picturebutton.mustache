@@ -20,8 +20,15 @@
     A picture button.
 }}
 <a target="_blank" class="picturebutton" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{^isfile}}{{buttonurl}}{{/isfile}}">
-  <figure class="image-block {{^includepicture}}nopicture{{/includepicture}}" {{#includepicture}}style="background-image: url({{buttonpicture.path}})"{{/includepicture}}>
-    <h2>{{buttontitle}}</h2>
+  <figure 
+    class="image-block {{^includepicture}}nopicture{{/includepicture}}" 
+    {{^includepicture}}data-filetype="{{buttonfilemime}}"{{/includepicture}}
+    {{#includepicture}}style="background-image: url({{buttonpicture.path}})"{{/includepicture}}
+    >
+    <h2>
+      {{#buttonfilemimeicon}} {{{buttonfilemimeicon}}} {{/buttonfilemimeicon}}
+      {{^buttonfilemimeicon}} {{buttonfilemime}} {{/buttonfilemimeicon}}
+    </h2>
     <figcaption>
       <h3>
         {{buttontitle}}

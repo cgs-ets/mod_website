@@ -145,8 +145,8 @@
     <TABLE NAME="website_permissions" COMMENT="Sharing permissions">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Describes what kind of access is allowed, eg Edit or View" />
-        <FIELD NAME="level" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Describes what kind of resource this is, eg Site or page" />
+        <FIELD NAME="permissiontype" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Describes what kind of access is allowed, eg Edit or View" />
+        <FIELD NAME="resourcetype" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Describes what kind of resource this is, eg Site or page" />
         <FIELD NAME="resourcekey" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The key to the shared resource" />
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The user the resource is shared to" />
         <FIELD NAME="ownerid" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The user that shared the resource" />

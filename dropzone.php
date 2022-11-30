@@ -108,16 +108,20 @@ if ($upload) {
     $cleanname = substr($file['name'], 0, strrpos($file['name'], '.'));
     $isimage = strpos($newrecord->mimetype, 'image') !== false ? 1 : 0;
     $isvideo = strpos($newrecord->mimetype, 'video') !== false ? 1 : 0;
+    $isaudio = strpos($newrecord->mimetype, 'audio') !== false ? 1 : 0;
     $isother = !$isimage && !$isvideo;
 
     $block = new \mod_website\block();
 
-    if ( $isimage || $isvideo ) 
+    if ( $isimage || $isvideo || $isaudio) 
     {
         // Add into a normal content block.
         $html = '<img src="@@PLUGINFILE@@/' . $filename . '" role="presentation">';
         if ($isvideo) {
             $html = '<video controls><source src="@@PLUGINFILE@@/' . $filename . '" type="' . $mime . '">Your browser does not support the video tag.</video>';
+        }
+        if ($isaudio) {
+            $html = '<audio controls><source src="@@PLUGINFILE@@/' . $filename . '" type="' . $mime . '">Your browser does not support the audio tag.</audio>';
         }
         $blockdata = array(
             'siteid' => $site->get_id(),

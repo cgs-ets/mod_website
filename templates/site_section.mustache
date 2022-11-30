@@ -19,7 +19,7 @@
 
     A single section.
 }}
-<div class="site-section editzone dzone"  action="/file/post"
+<div class="site-section editzone dzone {{^options.hidetitle}}{{#options.collapsible}}{{^options.expanddefault}}collapsed{{/options.expanddefault}}{{/options.collapsible}}{{/options.hidetitle}}"  action="/file/post"
     {{#canedit}}data-formurl="{{embedded_sectionurl}}"{{/canedit}} 
     data-sectionid="{{id}}" 
     data-layout="{{layout}}"

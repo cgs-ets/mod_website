@@ -79,7 +79,7 @@ class mod_website_mod_form extends moodleform_mod {
         $options = array(
             '0' => 'Single teacher-driven website, viewable by all students',
             '1' => 'Copy for each student, editable and viewable by the student',
-            //'2' => 'Page for each student, editable and viewable by the student',
+            '2' => 'Page for each student, editable and viewable by the student',
         );
         $select = $mform->addElement('select', 'distribution', get_string('distribution', 'mod_website'), $options);
         $select->setSelected('0');
@@ -160,9 +160,9 @@ class mod_website_mod_form extends moodleform_mod {
         $mform->addHelpButton('cutoffdate', 'cutoffdate', 'mod_website');
 
         /************************
-        * Sharing
+        * Sharing/Permissions
         *************************/
-        /*$mform->addElement('header', 'sharing', get_string('sharing', 'mod_website'));
+        $mform->addElement('header', 'sharing', get_string('sharing', 'mod_website'));
         $mform->setExpanded('sharing', false);
 
         $el =& $mform->createElement('html', get_string('distsinglesharing', 'mod_website'));
@@ -173,7 +173,12 @@ class mod_website_mod_form extends moodleform_mod {
         $el =& $mform->createElement('html', get_string('distmultisharing', 'mod_website'));
         $formgroup = array($el);
         $mform->addGroup($formgroup, 'distmultisharing');
-        $mform->hideIf('distmultisharing', 'distribution', 'eq', '0');
+        $mform->hideIf('distmultisharing', 'distribution', 'neq', '1');
+
+        $el =& $mform->createElement('html', get_string('distpagesharing', 'mod_website'));
+        $formgroup = array($el);
+        $mform->addGroup($formgroup, 'distpagesharing');
+        $mform->hideIf('distpagesharing', 'distribution', 'neq', '2');
 
         $sharegroups = $groups;
         unset($sharegroups['00_everyone']);
@@ -208,9 +213,9 @@ class mod_website_mod_form extends moodleform_mod {
             $select = $mform->addElement('select', 'sharingusers', get_string('users', 'mod_website'), $users, array('size' => 10, 'style' => 'width:100%;'));
             $select->setMultiple(true);
             $mform->hideIf('sharingusers', 'distribution', 'neq', '0');
-        }*/
+        }
         /************************
-        * End of sharing area
+        * End of sharing/permissions area
         *************************/
 
         // Add standard grading elements.

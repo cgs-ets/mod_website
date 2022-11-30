@@ -128,7 +128,7 @@ class Block {
                 'buttontitle' => $data->buttontitle,
                 'linktype' => $data->buttonlinktypegroup['buttonlinktype'],
                 'buttonurl' => $data->buttonurl,
-                'includepicture' => $data->includepicturegroup['includepicture'],
+                'includepicture' => $data->buttonpicture ? 1 : 0, //$data->includepicturegroup['includepicture'],
             ));
             // Save the file.
             if ($data->buttonfile) {
@@ -243,10 +243,13 @@ class Block {
                     'content', 
                     $this->get_id()
                 );
-                // Apply filters
+                
+                // Custom purification.
+                $html = utils::purify_html($html);
+                // Moodle's filters - without cleaning because we use custom cleaning.
                 $options = (object) array(
                     'context' => $related['modulecontext'],
-                    'noclean' => utils::should_clean_content($related['website']), // We may want this cleaned for security (student site)
+                    'noclean' => true, //utils::should_clean_content($related['website']),
                     'nocache' => true,
                 );
                 $html = format_text($html, FORMAT_HTML, $options);
@@ -256,7 +259,7 @@ class Block {
         if ($this->data->type == 'picturebutton') {
             if ($this->get_id()) {
                 $image = $this->export_buttonpicture($related);
-                $fileurl = $this->get_buttonfileurl($related);
+                list($fileurl, $filemimetype, $filemimetypeicon) = $this->export_buttonfile($related);
                 $settings = json_decode($this->data->content);
                 $buttondata = array(
                     'buttontitle' => $settings->buttontitle,
@@ -264,7 +267,9 @@ class Block {
                     'isurl' => $settings->linktype == 'url',
                     'buttonurl' => $settings->buttonurl,
                     'buttonfile' => $fileurl,
-                    'includepicture' => $settings->includepicture,
+                    'buttonfilemime' => $settings->linktype == 'file' ? $filemimetype : 'url',
+                    'buttonfilemimeicon' => $settings->linktype == 'file' ? $filemimetypeicon : '<i class="fa fa-link" aria-hidden="true"></i>',
+                    'includepicture' => $image ? 1 : 0,
                     'buttonpicture' => $image,
                 );
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
@@ -313,7 +318,7 @@ class Block {
 	}
 
 
-    private function get_buttonfileurl($related) {
+    private function export_buttonfile($related) {
 		global $CFG;
 
 		$url = '';
@@ -321,13 +326,51 @@ class Block {
         $filearea = 'buttonfile';
 	    $fs = get_file_storage();
 	    $files = $fs->get_area_files($related['modulecontext']->id, $plugin, $filearea, $this->data->id, "filename", false);
+        $mimetype = '';
+        $mimetypeicon = '<i class="fa fa-file-o" aria-hidden="true"></i>';
         if (count($files)) {
             // Get first file. Should only be one.
             $file = reset($files);
             $filename = $file->get_filename();
             $url = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$related['modulecontext']->id.'/'.$plugin.'/'.$filearea.'/'.$this->data->id.'/'.$filename);
+            $mimetype = $file->get_mimetype();
+            if (!empty($mimetype)) {
+                $mimetype = explode('/', $mimetype);
+                $mimetype = count($mimetype) == 2 ? $mimetype[1] : '';
+
+                if (in_array($mimetype, array('pdf')))
+                {
+                    $mimetypeicon = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+                    $mimetype = 'pdf';
+                }
+                else if ( strpos($mimetype, 'word') !== false )
+                {
+                    $mimetypeicon = '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
+                    $mimetype = 'word';
+                }
+                else if ( strpos($mimetype, 'sheet') !== false )
+                {
+                    $mimetypeicon = '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
+                    $mimetype = 'sheet';
+                }
+                else if ( strpos($mimetype, 'presentation') !== false )
+                {
+                    $mimetypeicon = '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
+                    $mimetype = 'powerpoint';
+                }
+                else if ( strpos($mimetype, 'zip') !== false || strpos($mimetype, '7z') !== false  )
+                {
+                    $mimetypeicon = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>';
+                    $mimetype = 'archive';
+                }
+                else if (in_array($mimetype, array('txt', 'plain', 'rtf')))
+                {
+                    $mimetypeicon = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+                    $mimetype = 'text';
+                }
+            }
         }
-	    return $url;
+	    return array($url, $mimetype, $mimetypeicon);
 	}
 
     public function set($property, $value) {

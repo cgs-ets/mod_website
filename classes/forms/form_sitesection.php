@@ -48,10 +48,33 @@ class form_sitesection extends \moodleform {
         $mform->addElement('text', 'sectiontitle', get_string('sectiontitle', 'mod_website'), 'size="48"');
         $mform->setType('sectiontitle', PARAM_TEXT);
 
+        /*----------------------
+        *   Section options
+        *----------------------*/
+        $options = array(
+            0 => get_string('titlevisible', 'mod_website'),
+            1 => get_string('titlehidden', 'mod_website'),
+        );
+        $select = $mform->addElement('select', 'hidetitle', '', $options);
+        $select->setSelected(0);
 
-        $mform->addElement('advcheckbox', 'hidetitle', get_string('hidetitle', 'mod_website'), ' ', array(), array(0, 1));
-        $mform->addElement('advcheckbox', 'collapsible', get_string('collapsible', 'mod_website'), ' ', array(), array(0, 1));
+        $options = array(
+            1 => get_string('sectioncollapsible', 'mod_website'),
+            0 => get_string('sectionalwaysopen', 'mod_website'),
+        );
+        $select = $mform->addElement('select', 'collapsible', '', $options);
+        $select->setSelected(1);
         $mform->hideIf('collapsible', 'hidetitle', 'eq', 1);
+
+        $options = array(
+            1 => get_string('sectionexpandeddefault', 'mod_website'),
+            0 => get_string('sectioncollapseddefault', 'mod_website'),
+        );
+        $select = $mform->addElement('select', 'expanddefault', '', $options);
+        $select->setSelected(1);
+        $mform->hideIf('expanddefault', 'hidetitle', 'eq', 1);
+        $mform->hideIf('expanddefault', 'collapsible', 'eq', 0);
+        
 
 
         /*----------------------
@@ -82,7 +105,6 @@ class form_sitesection extends \moodleform {
         );
         $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
         $select->setSelected(0);
-        //$mform->addRule('visibility', null, 'required', null, 'client');
 
         /*----------------------
         *   Buttons

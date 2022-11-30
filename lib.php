@@ -65,6 +65,13 @@ function website_supports($feature) {
 function website_add_instance($moduleinstance, $mform = null) {
     global $DB, $USER;
 
+
+    echo "<pre>";
+    var_export($moduleinstance);
+    var_export($mform);
+    exit;
+    
+
     $templatesiteid = 0;
     if (!empty($moduleinstance->useexistingurl)) {
         $regex = '/\/mod\/website\/site\.php\?site\=(\d+)/';
@@ -81,25 +88,20 @@ function website_add_instance($moduleinstance, $mform = null) {
     $moduleinstance->groups = json_encode($moduleinstance->distgroups);
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 
-    if ($moduleinstance->distribution === '0') {
-
-        // Single teacher site.
-        $sitedata = array(
-            'websiteid' => $moduleinstance->id,
-            'cmid' => $moduleinstance->coursemodule,
-            'creatorid' => $USER->id,
-            'userid' => $USER->id,
-            'title' => $moduleinstance->name,
-            'siteoptions' => '',
+    if ($moduleinstance->distribution === '0') { 
+        // Single site.
+        $website = new \mod_website\website();
+        $website->create_site(
+            array(
+                'websiteid' => $moduleinstance->id,
+                'cmid' => $moduleinstance->coursemodule,
+                'creatorid' => $USER->id,
+                'name' => $moduleinstance->name,
+            ),
+            $templatesiteid
         );
-        $site = new \mod_website\site();
-        if (!$templatesiteid) {
-            $site->create($sitedata);
-        } else {
-            $site->create_from_template($sitedata, $templatesiteid, true);
-        }
-    } else {
-        // Student sites.
+    } else if ($moduleinstance->distribution === '1') { 
+        // Copies for students.
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
         $website->create_sites_for_students(
@@ -111,6 +113,30 @@ function website_add_instance($moduleinstance, $mform = null) {
                 'name' => $moduleinstance->name,
             ),
             $templatesiteid
+        );
+    } else if ($moduleinstance->distribution === '2') { 
+        // Page per student.
+        // If a template URL has been supplied, check if a speciic page is nominated.
+        $templatepageid = 0;
+        if (!empty($moduleinstance->useexistingurl)) {
+            $regex = '/\/mod\/website\/site\.php\?site\=(\d+)&page\=(\d)/';
+            preg_match($regex, $moduleinstance->useexistingurl, $matches);
+            if (count($matches) == 3) {
+                $templatepageid = $matches[2];
+            }
+        }
+        $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
+        $website = new \mod_website\website();
+        $website->create_pages_for_students(
+            $students, 
+            array(
+                'websiteid' => $moduleinstance->id,
+                'cmid' => $moduleinstance->coursemodule,
+                'creatorid' => $USER->id,
+                'name' => $moduleinstance->name,
+            ),
+            $templatesiteid,
+            $templatepageid
         );
     }
 

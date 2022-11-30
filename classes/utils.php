@@ -94,6 +94,7 @@ class utils {
         return $mentees;
     }
 
+    // NOT USED - Implemented own cleaner.
     public static function should_clean_content($website) {
         // Don't clean teacher sites.
         if ($website->distribution === '0') {
@@ -166,5 +167,179 @@ class utils {
             'creatorid' => $creatorid,
             'name' => $newname,
         ));
+    }
+
+
+    // Moodle's purification is too restrictive. At the same time, we don't want to turn it off.
+    // This is a modified version of weblib.php line 1776.
+    // https://github.com/moodle/moodle/blob/master/lib/weblib.php
+    public static function purify_html($text) {
+        global $CFG;
+    
+        $text = (string)$text;
+    
+        static $purifiers = array();
+        static $caches = array();
+    
+        // Purifier code can change only during major version upgrade.
+        $version = empty($CFG->version) ? 0 : $CFG->version;
+        $cachedir = "$CFG->localcachedir/htmlpurifier/$version";
+        if (!file_exists($cachedir)) {
+            // Purging of caches may remove the cache dir at any time,
+            // luckily file_exists() results should be cached for all existing directories.
+            $purifiers = array();
+            $caches = array();
+            gc_collect_cycles();
+    
+            make_localcache_directory('htmlpurifier', false);
+            check_dir_exists($cachedir);
+        }
+    
+        // MIKEV - MODIFIED FOR WEBSITES. 
+        $allowid = 1;
+        $allowobjectembed = 1;
+    
+        $type = 'type_'.$allowid.'_'.$allowobjectembed;
+    
+        if (!array_key_exists($type, $caches)) {
+            $caches[$type] = \cache::make('core', 'htmlpurifier', array('type' => $type));
+        }
+        $cache = $caches[$type];
+
+        // MIKEV - Add a code version to the cache key.
+        $localversion = '2022113002';
+        // Add revision number and all options to the text key so that it is compatible with local cluster node caches.
+        $key = "|$version|$allowobjectembed|$allowid|$text|$localversion";
+        $filteredtext = $cache->get($key);
+    
+        if ($filteredtext === true) {
+            // The filtering did not change the text last time, no need to filter anything again.
+            return $text;
+        } else if ($filteredtext !== false) {
+            return $filteredtext;
+        }
+    
+        if (empty($purifiers[$type])) {
+            require_once $CFG->libdir.'/htmlpurifier/HTMLPurifier.safe-includes.php';
+            require_once $CFG->libdir.'/htmlpurifier/locallib.php';
+            $config = \HTMLPurifier_Config::createDefault();
+    
+            $config->set('HTML.DefinitionID', 'moodlehtml');
+            $config->set('HTML.DefinitionRev', 6);
+            $config->set('Cache.SerializerPath', $cachedir);
+            $config->set('Cache.SerializerPermissions', $CFG->directorypermissions);
+            $config->set('Core.NormalizeNewlines', false);
+            $config->set('Core.ConvertDocumentToFragment', true);
+            $config->set('Core.Encoding', 'UTF-8');
+            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+            $config->set('URI.AllowedSchemes', array(
+                'http' => true,
+                'https' => true,
+                'ftp' => true,
+                'irc' => true,
+                'nntp' => true,
+                'news' => true,
+                'rtsp' => true,
+                'rtmp' => true,
+                'teamspeak' => true,
+                'gopher' => true,
+                'mms' => true,
+                'mailto' => true
+            ));
+            $config->set('Attr.AllowedFrameTargets', array('_blank'));
+    
+            if ($allowobjectembed) {
+                $config->set('HTML.SafeObject', true);
+                $config->set('Output.FlashCompat', true);
+                $config->set('HTML.SafeEmbed', true);
+                
+                // MIKEV - ADDED FOR WEBSITES. 
+                // Allow iframes from trusted sources
+                $config->set('HTML.SafeIframe', true);
+                $config->set('URI.SafeIframeRegexp', '%^(https?:)?//%'); //allow all embeds
+                //$cfg->set('URI.SafeIframeRegexp', '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/)%'); //allow YouTube and Vimeo
+            }
+    
+            if ($allowid) {
+                $config->set('Attr.EnableID', true);
+            }
+    
+            if ($def = $config->maybeGetRawHTMLDefinition()) {
+                $def->addElement('nolink', 'Inline', 'Flow', array());                      // Skip our filters inside.
+                $def->addElement('tex', 'Inline', 'Inline', array());                       // Tex syntax, equivalent to $$xx$$.
+                $def->addElement('algebra', 'Inline', 'Inline', array());                   // Algebra syntax, equivalent to @@xx@@.
+                $def->addElement('lang', 'Block', 'Flow', array(), array('lang'=>'CDATA')); // Original multilang style - only our hacked lang attribute.
+                $def->addAttribute('span', 'xxxlang', 'CDATA');                             // Current very problematic multilang.
+    
+                // Media elements.
+                // https://html.spec.whatwg.org/#the-video-element
+                $def->addElement('video', 'Block', 'Optional: #PCDATA | Flow | source | track', 'Common', [
+                    'src' => 'URI',
+                    'crossorigin' => 'Enum#anonymous,use-credentials',
+                    'poster' => 'URI',
+                    'preload' => 'Enum#auto,metadata,none',
+                    'autoplay' => 'Bool',
+                    'playsinline' => 'Bool',
+                    'loop' => 'Bool',
+                    'muted' => 'Bool',
+                    'controls' => 'Bool',
+                    'width' => 'Length',
+                    'height' => 'Length',
+                ]);
+                // https://html.spec.whatwg.org/#the-audio-element
+                $def->addElement('audio', 'Block', 'Optional: #PCDATA | Flow | source | track', 'Common', [
+                    'src' => 'URI',
+                    'crossorigin' => 'Enum#anonymous,use-credentials',
+                    'preload' => 'Enum#auto,metadata,none',
+                    'autoplay' => 'Bool',
+                    'loop' => 'Bool',
+                    'muted' => 'Bool',
+                    'controls' => 'Bool'
+                ]);
+                // https://html.spec.whatwg.org/#the-source-element
+                $def->addElement('source', false, 'Empty', null, [
+                    'src' => 'URI',
+                    'type' => 'Text'
+                ]);
+                // https://html.spec.whatwg.org/#the-track-element
+                $def->addElement('track', false, 'Empty', null, [
+                    'src' => 'URI',
+                    'kind' => 'Enum#subtitles,captions,descriptions,chapters,metadata',
+                    'srclang' => 'Text',
+                    'label' => 'Text',
+                    'default' => 'Bool',
+                ]);
+    
+                // Use the built-in Ruby module to add annotation support.
+                $def->manager->addModule(new \HTMLPurifier_HTMLModule_Ruby());
+            }
+    
+            $purifier = new \HTMLPurifier($config);
+            $purifiers[$type] = $purifier;
+        } else {
+            $purifier = $purifiers[$type];
+        }
+    
+        $multilang = (strpos($text, 'class="multilang"') !== false);
+    
+        $filteredtext = $text;
+        if ($multilang) {
+            $filteredtextregex = '/<span(\s+lang="([a-zA-Z0-9_-]+)"|\s+class="multilang"){2}\s*>/';
+            $filteredtext = preg_replace($filteredtextregex, '<span xxxlang="${2}">', $filteredtext);
+        }
+        $filteredtext = (string)$purifier->purify($filteredtext);
+        if ($multilang) {
+            $filteredtext = preg_replace('/<span xxxlang="([a-zA-Z0-9_-]+)">/', '<span lang="${1}" class="multilang">', $filteredtext);
+        }
+    
+        if ($text === $filteredtext) {
+            // No need to store the filtered text, next time we will just return unfiltered text
+            // because it was not changed by purifying.
+            $cache->set($key, true);
+        } else {
+            $cache->set($key, $filteredtext);
+        }
+    
+        return $filteredtext;
     }
 }

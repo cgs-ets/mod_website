@@ -90,6 +90,7 @@ if (!empty($formdata)) {
     $formdata->sectionoptions = json_encode( (object) array(
         'hidetitle' => $formdata->hidetitle,
         'collapsible' => $formdata->collapsible,
+        'expanddefault' => $formdata->expanddefault,
     ));
     $formdata->title = $formdata->sectiontitle;
     $formdata->hidden = $formdata->visibility;
@@ -114,6 +115,7 @@ if ($sectionid) {
         'blocks' => $section->blocks,
         'hidetitle' => $options->hidetitle,
         'collapsible' => $options->collapsible,
+        'expanddefault' => $options->expanddefault,
         'visibility' => $section->hidden,
     ));
 }

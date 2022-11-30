@@ -315,7 +315,49 @@ class Website {
     }
 
 
+    public function create_site($data, $templatesiteid = 0) {
+        // Single teacher site.
+        $data = (object) $data;
+        $sitedata = array(
+            'websiteid' => $data->id,
+            'cmid' => $data->coursemodule,
+            'creatorid' => $data->creatorid,
+            'userid' => $data->creatorid,
+            'title' => $data->name,
+            'siteoptions' => '',
+        );
+        $site = new \mod_website\site();
+        if (!$templatesiteid) {
+            $site->create($sitedata);
+        } else {
+            $site->create_from_template($sitedata, $templatesiteid, true);
+        }
+    }
+
+
     public function create_sites_for_students($students, $data, $templatesiteid = 0) {
+        // Copies for students.
+        foreach ($students as $studentid) {
+            $data = (object) $data;
+            $sitedata = array(
+                'websiteid' => $data->websiteid,
+                'cmid' => $data->cmid,
+                'creatorid' => $data->creatorid,
+                'userid' => $studentid,
+                'title' => $data->name,
+                'siteoptions' => '',
+            );
+            $site = new \mod_website\site();
+            if (!$templatesiteid) {
+                $site->create($sitedata);
+            } else {
+                $site->create_from_template($sitedata, $templatesiteid, true);
+            }
+        }
+    }
+
+    public function create_pages_for_students($students, $data, $templatesiteid = 0, $templatepageid = 0) {
+        // Page for students.
         foreach ($students as $studentid) {
             $data = (object) $data;
             $sitedata = array(

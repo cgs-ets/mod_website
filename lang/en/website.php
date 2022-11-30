@@ -61,10 +61,16 @@ $string['nopermissiontoedit'] = 'You do not have permission to edit this website
 
 $string['editmenu'] = 'Edit menu';
 $string['editsection'] = 'Edit section';
-$string['sectionlayout'] = 'Section layout';
+$string['sectionlayout'] = 'Layout';
 $string['sectiontitle'] = 'Section title';
 $string['hidetitle'] = 'Hide title?';
+$string['titlehidden'] = 'Do not display title';
+$string['titlevisible'] = 'Display title';
 $string['collapsible'] = 'Section collapsible?';
+$string['sectioncollapsible'] = 'Section can be collapsed';
+$string['sectionalwaysopen'] = 'Section always expanded';
+$string['sectioncollapseddefault'] = 'Collapsed by default';
+$string['sectionexpandeddefault'] = 'Expanded by default';
 
 $string['editblock'] = 'Edit block';
 $string['blocktype'] = 'Block type';
@@ -73,11 +79,10 @@ $string['button'] = 'Button';
 $string['picturebutton'] = 'Picture button';
 
 $string['buttontitle'] = 'Button caption';
-$string['buttonlinktype'] = 'What would you like to link to?';
+$string['buttonlinktype'] = 'What is the button linking to?';
 $string['buttonfile'] = 'File';
 $string['buttonurl'] = 'URL';
 $string['uploadfile'] = 'Upload file';
-$string['includepicture'] = 'Would you like a picture for your button?';
 $string['buttonpicture'] = 'Button picture';
 $string['buttonlinkedfile'] = 'Button file';
 
@@ -109,7 +114,8 @@ $string['std_invalid_selection'] = 'The selected combination is invalid.';
 $string['groupsgroupingsheader'] = 'Groups - Groupings';
 
 $string['sharing'] = 'Sharing';
-$string['distsinglesharing'] = '<p class="alert alert-warning">By default this website is editable by you only. <br> You may allow other people to edit by selecting users, groups, or roles below.</p>';
-$string['distmultisharing'] = '<p class="alert alert-warning">This feature only applies to single site ditributions.</p>';
+$string['distsinglesharing'] = '<p class="alert alert-info">By default this website is editable by you only. <br> You may allow other people to edit by selecting users, groups, or roles below.</p><br><br><b>People that can Edit:</b>';
+$string['distmultisharing'] = '<p class="alert alert-info">This feature only applies to single site ditributions.</p>';
+$string['distpagesharing'] = '<p class="alert alert-info">This feature only applies to single site ditributions. The "Page for each student" distribution will automatically create a page for each student and set up the permissions allowing them to edit their own page.</p>';
 $string['roles'] = 'Roles';
 $string['users'] = 'Users';

@@ -37,7 +37,15 @@
 .path-mod-website#page-mod-website-edit-block .fdescription.required {
   display: none;
 }
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] {
+  /*&[data-includepicture="1"] {
+      #fitem_id_buttonpicture {
+        display: flex;
+      }
+    }*/
+}
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_buttontitle,
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_buttonpicture,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fgroup_id_buttonlinktypegroup,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_visibility,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fgroup_id_buttonar {
@@ -49,9 +57,6 @@
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fgroup_id_includepicturegroup {
-  display: flex;
-}
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-includepicture="1"] #fitem_id_buttonpicture {
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_content,
@@ -559,19 +564,6 @@
   display: none;
   width: 18px;
 }
-#page-mod-website-site .site-section[data-collapsible="true"] .section-title {
-  cursor: pointer;
-}
-#page-mod-website-site .site-section[data-collapsible="true"] .section-title .caret {
-  display: inline-block;
-}
-#page-mod-website-site .site-section[data-collapsible="true"].collapsed .section-blocks {
-  display: none;
-}
-#page-mod-website-site .site-section[data-collapsible="true"].collapsed .section-title .caret {
-  -webkit-transform: rotateX(180deg);
-  transform: rotateX(180deg);
-}
 #page-mod-website-site .site-section[data-hidden="1"] {
   display: none;
 }
@@ -602,6 +594,19 @@
   border-color: #0091F7 !important;
   border-style: solid !important;
   transform: scale(1.01) !important;
+}
+#page-mod-website-site .site-root[data-mode="view"] .site-section[data-collapsible="true"] .section-title {
+  cursor: pointer;
+}
+#page-mod-website-site .site-root[data-mode="view"] .site-section[data-collapsible="true"] .section-title .caret {
+  display: inline-block;
+}
+#page-mod-website-site .site-root[data-mode="view"] .site-section[data-collapsible="true"].collapsed .section-blocks {
+  display: none;
+}
+#page-mod-website-site .site-root[data-mode="view"] .site-section[data-collapsible="true"].collapsed .section-title .caret {
+  -webkit-transform: rotateX(180deg);
+  transform: rotateX(180deg);
 }
 @media (min-width: 780px) {
   #page-mod-website-site .site-section[data-layout="1"] .section-blocks {
@@ -699,39 +704,24 @@ https://codepen.io/steveeeie/pen/NVWMEM
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 230px;
   background-size: cover;
   background-position: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
-  /* For UX sake, always show the caption */
+  /* Show the mime icon */
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure:hover {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   transform: scale(1.05);
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure h2 {
-  position: absolute;
-  top: 50px;
-  left: 20px;
-  margin: 0;
-  padding: 0;
-  color: white;
-  font-size: 60px;
-  font-weight: 100;
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  right: 20px;
-  max-height: 196px;
-  overflow: hidden;
-  word-break: break-word;
-}
 #page-mod-website-site .site-block-inner a.picturebutton figure figcaption {
   position: absolute;
-  top: 300px;
+  bottom: 0px;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: auto;
   margin: 0;
   padding: 15px 30px;
   background-color: rgba(0, 0, 0, 0.85);
@@ -741,35 +731,59 @@ https://codepen.io/steveeeie/pen/NVWMEM
   transition: 0.25s;
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure figcaption h3 {
-  margin: 0 0 20px;
+  margin: 0;
   padding: 0;
   font-weight: 400;
   font-size: 17px;
-}
-#page-mod-website-site .site-block-inner a.picturebutton figure figcaption {
-  top: 220px;
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure h2 {
   opacity: 0;
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure.nopicture {
-  background: #ccc;
-  display: flex;
-  justify-content: center;
+  background: #aaa;
+  display: block;
   text-align: center;
-  padding: 20px;
+  padding: 50px;
+  color: #000;
 }
 #page-mod-website-site .site-block-inner a.picturebutton figure.nopicture h2 {
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  right: 20px;
+  max-height: 196px;
+  overflow: hidden;
+  word-break: break-word;
   opacity: 1;
-  color: #000;
-  font-size: 26px;
+  font-size: 56px;
   position: relative;
   top: 0;
   left: 0;
   text-decoration: none;
+  text-transform: uppercase;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture figcaption {
-  display: none;
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="url"] {
+  background: #306BFF;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="pdf"] {
+  background: #DA1618;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="word"] {
+  background: #295497;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="sheet"] {
+  background: #1F7244;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="powerpoint"] {
+  background: #C9461F;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="archive"] {
+  background: #FFB739;
+}
+#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="archive"] h2 {
+  color: #000;
 }
 #page-mod-website-site .modal {
   opacity: 0;

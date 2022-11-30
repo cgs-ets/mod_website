@@ -67,6 +67,9 @@ class form_siteblock extends \moodleform {
         $mform->addElement('text', 'buttontitle', get_string('buttontitle', 'mod_website'), 'size="48"'); 
         $mform->setType('buttontitle', PARAM_TEXT);
 
+        // Button photo
+        $mform->addElement('filemanager', 'buttonpicture', get_string('buttonpicture', 'mod_website'), get_string('buttonpicture', 'mod_website'), static::picture_options());
+
         // What are you linking to?
         $buttonlinktype=array();
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonfile', 'mod_website'), 'file', array('class' => 'linktype'));
@@ -81,14 +84,10 @@ class form_siteblock extends \moodleform {
         $mform->addElement('filemanager', 'buttonfile', get_string('uploadfile', 'mod_website'), get_string('buttonfile', 'mod_website'), static::file_options()); 
 
         // Would you like a button photo?
-        $includepicture=array();
-        $includepicture[] = $mform->createElement('radio', 'includepicture', null, 'Yes', 1, array('class' => 'includepicture'));
-        $includepicture[] = $mform->createElement('radio', 'includepicture', null, 'No', 0, array('class' => 'includepicture'));
-        $mform->addGroup($includepicture, 'includepicturegroup', get_string('includepicture', 'mod_website'));
-
-        // Button photo
-        $mform->addElement('filemanager', 'buttonpicture', get_string('buttonpicture', 'mod_website'), get_string('buttonpicture', 'mod_website'), static::picture_options());
-      
+        //$includepicture=array();
+        //$includepicture[] = $mform->createElement('radio', 'includepicture', null, 'Yes', 1, array('class' => 'includepicture'));
+        //$includepicture[] = $mform->createElement('radio', 'includepicture', null, 'No', 0, array('class' => 'includepicture'));
+        //$mform->addGroup($includepicture, 'includepicturegroup', get_string('includepicture', 'mod_website'));
         
         /*----------------------
         *   Visibility
