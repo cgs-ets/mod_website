@@ -319,7 +319,7 @@ class Website {
         // Single teacher site.
         $data = (object) $data;
         $sitedata = array(
-            'websiteid' => $data->id,
+            'websiteid' => $data->websiteid,
             'cmid' => $data->coursemodule,
             'creatorid' => $data->creatorid,
             'userid' => $data->creatorid,
