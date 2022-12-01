@@ -80,7 +80,7 @@ $formsiteblock = new form_siteblock(
     ), 
     'post', 
     '', 
-    array('target' => '_top', 'data-form' => 'website-siteblock')
+    array('target' => '_parent', 'data-form' => 'website-siteblock')
 );
 
 // Check if it is cancelled.

@@ -91,7 +91,7 @@ $formsitemenu = new form_sitemenu($thisurl->out(false), array(
         'classes' => 'list-clone list-all'
     ),
     'embed' => $embed,
-), 'post', '', array('target' => '_top', 'data-form' => 'website-sitemenu'));
+), 'post', '', array('target' => '_parent', 'data-form' => 'website-sitemenu'));
 
 // Check if it is cancelled.
 if ($formsitemenu->is_cancelled()) {

@@ -3,6 +3,7 @@
   "private": true,
   "description": "Website builder module",
   "devDependencies": {
+    "cypress": "^11.2.0",
     "grunt": "^1.1.0",
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.1"

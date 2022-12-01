@@ -76,7 +76,7 @@ $form = new form_sitepage($thisurl->out(false),
         'ishomepage' => $ishomepage,
         'embed' => $embed, 
     ), 
-    'post', '', array('target' => '_top', 'data-form' => 'website-sitepage')
+    'post', '', array('target' => '_parent', 'data-form' => 'website-sitepage')
 );
 
 // Check if it is cancelled.

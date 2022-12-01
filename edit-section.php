@@ -73,7 +73,7 @@ $formsitesection = new form_sitesection($thisurl->out(false),
         'sectionid' => $sectionid,
         'returnurl' => $gobackurl->out(),
         'embed' => $embed,
-    ), 'post', '', array('target' => '_top', 'data-form' => 'website-sitesection'));
+    ), 'post', '', array('target' => '_parent', 'data-form' => 'website-sitesection'));
 
 // Check if it is cancelled.
 if ($formsitesection->is_cancelled()) {

@@ -92,7 +92,7 @@
             data: deletebutton.dataset.blockid,
         },
         done: function (e) {
-          window.open(deletebutton.dataset.returnurl, '_top');
+          window.open(deletebutton.dataset.returnurl, '_parent');
         },
         fail: Notification.exception
       }]);

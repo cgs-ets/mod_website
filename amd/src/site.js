@@ -54,7 +54,7 @@
    function Site(rootel) {
     var self = this;
     self.rootel = rootel;
-    self.editingsetup = false;
+    self.editingawake = false;
   }
 
   /**
@@ -65,7 +65,7 @@
     var self = this
 
     // Set up editing.
-    self.setupEditing();
+    self.wakeupEditing();
 
     // Edit mode switch.
     let editswitch = document.querySelector('.site-editor-switch')
@@ -74,7 +74,7 @@
       if (e.currentTarget.checked) {
         self.rootel.dataset.mode = 'edit'
         mode = 1
-        self.setupEditing();
+        self.wakeupEditing();
       } else {
         self.rootel.dataset.mode = 'view'
         self.disableBlockSorting();
@@ -177,10 +177,6 @@
         });
       });
 
-      
-
-      
-
     }
 
     // Check menu width.
@@ -240,6 +236,8 @@
       }
     })
 
+    self.rootel.classList.add('js-loaded')
+
   };
 
   Site.prototype.checkMenuWidth = function () {
@@ -266,7 +264,7 @@
   }
 
 
-  Site.prototype.setupEditing = function () {
+  Site.prototype.wakeupEditing = function () {
     var self = this
 
     // Make sure edit mode is on.
@@ -283,13 +281,13 @@
     }
 
     // Check if already set up.
-    if ( self.editingsetup ) { 
+    if ( self.editingawake ) { 
       self.enableBlockSorting();
       self.enableSectionSorting();
     }
 
     // Only setup once.
-    self.editingsetup = true;
+    self.editingawake = true;
     
     // Setup sorting.
     self.initBlockSorting()
