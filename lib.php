@@ -83,6 +83,7 @@ function website_add_instance($moduleinstance, $mform = null) {
 
     // Create the website record.
     $moduleinstance->timecreated = time();
+    $moduleinstance->distgroups = isset($moduleinstance->distgroups) ? $moduleinstance->distgroups : [];
     $moduleinstance->groups = json_encode($moduleinstance->distgroups);
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 

@@ -90,7 +90,7 @@ $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', 
 // Add vendor code.
 $PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/Sortable.min.js'), true );
 $PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/dropzone/dropzone.min.js'), true );
-$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/css/dropzone.css'));
+$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/static/css/dropzone.css'));
 
 
 $PAGE->add_body_class('fullscreen');

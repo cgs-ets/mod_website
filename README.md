@@ -27,6 +27,24 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
+## Running Cypress tests ##
+
+Update the following in cypress.config.js:
+  1. baseUrl
+  2. username
+  3. password
+
+Install Cypress
+
+    $ npm install
+    $ npx cypress install
+    $ npx cypress open
+
+In the Cypress app:
+  1. Select E2E Testing
+  2. Choose Chrome
+  3. Select a spec to run the tests
+
 ## License ##
 
 2022 Michael Vangelovski <michael.vangelovski@gmail.com>
