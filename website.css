@@ -810,7 +810,7 @@
   position: relative;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(266px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
   gap: 40px;
 }
 #page-mod-website-site .site-block .site-block-inner {
