@@ -803,6 +803,9 @@
     clear: left;
   }
 }
+#page-mod-website-site .site-section[data-layout="4"] {
+  padding: 0 20px;
+}
 #page-mod-website-site .site-section[data-layout="4"] .section-blocks {
   position: relative;
   margin: 0 auto;

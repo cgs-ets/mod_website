@@ -157,10 +157,14 @@
 
 
 // Responsive Grid
-.site-section[data-layout="4"] .section-blocks {
-  position: relative;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(266px, 1fr));
-  gap: 40px;
+.site-section[data-layout="4"] {
+  padding: 0 20px;
+  .section-blocks {
+    position: relative;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(266px, 1fr));
+    gap: 40px;
+  }
 }
+  
