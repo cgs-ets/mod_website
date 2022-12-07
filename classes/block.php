@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\logging;
 use mod_website\forms\form_siteblock;
 
 require_once($CFG->libdir . '/filelib.php');
@@ -85,6 +86,10 @@ class Block {
         $this->validate_data();
 
         $id = $DB->insert_record(static::TABLE, $this->data);
+
+        logging::log('Block', $id, array(
+            'event' => 'Block created'
+        ));
 
         return $this->read($id);
     }
@@ -154,7 +159,30 @@ class Block {
             }
         }
         
-        $DB->update_record(static::TABLE, $this->data);
+        $this->update();
+        return $this->data->id;
+    }
+
+
+    
+    /**
+     * update block data.
+     *
+     * @param $data
+     * @return static
+     */
+    public function update() {
+        global $DB;
+
+        if ($this->data->id) {
+            $this->validate_data();
+            $DB->update_record(static::TABLE, $this->data);
+        }
+
+        logging::log('Block', $this->data->id, array(
+            'event' => 'Block updated'
+        ));
+        
         return $this->data->id;
     }
 
@@ -191,23 +219,10 @@ class Block {
 
         $this->data->deleted = 1;
         $this->update();
-    }
-
-    /**
-     * update block data.
-     *
-     * @param $data
-     * @return static
-     */
-    public function update() {
-        global $DB;
-
-        if ($this->data->id) {
-            $this->validate_data();
-            $DB->update_record(static::TABLE, $this->data);
-        }
         
-        return $this->data->id;
+        logging::log('Block', $this->data->id, array(
+            'event' => 'Block deleted'
+        ));
     }
 
 

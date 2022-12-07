@@ -25,6 +25,8 @@ namespace mod_website;
 defined('MOODLE_INTERNAL') || die();
 
 use mod_website\utils;
+use mod_website\logging;
+use mod_website\permissions;
 
 /**
  * Provides utility functions for this plugin.
@@ -123,6 +125,10 @@ class Site {
         ));
         $DB->update_record(static::TABLE, $this->data);
 
+        logging::log('Site', $id, array(
+            'event' => 'Site created'
+        ));
+
         return $this;
     }
 
@@ -151,6 +157,9 @@ class Site {
         $pagetitle = $this->data['title'];
         unset($this->data['title']);
         $id = $DB->insert_record(static::TABLE, $this->data);
+        logging::log('Site', $id, array(
+            'event' => 'Site stub created for template'
+        ));
         $this->read($id);
 
         /*****
@@ -289,23 +298,27 @@ class Site {
 
         // Attempt to replace links to old site within new site.
         if ($attemptreplacelinks) {
-        foreach ($blockcopies as $blockid) {
-            if ($blockid == 0) { continue; }
-            $block = new \mod_website\block($blockid);
-            $content = $block->get_content();
-            
-            // Replace site param.
-            $content = str_replace('site=' . $oldsiteid, 'site=' . $this->get_id(), $content);
+            foreach ($blockcopies as $blockid) {
+                if ($blockid == 0) { continue; }
+                $block = new \mod_website\block($blockid);
+                $content = $block->get_content();
+                
+                // Replace site param.
+                $content = str_replace('site=' . $oldsiteid, 'site=' . $this->get_id(), $content);
 
-            // Replace page params.
-            foreach ($pagecopies as $oldpageid => $newpageid) {
-                $content = str_replace('page=' . $oldpageid, 'page=' . $newpageid, $content);
+                // Replace page params.
+                foreach ($pagecopies as $oldpageid => $newpageid) {
+                    $content = str_replace('page=' . $oldpageid, 'page=' . $newpageid, $content);
+                }
+
+                $block->set('content', $content);
+                $block->update();
             }
-
-            $block->set('content', $content);
-            $block->update();
         }
-    }
+
+        logging::log('Site', $id, array(
+            'event' => 'Copy from template complete'
+        ));
 
         return $this;
     }
@@ -867,123 +880,8 @@ class Site {
         if ($website->distribution !== '0') {
             return;
         }
-
-        if ($data->editorstype == 'groups') 
-        {
-            $this->create_edit_permissions_groups($data->sharinggroups);
-        } 
-        elseif ($data->editorstype == 'roles')
-        {
-            $this->create_edit_permissions_roles($data->courseid, $data->sharingroles);
-        }
-        elseif ($data->editorstype == 'users')
-        {
-            $this->create_edit_permissions_users($data->sharingusers);
-        }
-        elseif ($data->editorstype == 'removeall')
-        {
-            $this->remove_all_edit_permissions();
-        }
-    }
-
-    public function create_edit_permissions_groups($list) {
-        // Convert selected groups into a list of users. 
-        $users = array();
-        foreach ( $list as $groupselection ) {
-            $split = explode('_', $groupselection);
-            if (intval($split[0]) === 0) {
-                continue;
-            }
-            $members = array();
-            if ($split[1] === 'group') {
-                $members = groups_get_members($split[0], 'u.id');
-            }
-            if ($split[1] === 'grouping') {
-                $members = groups_get_grouping_members($split[0], 'u.id');
-            }
-            $memberids = array_column($members, 'id');
-            $users = array_merge($users, $memberids);
-        }
         
-        $this->replace_edit_permissions_users($users);
-    }
-
-    public function create_edit_permissions_roles($courseid, $list) {
-        // Convert selected roles into a list of users. 
-        $users = array();
-        foreach ( $list as $roleselection ) {
-            $split = explode('_', $roleselection);
-            if (intval($split[0]) === 0) {
-                continue;
-            }
-            $context = \context_course::instance($courseid);
-            $roleusers = get_role_users($split[0], $context, false, 'u.id', 'u.id'); //last param is sort by.
-            $roleusersids = array_column($roleusers, 'id');
-            $users = array_merge($users, $roleusersids); 
-        }
-
-        $this->replace_edit_permissions_users($users);
-    }
-
-    public function create_edit_permissions_users($list) {
-        // Convert selected users into a list of users. 
-        $users = array();
-        foreach ( $list as $userselection ) {
-            $split = explode('_', $userselection);
-            if (intval($split[0]) === 0) {
-                continue;
-            }
-            $users[] = $split[0];
-        }
-
-        $this->replace_edit_permissions_users($users);
-    }
-
-    public function replace_edit_permissions_users($users) {
-        global $DB, $USER;
-
-        // Fundamental properties.
-        $data = new \stdClass();
-        $data->permissiontype = 'Edit';
-        $data->resourcetype = 'Site';
-        $data->resourcekey = $this->get_id();
-
-        // Get existing permissions.
-        $existing = array_column($DB->get_records(static::TABLE_PERMISSIONS, (array) $data, 'id', 'userid'), 'userid');
-
-        // Create the new records.
-        $data->ownerid = $USER->id;
-        foreach ( $users as $user ) {
-            // Check if it already exists.
-            $key = array_search($user, $existing);
-            if ($key !== false) {
-                unset($existing[$key]);
-                continue;
-            }
-
-            // Create an editing permission record for each user.
-            $data->userid = $user;
-            $DB->insert_record(static::TABLE_PERMISSIONS, $data);
-        }
-
-        // Delete old permissions.
-        foreach ($existing as $todelete) {
-            unset($data->ownerid);
-            $data->userid = $todelete;
-            $DB->delete_records(static::TABLE_PERMISSIONS, (array) $data);
-        }
-    }
-
-    public function remove_all_edit_permissions() {
-        global $DB;
-
-        // Fundamental properties.
-        $data = new \stdClass();
-        $data->permissiontype = 'Edit';
-        $data->resourcetype = 'Site';
-        $data->resourcekey = $this->get_id();
-
-        $DB->delete_records(static::TABLE_PERMISSIONS, (array) $data);
+        permissions::sync_permission_selections('Site', $this->get_id(), $data);
     }
      
     public function load_editors() {

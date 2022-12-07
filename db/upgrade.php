@@ -225,6 +225,32 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022102607, 'website');
     }
 
+    if ($oldversion < 2022120700) {
+
+        // Define table website_change_logs to be created.
+        $table = new xmldb_table('website_change_logs');
+
+        // Adding fields to table website_change_logs.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('resourcetype', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('resourcekey', XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('logtime', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('logdata', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table website_change_logs.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for website_change_logs.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2022120700, 'website');
+    }
+
+
 
     return true;
 }

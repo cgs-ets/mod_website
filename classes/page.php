@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\logging;
 use mod_website\forms\form_sitepage;
 
 /**
@@ -82,11 +83,15 @@ class Page {
         
         $id = $DB->insert_record(static::TABLE, $this->data);
 
+        logging::log('Page', $id, array(
+            'event' => 'Page created'
+        ));
+
         return $this->read($id);
     }
 
     /**
-     * create a section record in the db and return the id.
+     * update a page record in the db and return the id.
      *
      * @param $data
      * @return static
@@ -97,13 +102,17 @@ class Page {
         if ($this->data->id) {
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
+
+            logging::log('Page', $this->data->id, array(
+                'event' => 'Page updated'
+            ));
         }
         
         return $this->data->id;
     }
 
     /**
-     * create a new site record in the db and return a site instance.
+     * update a page record in the db and return a page instance.
      * 
      * @param $formdata
      * @return static
@@ -120,8 +129,7 @@ class Page {
             $this->data->title = $data->title;
             $this->data->hidden = $data->hidden;
             $this->data->timemodified = time();
-            $this->validate_data();
-            $DB->update_record(static::TABLE, $this->data);
+            $this->update();
         }
 
         // If there is a banner image save it.

@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\logging;
 use mod_website\forms\form_siteblock;
 
 require_once($CFG->libdir . '/filelib.php');
@@ -83,6 +84,10 @@ class Menu {
         
         $id = $DB->insert_record(static::TABLE, $this->data);
 
+        logging::log('Menu', $id, array(
+            'event' => 'Menu created'
+        ));
+
         return $this->read($id);
     }
 
@@ -118,8 +123,28 @@ class Menu {
             $this->read($data->id);
             $this->data->json = $data->json;
             $this->data->timemodified = time();
+            $this->update();
+        }
+        
+        return $this->data->id;
+    }
+
+    /**
+     * create a section record in the db and return the id.
+     *
+     * @param $data
+     * @return static
+     */
+    public function update() {
+        global $DB;
+
+        if ($this->data->id) {
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
+
+            logging::log('Menu', $this->data->id, array(
+                'event' => 'Menu updated'
+            ));
         }
         
         return $this->data->id;
@@ -141,6 +166,9 @@ class Menu {
         $this->data->timemodified = time();
         $this->validate_data();
         $DB->update_record(static::TABLE, $this->data);
+        logging::log('Menu', $id, array(
+            'event' => 'Menu updated from array'
+        ));
     }
 
     

@@ -24,6 +24,7 @@ namespace mod_website;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_website\logging;
 
 /**
  * Provides utility functions for this plugin.
@@ -82,6 +83,10 @@ class Section {
         
         $id = $DB->insert_record(static::TABLE, $this->data);
 
+        logging::log('Section', $id, array(
+            'event' => 'Section created'
+        ));
+
         return $this->read($id);
     }
 
@@ -105,8 +110,7 @@ class Section {
             $this->data->sectionoptions = $data->sectionoptions;
             $this->data->timemodified = time();
             $this->data->hidden = $data->hidden;
-            $this->validate_data();
-            $DB->update_record(static::TABLE, $this->data);
+            $this->update();
         }
         
         return $this->data->id;
@@ -124,6 +128,10 @@ class Section {
         if ($this->data->id) {
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
+
+            logging::log('Section', $this->data->id, array(
+                'event' => 'Section updated'
+            ));
         }
         
         return $this->data->id;
@@ -193,6 +201,10 @@ class Section {
 
         $this->data->deleted = 1;
         $this->update();
+
+        logging::log('Section', $this->data->id, array(
+            'event' => 'Section deleted'
+        ));
     }
 
     /**
