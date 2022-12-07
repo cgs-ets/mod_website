@@ -70,6 +70,7 @@ function website_add_instance($moduleinstance, $mform = null) {
     //var_export($mform);
     //exit;
 
+    // Template
     $templatesiteid = 0;
     if (!empty($moduleinstance->useexistingurl)) {
         $regex = '/\/mod\/website\/site\.php\?site\=(\d+)/';
@@ -87,6 +88,7 @@ function website_add_instance($moduleinstance, $mform = null) {
     $moduleinstance->groups = json_encode($moduleinstance->distgroups);
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 
+    // Create the sites within this activity based on distribution.
     if ($moduleinstance->distribution === '0') { 
         // Single site.
         $website = new \mod_website\website();
@@ -113,7 +115,7 @@ function website_add_instance($moduleinstance, $mform = null) {
             ),
             $templatesiteid
         );
-    } else if ($moduleinstance->distribution === '2') { 
+    } else if ($moduleinstance->distribution === '2') {
         // Page per student.
         // If a template URL has been supplied, check if a speciic page is nominated.
         $templatepageid = 0;
@@ -140,6 +142,7 @@ function website_add_instance($moduleinstance, $mform = null) {
     }
 
     website_grade_item_update($moduleinstance);
+    
 
     return $moduleinstance->id;
 }

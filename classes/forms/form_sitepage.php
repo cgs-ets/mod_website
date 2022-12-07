@@ -76,7 +76,6 @@ class form_sitepage extends \moodleform {
         $options = array(
             0 => 'No change',
             1 => 'Insert page at top (No change if page is already in the menu)',
-            2 => 'Edit menu after saving changes',
         );
         $select = $mform->addElement('select', 'addtomenu', get_string('addtomenu', 'mod_website'), $options);
         $select->setSelected(0);

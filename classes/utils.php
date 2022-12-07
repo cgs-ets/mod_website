@@ -342,4 +342,24 @@ class utils {
     
         return $filteredtext;
     }
+
+    /**
+     * Helper function to add extra display info for user.
+     *
+     * @param stdClass $user
+     * @return stdClass $user
+     */
+    public static function load_user_display_info(&$user) {
+        global $PAGE;
+
+        // Fullname.
+        $user->fullname = fullname($user);
+        // Fullname reverse
+        $user->fullnamereverse = "{$user->lastname}, {$user->firstname}";
+
+        // Profile photo.
+        $userphoto = new \user_picture($user);
+        $userphoto->size = 2; // Size f2.
+        $user->profilephoto = $userphoto->get_url($PAGE)->out(false);
+    }
 }

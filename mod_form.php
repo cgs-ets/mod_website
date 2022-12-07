@@ -159,65 +159,6 @@ class mod_website_mod_form extends moodleform_mod {
         $mform->addElement('date_time_selector', 'cutoffdate', $name, array('optional'=>true));
         $mform->addHelpButton('cutoffdate', 'cutoffdate', 'mod_website');
 
-        /************************
-        * Sharing/Permissions
-        *************************/
-        /*
-        $mform->addElement('header', 'sharing', get_string('sharing', 'mod_website'));
-        $mform->setExpanded('sharing', false);
-
-        $el =& $mform->createElement('html', get_string('distsinglesharing', 'mod_website'));
-        $formgroup = array($el);
-        $mform->addGroup($formgroup, 'distsinglesharing');
-        $mform->hideIf('distsinglesharing', 'distribution', 'neq', '0');
-
-        $el =& $mform->createElement('html', get_string('distmultisharing', 'mod_website'));
-        $formgroup = array($el);
-        $mform->addGroup($formgroup, 'distmultisharing');
-        $mform->hideIf('distmultisharing', 'distribution', 'neq', '1');
-
-        $el =& $mform->createElement('html', get_string('distpagesharing', 'mod_website'));
-        $formgroup = array($el);
-        $mform->addGroup($formgroup, 'distpagesharing');
-        $mform->hideIf('distpagesharing', 'distribution', 'neq', '2');
-
-        $sharegroups = $groups;
-        unset($sharegroups['00_everyone']);
-        unset($sharegroups['0_group']);
-        if (!empty($sharegroups)) {
-            $select = $mform->addElement('select', 'sharinggroups', get_string('groups', 'mod_website'), $sharegroups, array('size' => 10, 'style' => 'width:100%;'));
-            $select->setMultiple(true);
-            $mform->addHelpButton('sharinggroups', 'group_select', 'mod_website');
-            $mform->hideIf('sharinggroups', 'distribution', 'neq', '0');
-        }
-
-        $roles = array();
-        $course_roles = get_roles_used_in_context(context_course::instance($PAGE->course->id), false);
-        foreach ($course_roles as $r) {
-            $roles[$r->id . '_role'] = $r->shortname;
-        }
-        if (!empty($roles)) {
-            $select = $mform->addElement('select', 'sharingroles', get_string('roles', 'mod_website'), $roles, array('size' => 10, 'style' => 'width:100%;'));
-            $select->setMultiple(true);
-            $mform->hideIf('sharingroles', 'distribution', 'neq', '0');
-        }
-
-        $users = array();
-        foreach ($course_roles as $role) {
-            $users[$role->id . '_roleheading'] = '---- ' . $role->shortname . ' ----';
-            $roleusers = get_role_users($role->id, context_course::instance($PAGE->course->id));
-            foreach ($roleusers as $u) {
-                $users[$u->id . '_user'] = $u->lastname . ', ' . $u->firstname;
-            }
-        }
-        if (!empty($users)) {
-            $select = $mform->addElement('select', 'sharingusers', get_string('users', 'mod_website'), $users, array('size' => 10, 'style' => 'width:100%;'));
-            $select->setMultiple(true);
-            $mform->hideIf('sharingusers', 'distribution', 'neq', '0');
-        }
-        /************************
-        * End of sharing/permissions area
-        *************************/
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

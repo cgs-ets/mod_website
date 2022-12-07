@@ -116,7 +116,7 @@ trait apicontrol {
             $page = new \mod_website\page($data);
             $site = new \mod_website\site($page->get_siteid());
             if ($page->get_id() && $site->get_id()) {
-                $site->promotetohome($page->get_id());
+                $site->promote_to_home($page->get_id());
                 return 1;
             }
         }

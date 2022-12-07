@@ -3,6 +3,7 @@
   /* Group field labels, e.g. Picture button Title and URL */
   /* EDIT BLOCK FORM */
   /* Section layout */
+  /* EDIT PERMISSIONS FORM */
   /* Make site fullscreen */
   /* fullscreen toggle */
 }
@@ -85,6 +86,18 @@
 }
 .path-mod-website select {
   width: 100%;
+}
+.path-mod-website form[data-form="website-permissions"] .col-md-3 {
+  display: none !important;
+}
+.path-mod-website form[data-form="website-permissions"] .default-editors,
+.path-mod-website form[data-form="website-permissions"] .additional-editors {
+  display: flex;
+  gap: 15px;
+  background: #f2f4f6;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
 }
 .path-mod-website .site-preview-wrap {
   display: none;
@@ -280,6 +293,9 @@
     transform: rotate(360deg);
   }
 }
+.path-mod-website .ml-25 {
+  margin-left: 25px;
+}
 #page-mod-website-site {
   /* devanagari */
   /* latin-ext */
@@ -296,6 +312,7 @@
   /* devanagari */
   /* latin-ext */
   /* latin */
+  /* Site settings / Site permissions button */
   /* The switch - the box around the slider */
   /* Hide default HTML checkbox */
   /* The slider */
@@ -492,15 +509,14 @@
 }
 #page-mod-website-site .site-root[data-mode="edit"] .topbar {
   align-items: start;
+  overflow: visible;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .topbar-right {
   align-items: end;
   gap: 10px;
   flex-direction: column-reverse;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-add-site-page,
-#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-edit-menu,
-#page-mod-website-site .site-root[data-mode="edit"] .site-body .btn-add-site-section {
+#page-mod-website-site .site-root[data-mode="edit"] .btn-editoption {
   background-color: #2196F3;
   color: #fff;
   padding: 7px 16px;
@@ -515,9 +531,7 @@
   transition: background-color ease 0.3s;
   white-space: nowrap;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-add-site-page:hover,
-#page-mod-website-site .site-root[data-mode="edit"] .topbar .btn-edit-menu:hover,
-#page-mod-website-site .site-root[data-mode="edit"] .site-body .btn-add-site-section:hover {
+#page-mod-website-site .site-root[data-mode="edit"] .btn-editoption:hover {
   background-color: #1d87da;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .site-body .page-options,
@@ -615,6 +629,10 @@
   border-color: #bbb;
   transform: scale(1);
 }
+#page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section .section-title {
+  display: block;
+  padding: 10px;
+}
 #page-mod-website-site .site-editor {
   display: flex;
   justify-content: right;
@@ -622,6 +640,13 @@
   color: #fff;
   padding: 6px;
   font-size: 14px;
+}
+#page-mod-website-site a.btn-helplink {
+  font-size: 17px;
+  line-height: 1;
+  margin: 0 15px 0 0;
+  padding: 2px;
+  color: #fff;
 }
 #page-mod-website-site .switch {
   margin: 0;
@@ -699,6 +724,9 @@
 #page-mod-website-site .site-section .section-title .caret {
   display: none;
   width: 18px;
+}
+#page-mod-website-site .site-section .section-title.hidden {
+  display: none;
 }
 #page-mod-website-site .site-section[data-hidden="1"] {
   display: none;
@@ -1124,6 +1152,10 @@ https://codepen.io/steveeeie/pen/NVWMEM
   outline: none;
   border: none;
   box-shadow: none;
+}
+#page-mod-website-site .topbar .site-edit-options {
+  display: flex;
+  align-items: center;
 }
 #page-mod-website-site .site-header {
   background-size: cover;

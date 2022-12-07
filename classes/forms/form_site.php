@@ -35,16 +35,18 @@ class form_site extends \moodleform {
      * @return void
      */
     function definition() {
-        global $CFG, $OUTPUT, $USER, $DB;
+        global $CFG, $OUTPUT, $USER, $DB, $PAGE;
 
         $mform =& $this->_form;
+        $websitedata = $this->_customdata['websitedata'];
+        $embed = $this->_customdata['embed'];
 
         /*----------------------
         *   Buttons
         *----------------------*/
-        $this->add_action_buttons();
+        $this->add_action_buttons(!$embed);
 
-
+        
     }
 
 }

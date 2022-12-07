@@ -27,14 +27,12 @@
     {{^options.hidetitle}}{{#options.collapsible}}data-collapsible="true"{{/options.collapsible}}{{/options.hidetitle}}
     >
 
-  {{^options.hidetitle}}
-    <h2 class="section-title">
-      {{title}}
-      <svg class="caret" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
-        <path d="M128,188a11.96187,11.96187,0,0,1-8.48535-3.51465l-80-80a12.0001,12.0001,0,0,1,16.9707-16.9707L128,159.0293l71.51465-71.51465a12.0001,12.0001,0,0,1,16.9707,16.9707l-80,80A11.96187,11.96187,0,0,1,128,188Z"/>
-      </svg>
-    </h2>
-  {{/options.hidetitle}}
+  <h2 class="section-title {{#options.hidetitle}}hidden{{/options.hidetitle}}">
+    {{title}}
+    <svg class="caret" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
+      <path d="M128,188a11.96187,11.96187,0,0,1-8.48535-3.51465l-80-80a12.0001,12.0001,0,0,1,16.9707-16.9707L128,159.0293l71.51465-71.51465a12.0001,12.0001,0,0,1,16.9707,16.9707l-80,80A11.96187,11.96187,0,0,1,128,188Z"/>
+    </svg>
+  </h2>
 
   <div class="section-blocks">
     {{#blocks}}

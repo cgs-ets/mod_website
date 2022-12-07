@@ -1,0 +1,37 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_website/site_menu
+
+    The main menu.
+}}
+<div class="site-edit-options">
+  {{#canedit}}
+    <!--<a data-formurl="{{embedded_editsiteurl}}" href="{{editsiteurl}}" class="btn-edit-site editoption" title="Site settings">
+      <i class="fa fa-cog" aria-hidden="true"></i>
+    </a>-->
+    <a data-formurl="{{embedded_editpermissionsurl}}" href="{{editpermissionsurl}}" class="btn-edit-permissions editoption" title="Site permissions">
+      <i class="fa fa-user-plus" aria-hidden="true"></i>
+    </a>
+    <a data-formurl="{{embedded_editmenuurl}}" href="{{editmenuurl}}" class="btn-editoption btn-edit-menu editoption">
+      Edit menu
+    </a>
+    <a data-formurl="{{embedded_newpageurl}}" href="{{newpageurl}}" class="btn-editoption btn-add-site-page editoption">
+      New page
+    </a>
+  {{/canedit}}
+</div>

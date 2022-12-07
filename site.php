@@ -71,9 +71,8 @@ if (!$site->currentpage->get_id()) {
     redirect($url);
 }
 
-// Export the data. Also checks if this user is the site user (allowing editing)
+// Export the data. Also checks if user can edit.
 $data = $site->export(array(
-    'user' => $USER,
     'mode' => $mode == 'preview' ? 'view' : $mode,
     'course' => $course,
     'website' => $website,

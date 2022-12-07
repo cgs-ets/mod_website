@@ -43,6 +43,8 @@ class Site {
     const TABLE_BLOCKS = 'website_site_blocks';
     const TABLE_MENUS = 'website_site_menus';
     const TABLE_WEBSITE = 'website';
+    const TABLE_PERMISSIONS = 'website_permissions';
+    
 
     private $data = array();
 
@@ -52,12 +54,14 @@ class Site {
     public $menuid = 0;
     public $numpages = 0;
 
+    private $permissions = array();
+
     private static function required_data() {
         return array('websiteid', 'cmid', 'creatorid', 'userid');
     }
 
     private static function required_related() {
-        return array('user', 'course', 'website', 'modulecontext');
+        return array('course', 'website', 'modulecontext');
     }
 
     /**
@@ -572,11 +576,8 @@ class Site {
 
         $output = array();
 
-        // Is this user an editor?
-        $canedit = false;
-        if ($this->data->userid == $related['user']->id) {
-            $canedit = true;
-        }
+        // Is this user an editor? MIKE
+        $canedit = $this->can_user_edit();
 
         // Check availaibility conditions.
         if (
@@ -587,6 +588,15 @@ class Site {
         }
 
         // Editing URLs
+        $editsiteurl = new \moodle_url('/mod/website/edit-site.php', array(
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
+        $editpermissionsurl = new \moodle_url('/mod/website/edit-permissions.php', array(
+            'type' => 'site',
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
         $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
@@ -628,6 +638,8 @@ class Site {
 
         $output = array(
             'canedit' => $canedit,
+            'editpermissionsurl' => $editpermissionsurl->out(false),
+            'editsiteurl' => $editsiteurl->out(false),
             'editpageurl' => $editpageurl->out(false),
             'newpageurl' => $newpageurl->out(false),
             'editmenuurl' => $editmenuurl->out(false),
@@ -646,10 +658,14 @@ class Site {
         );
 
         // Embedded Form URLs.
+        $editpermissionsurl->param('embed', 1);
+        $editsiteurl->param('embed', 1);
         $editpageurl->param('embed', 1);
         $newpageurl->param('embed', 1);
         $editmenuurl->param('embed', 1);
         $newsectionurl->param('embed', 1);
+        $output['embedded_editpermissionsurl'] = $editpermissionsurl->out(false);
+        $output['embedded_editsiteurl'] = $editsiteurl->out(false);
         $output['embedded_editpageurl'] = $editpageurl->out(false);
         $output['embedded_newpageurl'] = $newpageurl->out(false);
         $output['embedded_editmenuurl'] = $editmenuurl->out(false);
@@ -684,34 +700,6 @@ class Site {
                 throw new \coding_exception('Site is missing required related data: ' . $attribute);
             }
         }
-    }
-
-    public function can_user_edit() {
-        global $USER;
-        return ($this->get_userid() === $USER->id);
-    }
-
-    public function can_user_view() {
-        global $USER;
-        
-        // Single site
-        if ($this->get_website()->distribution === '0') {
-            // Everyone can view.
-            return true;
-        }
-
-        // Copy for each student.
-        if ($this->get_website()->distribution === '1') {
-            // Teachers, the student, and their mentors can view.
-            if (utils::is_grader() || 
-                $this->get_userid() === $USER->id || 
-                utils::is_user_mentor_of_student($USER->id, $this->get_userid()) ) {
-                return true;
-            }
-
-        }
-
-        return false;
     }
     
     public function set($property, $value) {
@@ -808,7 +796,7 @@ class Site {
         return array_values($pages);
     }
 
-    public function promotetohome($pageid) {
+    public function promote_to_home($pageid) {
         // Make sure the page is real and visible.
         $page = new \mod_website\page();
         $page->read_for_site($this->get_id(), $pageid);
@@ -824,6 +812,210 @@ class Site {
         $this->data->siteoptions = json_encode($siteoptions);
         $this->update();
     }
-      
+
+    public function can_user_edit() {
+        global $USER, $DB;
+
+        // Site creator can always edit.
+        if ($this->get_userid() === $USER->id) {
+            return true;
+        }
+
+        // Permissions.
+        $permissions = $DB->get_record(static::TABLE_PERMISSIONS, array(
+            'permissiontype' => 'Edit',
+            'resourcetype' => 'Site',
+            'resourcekey' => $this->get_id(),
+            'userid' => $USER->id,
+        ), '*', IGNORE_MULTIPLE);
+        if ($permissions) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function can_user_view() {
+        global $USER;
+        
+        // Single site
+        if ($this->get_website()->distribution === '0') {
+            // Everyone can view.
+            return true;
+        }
+
+        // Copy for each student.
+        if ($this->get_website()->distribution === '1') {
+            // Teachers, the student, and their mentors can view.
+            if (utils::is_grader() || 
+                $this->get_userid() === $USER->id || 
+                utils::is_user_mentor_of_student($USER->id, $this->get_userid()) ) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    public function sync_permission_selections($data) {
+        if (empty($this->get_id())) {
+            return;
+        }
+        // Can only share a site if the distribution is single site.
+        $website = $this->get_website();
+        if ($website->distribution !== '0') {
+            return;
+        }
+
+        if ($data->editorstype == 'groups') 
+        {
+            $this->create_edit_permissions_groups($data->sharinggroups);
+        } 
+        elseif ($data->editorstype == 'roles')
+        {
+            $this->create_edit_permissions_roles($data->courseid, $data->sharingroles);
+        }
+        elseif ($data->editorstype == 'users')
+        {
+            $this->create_edit_permissions_users($data->sharingusers);
+        }
+        elseif ($data->editorstype == 'removeall')
+        {
+            $this->remove_all_edit_permissions();
+        }
+    }
+
+    public function create_edit_permissions_groups($list) {
+        // Convert selected groups into a list of users. 
+        $users = array();
+        foreach ( $list as $groupselection ) {
+            $split = explode('_', $groupselection);
+            if (intval($split[0]) === 0) {
+                continue;
+            }
+            $members = array();
+            if ($split[1] === 'group') {
+                $members = groups_get_members($split[0], 'u.id');
+            }
+            if ($split[1] === 'grouping') {
+                $members = groups_get_grouping_members($split[0], 'u.id');
+            }
+            $memberids = array_column($members, 'id');
+            $users = array_merge($users, $memberids);
+        }
+        
+        $this->replace_edit_permissions_users($users);
+    }
+
+    public function create_edit_permissions_roles($courseid, $list) {
+        // Convert selected roles into a list of users. 
+        $users = array();
+        foreach ( $list as $roleselection ) {
+            $split = explode('_', $roleselection);
+            if (intval($split[0]) === 0) {
+                continue;
+            }
+            $context = \context_course::instance($courseid);
+            $roleusers = get_role_users($split[0], $context, false, 'u.id', 'u.id'); //last param is sort by.
+            $roleusersids = array_column($roleusers, 'id');
+            $users = array_merge($users, $roleusersids); 
+        }
+
+        $this->replace_edit_permissions_users($users);
+    }
+
+    public function create_edit_permissions_users($list) {
+        // Convert selected users into a list of users. 
+        $users = array();
+        foreach ( $list as $userselection ) {
+            $split = explode('_', $userselection);
+            if (intval($split[0]) === 0) {
+                continue;
+            }
+            $users[] = $split[0];
+        }
+
+        $this->replace_edit_permissions_users($users);
+    }
+
+    public function replace_edit_permissions_users($users) {
+        global $DB, $USER;
+
+        // Fundamental properties.
+        $data = new \stdClass();
+        $data->permissiontype = 'Edit';
+        $data->resourcetype = 'Site';
+        $data->resourcekey = $this->get_id();
+
+        // Get existing permissions.
+        $existing = array_column($DB->get_records(static::TABLE_PERMISSIONS, (array) $data, 'id', 'userid'), 'userid');
+
+        // Create the new records.
+        $data->ownerid = $USER->id;
+        foreach ( $users as $user ) {
+            // Check if it already exists.
+            $key = array_search($user, $existing);
+            if ($key !== false) {
+                unset($existing[$key]);
+                continue;
+            }
+
+            // Create an editing permission record for each user.
+            $data->userid = $user;
+            $DB->insert_record(static::TABLE_PERMISSIONS, $data);
+        }
+
+        // Delete old permissions.
+        foreach ($existing as $todelete) {
+            unset($data->ownerid);
+            $data->userid = $todelete;
+            $DB->delete_records(static::TABLE_PERMISSIONS, (array) $data);
+        }
+    }
+
+    public function remove_all_edit_permissions() {
+        global $DB;
+
+        // Fundamental properties.
+        $data = new \stdClass();
+        $data->permissiontype = 'Edit';
+        $data->resourcetype = 'Site';
+        $data->resourcekey = $this->get_id();
+
+        $DB->delete_records(static::TABLE_PERMISSIONS, (array) $data);
+    }
+     
+    public function load_editors() {
+        global $DB; 
+        
+        if (empty($this->get_id())) {
+            return;
+        }
+
+        // Permissions.
+        $this->permissions = $DB->get_records(static::TABLE_PERMISSIONS, array(
+            'resourcetype' => 'Site',
+            'resourcekey' => $this->get_id(),
+        ));
+    }
+
+    public function export_user() {
+        $user = \core_user::get_user($this->get_userid());
+        utils::load_user_display_info($user);
+        return $user;
+    }
+
+    public function export_editors() {
+        $editors = array();
+        foreach ($this->permissions as $permission) {
+            if ($permission->permissiontype == 'Edit') {
+                $user = \core_user::get_user($permission->userid);
+                utils::load_user_display_info($user);
+                $editors[] = $user;
+            }
+        }
+        return $editors;
+    }
 
 }

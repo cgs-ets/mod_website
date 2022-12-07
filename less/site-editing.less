@@ -76,6 +76,7 @@
   }
   .topbar {
     align-items: start;
+    overflow: visible;
   }
   .topbar-right {
     align-items: end;
@@ -83,9 +84,7 @@
     flex-direction: column-reverse;
   }
 
-  .topbar .btn-add-site-page, 
-  .topbar .btn-edit-menu,
-  .site-body .btn-add-site-section {
+  .btn-editoption {
     background-color: #2196F3;
     color: #fff;
     padding: 7px 16px;
@@ -207,6 +206,10 @@
       &:hover {
         border-color: #bbb;
         transform: scale(1);
+      }
+      .section-title {
+        display: block;
+        padding: 10px;
       }
     }
   }

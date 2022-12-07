@@ -31,8 +31,7 @@
     </div>
     <div class="topbar-right flex">
       {{>mod_website/site_menu}}
-      {{#canedit}}<a data-formurl="{{embedded_editmenuurl}}" href="{{editmenuurl}}" class="btn-edit-menu editoption">Edit menu</a>{{/canedit}}
-      {{#canedit}}<a data-formurl="{{embedded_newpageurl}}" href="{{newpageurl}}" class="btn-add-site-page editoption">New page</a>{{/canedit}}
+      {{>mod_website/site_edit_options}}
     </div>
   </div>
   {{#page}}
@@ -45,7 +44,7 @@
         {{/sections}}
       </div>
       <div class="page-options">
-        {{#canedit}}<a data-formurl="{{embedded_newsectionurl}}" href="{{newsectionurl}}" class="btn-add-site-section editoption">Add section</a>{{/canedit}}
+        {{#canedit}}<a data-formurl="{{embedded_newsectionurl}}" href="{{newsectionurl}}" class="btn-editoption btn-add-site-section editoption">Add section</a>{{/canedit}}
       </div>
     </div>
   {{/page}}

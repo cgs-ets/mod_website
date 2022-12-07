@@ -26,14 +26,16 @@ require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
 use mod_website\utils;
-use mod_website\forms\form_site;
+use mod_website\forms\form_permissions;
 
 // Course module id.
+$type = required_param('type', PARAM_TEXT);
 $siteid = required_param('site', PARAM_INT);
 $pageid = required_param('page', PARAM_INT);
 $embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
+$page = new \mod_website\page($pageid);
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -46,7 +48,8 @@ if ( ! $site->can_user_edit()) {
 }
 
 $modulecontext = context_module::instance($cm->id);
-$thisurl = new moodle_url('/mod/website/edit-site.php', array(
+$thisurl = new moodle_url('/mod/website/edit-permissions.php', array(
+    'type' => $type,
     'site' => $siteid,
     'page' => $pageid,
 ));
@@ -65,22 +68,29 @@ $PAGE->navbar->add($website->name, $gobackurl);
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 $PAGE->add_body_class('limitedwidth');
 
-// Get current editors of the site.
-$site = new \mod_website\site($siteid);
-$site->load_editors();
-$defaulteditors = [$site->export_user()];
-$additionaleditors = $site->export_editors();
+$defaulteditors = array();
+$additionaleditors = array();
+
+if ($type == 'site') {
+    // Get current editors of the site.
+    $site = new \mod_website\site($siteid);
+    $site->load_editors();
+    $defaulteditors = [$site->export_user()];
+    $additionaleditors = $site->export_editors();
+}
 
 // Initialise the form.
-$formsite = new form_site(
+$formsite = new form_permissions(
     $thisurl->out(false), 
     array(
         'embed' => $embed,
         'websitedata' => $website,
+        'defaulteditors' => $defaulteditors,
+        'additionaleditors' => $additionaleditors,
     ), 
     'post', 
     '', 
-    array('target' => '_parent', 'data-form' => 'website-site')
+    array('target' => '_parent', 'data-form' => 'website-permissions')
 );
 
 // Check if it is cancelled.
@@ -92,8 +102,14 @@ if ($formsite->is_cancelled()) {
 // Check if it is submitted.
 $formdata = $formsite->get_data();
 if (!empty($formdata)) {
-    // Save site settings.
-
+    
+    // Set up editing permission
+    if (isset($formdata->editorstype)) {
+        $formdata->courseid = $course->id;
+        if ($type == 'site') {
+            $site->sync_permission_selections($formdata);
+        }
+    }
     redirect($gobackurl->out());
     exit;
 }
