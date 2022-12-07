@@ -116,7 +116,7 @@ $string['groupsgroupingsheader'] = 'Groups - Groupings';
 
 $string['sitesettings'] = 'Site settings';
 $string['permissions'] = 'Permissions';
-$string['editpermissions'] = 'Who can edit site?';
+$string['editpermissions'] = 'Who can edit this site?';
 $string['viewpermissions'] = 'View Permissions';
 $string['editorstype'] = 'People that can edit';
 $string['distsinglesharing'] = '<p>By default this website (including all pages, sections, and blocks) is editable by you only. Additional editors may be added by selecting users, groups, or roles below.</p>';
