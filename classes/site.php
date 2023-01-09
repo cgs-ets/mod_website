@@ -589,16 +589,28 @@ class Site {
 
         $output = array();
 
-        // Is this user an editor? MIKE
-        $canedit = $this->can_user_edit();
+        // Is this user a site editor?
+        $caneditsite = $this->can_user_edit();
+
+        // Is this user an editor of this page?
+        $page = new \mod_website\page();
+        $page->read_for_site($this->get_id(), $related['currentpage']->get_id());
+        if (empty($page->get_id())) {
+            return;
+        }
+        $caneditpage = $page->can_user_edit();
 
         // Check availaibility conditions.
         if (
             ($related['website']->alloweditingfromdate && $related['website']->alloweditingfromdate > time()) ||
             ($related['website']->cutoffdate && $related['website']->cutoffdate <= time())
         ) {
-            $canedit = false;
+            $caneditsite = $caneditpage = false;
         }
+        
+        $siteurl = new \moodle_url('/mod/website/site.php', array(
+            'site' => $this->data->id,
+        ));
 
         // Editing URLs
         $editsiteurl = new \moodle_url('/mod/website/edit-site.php', array(
@@ -650,7 +662,8 @@ class Site {
         }
 
         $output = array(
-            'canedit' => $canedit,
+            'caneditsite' => $caneditsite,
+            'caneditpage' => $caneditpage,
             'editpermissionsurl' => $editpermissionsurl->out(false),
             'editsiteurl' => $editsiteurl->out(false),
             'editpageurl' => $editpageurl->out(false),
@@ -668,6 +681,7 @@ class Site {
             'page' => $currentpage,
             'mode' => $related['mode'],
             'editing' => $related['mode'] == 'edit',
+            'siteurl' => $siteurl->out(false),
         );
 
         // Embedded Form URLs.

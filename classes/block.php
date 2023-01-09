@@ -133,6 +133,7 @@ class Block {
                 'buttontitle' => $data->buttontitle,
                 'linktype' => $data->buttonlinktypegroup['buttonlinktype'],
                 'buttonurl' => $data->buttonurl,
+                'linktarget' => $data->linktargetgroup['linktarget'],
                 'includepicture' => $data->buttonpicture ? 1 : 0, //$data->includepicturegroup['includepicture'],
             ));
             // Save the file.

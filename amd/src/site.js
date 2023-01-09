@@ -102,8 +102,8 @@
     })
     
 
-    // User is editor.
-    if (self.rootel.dataset.canedit == '1') {
+    // User is editor in some capacity (site or page).
+    if (self.rootel.dataset.caneditpage == '1') {
 
       // Embedded forms.
       document.querySelectorAll('[data-formurl]').forEach(item => {

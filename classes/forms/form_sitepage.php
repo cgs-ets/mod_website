@@ -41,6 +41,8 @@ class form_sitepage extends \moodleform {
         $mform =& $this->_form;
         $ishomepage = $this->_customdata['ishomepage'];
         $embed = $this->_customdata['embed'];
+        $pageid = $this->_customdata['pageid'];
+        $returnurl = $this->_customdata['returnurl'];
 
         /*----------------------
          *   Page title.
@@ -84,6 +86,13 @@ class form_sitepage extends \moodleform {
         *   Buttons
         *----------------------*/
         $this->add_action_buttons(!$embed);
+
+        /*----------------------
+        *   Delete
+        *----------------------*/
+        if ($pageid) {
+            $mform->addElement('html', '<a data-pageid="' . $pageid . '" data-returnurl="' . $returnurl . '" class="btn-delete btn btn-danger float-right">Delete page</a>');
+        }
 
         /*----------------------
         *   Hidden

@@ -27,6 +27,7 @@ require_once(__DIR__.'/lib.php');
 
 use mod_website\utils;
 use mod_website\site;
+use mod_website\page;
 
 // Course module id.
 $siteid = required_param('site', PARAM_INT);
@@ -35,6 +36,7 @@ $mode = optional_param('mode', '', PARAM_TEXT);
 
 // Get the single site instance.
 $site = new Site($siteid);
+$page = new Page($pageid);  
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -60,7 +62,7 @@ if ( ! $site->can_user_view() ) {
 // Check edit mode preference.
 if ($mode != 'preview') { // Used for iframe preview in mod_form.
     $mode = 'view';
-    if ($site->can_user_edit() && website_is_editing_on()) {
+    if ($page->can_user_edit() && website_is_editing_on()) {
         $mode = 'edit';
     }
 }
@@ -76,11 +78,13 @@ $data = $site->export(array(
     'mode' => $mode == 'preview' ? 'view' : $mode,
     'course' => $course,
     'website' => $website,
+    'currentpage' => $site->currentpage,
     'modulecontext' => $modulecontext,
 ));
 
 if ($mode == 'preview') {
-    $data->canedit = false;
+    $data->caneditsite = false;
+    $data->caneditpage = false;
 }
 
 // Add css.
@@ -103,7 +107,7 @@ echo $OUTPUT->header();
 // Render the site. 
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 
-if ($data->canedit) {
+if ($data->caneditsite || $data->caneditpage) {
     $modal = array('id' => 'embeddedform', 'body' => '');
     echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
 }

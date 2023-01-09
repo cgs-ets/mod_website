@@ -41,9 +41,9 @@ $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EX
 
 require_login($course, true, $cm);
 
-if ( ! $site->can_user_edit()) {
-    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
-}
+// Get the page.
+$page = new \mod_website\page();
+$page->read_for_site($siteid, $pageid);
 
 $modulecontext = context_module::instance($cm->id);
 $thisurl = new moodle_url('/mod/website/edit-page.php', array(
@@ -65,9 +65,15 @@ $PAGE->navbar->add($website->name, $gobackurl);
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 $PAGE->add_body_class('limitedwidth');
 
-// Get the page.
-$page = new \mod_website\page();
-$page->read_for_site($siteid, $pageid);
+if ($pageid) {
+    if ( ! $page->can_user_edit()) {
+        notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    }
+} else {
+    if ( ! $site->can_user_edit()) {
+        notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    }
+}
 
 // Initialise the form.
 $ishomepage = ($pageid == $site->homepageid);
@@ -75,6 +81,8 @@ $form = new form_sitepage($thisurl->out(false),
     array( 
         'ishomepage' => $ishomepage,
         'embed' => $embed, 
+        'pageid' => $pageid,
+        'returnurl' => $gobackurl->out(),
     ), 
     'post', '', array('target' => '_parent', 'data-form' => 'website-sitepage')
 );
@@ -122,6 +130,9 @@ $form->set_data(array(
     'bannerimage' => $draftitemid,
     'visibility' => $page->get_hidden(),
 ));
+
+
+$PAGE->requires->js_call_amd('mod_website/editpage', 'init');
 
 if ($embed) {
     $PAGE->add_body_classes(['fullscreen','embedded']);

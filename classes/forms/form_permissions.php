@@ -40,6 +40,7 @@ class form_permissions extends \moodleform {
         $mform =& $this->_form;
         $websitedata = $this->_customdata['websitedata'];
         $embed = $this->_customdata['embed'];
+        $type = $this->_customdata['type'];
         $defaulteditors = $this->_customdata['defaulteditors'];
         $additionaleditors = $this->_customdata['additionaleditors'];
        
@@ -47,7 +48,7 @@ class form_permissions extends \moodleform {
         * Sharing/Permissions
         *************************/
         // Edit permissions title
-        $mform->addElement('html', '<h3>' . get_string('editpermissions', 'mod_website') . '</h3>');
+        $mform->addElement('html', '<h3>' . get_string('editpermissions', 'mod_website', $type) . '</h3>');
 
         // Default editors blurb
         if ($websitedata->distribution == 1) {
@@ -57,8 +58,12 @@ class form_permissions extends \moodleform {
             $mform->addElement('html', get_string('distpagesharing', 'mod_website'));
         }
         else if ($websitedata->distribution == 0) {
-            $mform->addElement('html', get_string('distsinglesharing', 'mod_website'));
 
+            if ($type == 'site') {
+                $mform->addElement('html', get_string('sitepermissionsblurb', 'mod_website'));
+            } else if ($type == 'page') {
+                $mform->addElement('html', get_string('pagepermissionsblurb', 'mod_website'));
+            }
         
             // Current editors
             $mform->addElement('html', $OUTPUT->render_from_template('mod_website/site_settings_editors', array(

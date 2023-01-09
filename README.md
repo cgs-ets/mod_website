@@ -45,6 +45,11 @@ In the Cypress app:
   2. Choose Chrome
   3. Select a spec to run the tests
 
+To run in cmd mode
+
+    $ cd {your/moodle/dirroot}/mod/website
+    $ npx cypress run
+
 ## License ##
 
 2022 Michael Vangelovski <michael.vangelovski@gmail.com>

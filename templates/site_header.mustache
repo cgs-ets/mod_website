@@ -21,11 +21,9 @@
 }}
 
 <div class="site-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}" 
-  {{#canedit}} data-formurl="{{embedded_editpageurl}}" {{/canedit}}
+  {{#caneditpage}} data-formurl="{{embedded_editpageurl}}" {{/caneditpage}}
   {{#bannerimage}} style="background-image: url('{{path}}');" {{/bannerimage}} >
-
   <h1 class="title">
     {{title}}
   </h1>
-
 </div>

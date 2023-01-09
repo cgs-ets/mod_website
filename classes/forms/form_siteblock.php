@@ -63,11 +63,11 @@ class form_siteblock extends \moodleform {
         /*----------------------
         *   Picture button
         *----------------------*/
-        // Button caption
+        // Button caption.
         $mform->addElement('text', 'buttontitle', get_string('buttontitle', 'mod_website'), 'size="48"'); 
         $mform->setType('buttontitle', PARAM_TEXT);
 
-        // Button photo
+        // Button photo.
         $mform->addElement('filemanager', 'buttonpicture', get_string('buttonpicture', 'mod_website'), get_string('buttonpicture', 'mod_website'), static::picture_options());
 
         // What are you linking to?
@@ -76,12 +76,19 @@ class form_siteblock extends \moodleform {
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonurl', 'mod_website'), 'url', array('class' => 'linktype'));
         $mform->addGroup($buttonlinktype, 'buttonlinktypegroup', get_string('buttonlinktype', 'mod_website'));
 
-        // URL
+        // URL.
         $mform->addElement('text', 'buttonurl', get_string('buttonurl', 'mod_website'), 'size="48"');
         $mform->setType('buttonurl', PARAM_TEXT);
 
-        // Link to file
+        // Link to file.
         $mform->addElement('filemanager', 'buttonfile', get_string('uploadfile', 'mod_website'), get_string('buttonfile', 'mod_website'), static::file_options()); 
+
+        // Open in / Target.
+        $linktarget=array();
+        $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetself', 'mod_website'), '_self ', array('class' => 'linktype'));
+        $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetblank', 'mod_website'), '_blank', array('class' => 'linktype'));
+        $mform->addGroup($linktarget, 'linktargetgroup', get_string('linktarget', 'mod_website'));
+        $mform->hideIf('linktarget', 'buttonlinktype', 'neq', 'url');
 
         // Would you like a button photo?
         //$includepicture=array();
@@ -99,7 +106,6 @@ class form_siteblock extends \moodleform {
         $select = $mform->addElement('select', 'visibility', get_string('visibility', 'mod_website'), $options);
         $select->setSelected(0);
         //$mform->addRule('visibility', null, 'required', null, 'client');
-
         
         /*----------------------
         *   Buttons

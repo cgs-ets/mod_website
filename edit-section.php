@@ -35,16 +35,13 @@ $sectionid = optional_param('section', 0, PARAM_INT);
 $embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
+$page = new \mod_website\page($pageid);  
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
 $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
-
-if ( ! $site->can_user_edit()) {
-    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
-}
 
 $modulecontext = context_module::instance($cm->id);
 $thisurl = new moodle_url('/mod/website/edit-section.php', array(
@@ -66,6 +63,10 @@ $PAGE->navbar->add($website->name, $gobackurl);
 // Wrap it in moodle.
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 $PAGE->add_body_class('limitedwidth');
+
+if ( ! $page->can_user_edit()) {
+    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
 
 // Initialise the form.
 $formsitesection = new form_sitesection($thisurl->out(false), 
@@ -97,8 +98,7 @@ if (!empty($formdata)) {
     $section = new \mod_website\section();
     $sectionid = $section->save($formdata);
     // Add the section to the page.
-    if ($pageid > 0) {
-        $page = new \mod_website\page($pageid);
+    if ($page->get_id()) {
         $page->add_section_to_page($sectionid);  
     }
     redirect($gobackurl->out());

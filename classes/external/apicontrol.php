@@ -104,6 +104,12 @@ trait apicontrol {
             $section->delete();
             return 1;
         }
+        
+        if ($action == 'delete_page') {
+            $page = new \mod_website\page($data);
+            $page->delete();
+            return 1;
+        }
 
         if ($action == 'page_visibility') {
             $data = json_decode($data);

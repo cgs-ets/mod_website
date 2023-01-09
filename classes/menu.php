@@ -166,7 +166,7 @@ class Menu {
         $this->data->timemodified = time();
         $this->validate_data();
         $DB->update_record(static::TABLE, $this->data);
-        logging::log('Menu', $id, array(
+        logging::log('Menu', $this->data->id, array(
             'event' => 'Menu updated from array'
         ));
     }

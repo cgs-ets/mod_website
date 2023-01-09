@@ -42,10 +42,6 @@ $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EX
 
 require_login($course, true, $cm);
 
-if ( ! $site->can_user_edit()) {
-    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
-}
-
 $modulecontext = context_module::instance($cm->id);
 $thisurl = new moodle_url('/mod/website/edit-menu.php', array(
     'site' => $siteid,
@@ -67,6 +63,10 @@ $PAGE->navbar->add($website->name, $gobackurl);
 // Wrap it in moodle.
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 $PAGE->add_body_class('limitedwidth');
+
+if ( ! $site->can_user_edit()) {
+    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
 
 // Initialise the form.
 $formsitemenu = new form_sitemenu($thisurl->out(false), array(

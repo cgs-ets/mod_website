@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_website\logging;
 use mod_website\forms\form_sitepage;
+use mod_website\permissions;
 
 /**
  * Provides utility functions for this plugin.
@@ -41,9 +42,11 @@ class Page {
     const TABLE = 'website_site_pages';
     const TABLE_SITES = 'website_sites';
     const TABLE_SECTIONS = 'website_site_sections';
+    const TABLE_PERMISSIONS = 'website_permissions';
 
     private $data = array();
     private $sections = array();
+    private $permissions = array();
 
     private static function required_data() {
         return array('siteid');
@@ -174,6 +177,31 @@ class Page {
         $this->read_sections();
 
         return $this;
+    }
+
+    /**
+     * Soft delete the page.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function delete($id = 0) {
+        global $DB;
+
+        if (!empty($id)) {
+            $this->read($id);
+        }
+
+        if (empty($this->data->id)) {
+            return;
+        }
+
+        $this->data->deleted = 1;
+        $this->update();
+
+        logging::log('Page', $this->data->id, array(
+            'event' => 'Page deleted'
+        ));
     }
 
     /**
@@ -327,6 +355,67 @@ class Page {
             $this->data->sections = json_encode($sections);
             $DB->update_record(static::TABLE, $this->data);
         }
+    }
+
+    public function sync_permission_selections($data) {
+        if (empty($this->get_id())) {
+            return;
+        }
+        // Can only share a site if the distribution is single site.
+        //$website = $this->get_website();
+        //if ($website->distribution !== '0') {
+        //    return;
+        //}
+        permissions::sync_permission_selections('Page', $this->get_id(), $data);
+    }
+
+    public function load_editors() {
+        global $DB; 
+        
+        if (empty($this->get_id())) {
+            return;
+        }
+
+        // Permissions.
+        $this->permissions = $DB->get_records(static::TABLE_PERMISSIONS, array(
+            'resourcetype' => 'Page',
+            'resourcekey' => $this->get_id(),
+        ));
+    }
+
+    public function export_editors() {
+        $editors = array();
+        foreach ($this->permissions as $permission) {
+            if ($permission->permissiontype == 'Edit') {
+                $user = \core_user::get_user($permission->userid);
+                utils::load_user_display_info($user);
+                $editors[] = $user;
+            }
+        }
+        return $editors;
+    }
+
+    public function can_user_edit() {
+        global $USER, $DB;
+
+        // Site permissions first.
+        $site = new \mod_website\site($this->get_siteid());
+        if ($site->can_user_edit()) {
+            return true;
+        }
+
+        // Check permissions for page.
+        $permissions = $DB->get_record(static::TABLE_PERMISSIONS, array(
+            'permissiontype' => 'Edit',
+            'resourcetype' => 'Page',
+            'resourcekey' => $this->get_id(),
+            'userid' => $USER->id,
+        ), '*', IGNORE_MULTIPLE);
+        if ($permissions) {
+            return true;
+        }
+
+        return false;
     }
 
      /**

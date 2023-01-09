@@ -20,14 +20,14 @@
     The overall site layout.
 }}
 
-<div class="site-root" data-siteid="{{id}}" data-mode="{{mode}}" {{#canedit}}data-canedit="{{canedit}}"{{/canedit}} data-currentpage="{{page.id}}">
-  {{#canedit}}
+<div class="site-root" data-siteid="{{id}}" data-mode="{{mode}}" {{#caneditpage}}data-caneditpage="{{caneditpage}}"{{/caneditpage}} data-currentpage="{{page.id}}">
+  {{#caneditpage}}
     {{>mod_website/site_editor}}
-  {{/canedit}}
+  {{/caneditpage}}
   <div class="topbar editzone">
     <div class="logo">
       <a target="_parent" href="{{course.url}}">{{course.shortname}}</a> / 
-      <a href="{{website.url}}">{{website.name}}</a>
+      <a href="{{siteurl}}">{{website.name}}</a>
     </div>
     <div class="topbar-right flex">
       {{>mod_website/site_menu}}
@@ -44,7 +44,7 @@
         {{/sections}}
       </div>
       <div class="page-options">
-        {{#canedit}}<a data-formurl="{{embedded_newsectionurl}}" href="{{newsectionurl}}" class="btn-editoption btn-add-site-section editoption">Add section</a>{{/canedit}}
+        {{#caneditpage}}<a data-formurl="{{embedded_newsectionurl}}" href="{{newsectionurl}}" class="btn-editoption btn-add-site-section editoption">Add section</a>{{/caneditpage}}
       </div>
     </div>
   {{/page}}

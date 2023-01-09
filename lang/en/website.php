@@ -116,10 +116,11 @@ $string['groupsgroupingsheader'] = 'Groups - Groupings';
 
 $string['sitesettings'] = 'Site settings';
 $string['permissions'] = 'Permissions';
-$string['editpermissions'] = 'Who can edit this site?';
+$string['editpermissions'] = 'Who can edit this {$a}?';
 $string['viewpermissions'] = 'View Permissions';
 $string['editorstype'] = 'People that can edit';
-$string['distsinglesharing'] = '<p>By default this website (including all pages, sections, and blocks) is editable by you only. Additional editors may be added by selecting users, groups, or roles below.</p>';
+$string['sitepermissionsblurb'] = '<p>By default this website (including all pages, sections, and blocks) is editable by the site owner. Additional editors may be added by selecting users, groups, or roles below.</p>';
+$string['pagepermissionsblurb'] = '<p>By default this page is editable by the site owner. Additional editors may be added by selecting users, groups, or roles below.</p>';
 $string['distmultisharing'] = '<p>This feature only applies to single site ditributions.</p>';
 $string['distpagesharing'] = '<p>This feature only applies to single site ditributions. The "Page for each student" distribution will automatically create a page for each student and set up the permissions allowing them to edit their own page.</p>';
 $string['roles'] = 'Roles';
@@ -128,3 +129,7 @@ $string['removeall'] = 'Remove all';
 $string['nochange'] = 'No change';
 
 $string['helplink'] = 'https://kb.cgs.act.edu.au/guides/website-builder-tool-in-cgs-connect/';
+
+$string['targetself'] = 'Same window';
+$string['targetblank'] = 'New tab';
+$string['linktarget'] = 'Open in';
