@@ -1133,6 +1133,10 @@ https://codepen.io/steveeeie/pen/NVWMEM
 #page-mod-website-site .site-body {
   padding-bottom: 100px;
 }
+#page-mod-website-site .site-body table td {
+  border: 1px solid;
+  padding: 8px;
+}
 #page-mod-website-site .topbar {
   position: relative;
   display: flex;
