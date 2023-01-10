@@ -281,7 +281,7 @@ class Block {
                     'buttontitle' => $settings->buttontitle,
                     'isfile' => $settings->linktype == 'file',
                     'isurl' => $settings->linktype == 'url',
-                    'target' => $settings->linktarget ? $settings->linktarget : '_self',
+                    'target' => $settings->linktarget ? trim($settings->linktarget) : '_self',
                     'buttonurl' => $settings->buttonurl,
                     'buttonfile' => $fileurl,
                     'buttonfilemime' => $settings->linktype == 'file' ? $filemimetype : 'url',
