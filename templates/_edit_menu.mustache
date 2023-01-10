@@ -122,14 +122,32 @@
 .inactive .menu-list > .list-group-item > .nested-sortable , .all .menu-list > .list-group-item > .nested-sortable {
   display: none;
 }
-/* Hide/show options depending on whether item is homepage or not */
+/* Hide/show homepage option depending on whether item is homepage or not */
 .list-group-item[data-ishomepage="1"] .item-options .promote-to-homepage {
   display: none;
 }
 .list-group-item[data-ishomepage="0"] .item-options .current-homepage {
   display: none;
 }
+.list-group-item[data-ishomepage="1"] .item-options .current-homepage {
+  display: block;
+}
+/* Hide/show visibility option depending on current state */
 .list-group-item[data-ishomepage="1"] .item-options .option-visibility {
   display: none;
+}
+/* Hide/show target option depending on current state */
+.list-group-item[data-target="blank"] .item-options .target[data-target="blank"] {
+  display: none;
+}
+.list-group-item .item-options .target[data-target="self"] {
+  display: none;
+}
+.list-group-item[data-target="blank"] .item-options .target[data-target="self"] {
+  display: block;
+}
+/* Some options only apply to active list */
+.inactive .list-group-item .item-options .target, .all .list-group-item .item-options .target {
+  display: none !important;
 }
 </style>

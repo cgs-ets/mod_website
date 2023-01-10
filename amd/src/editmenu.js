@@ -148,7 +148,33 @@
       })
     })
 
+
+    // Target
+    document.querySelectorAll('.target').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        let elem = e.currentTarget
+        let target = elem.dataset.target
+        for ( ; elem && elem !== document; elem = elem.parentNode ) {
+          if ( elem.classList.contains('list-group-item') ) {
+            elem.dataset.target = target
+            self.regenerateAttributes(elem)
+            self.regenerateJson()
+            return
+          }
+        }
+      })
+    })
+
   };
+
+
+  Editmenu.prototype.setTarget = function (elem, target) {
+    var self = this
+    // find the parent item elem.
+    
+  }
 
   Editmenu.prototype.SortStart = function (e) {
     let menuel = document.querySelector(".active .menu-list")
@@ -156,9 +182,6 @@
   }
   
   Editmenu.prototype.SortEnd = function (e) {
-    let menuel = document.querySelector(".active .menu-list")
-    menuel.classList.remove("sorting")
-
     // Taken from all to active.
     if (e.from.classList.contains('list-all') && e.to.classList.contains('list-active')) {
       let isinactive = document.querySelectorAll('.inactive .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]').length
@@ -204,6 +227,25 @@
       e.item.remove()
     }
 
+    var editmenu = new Editmenu();
+    editmenu.regenerateJson();
+  }
+
+  Editmenu.prototype.regenerateAttributes = function (item) {
+    let attributes = {
+      target : '',
+    }
+    if (item.dataset.attributes) {
+      attributes = JSON.parse(item.dataset.attributes)
+    }
+    attributes.target = item.dataset.target
+    item.dataset.attributes = JSON.stringify(attributes)
+  }
+
+  Editmenu.prototype.regenerateJson = function () {
+    let menuel = document.querySelector(".active .menu-list")
+    menuel.classList.remove("sorting")
+
     // Create the new json.
     let menu = []
     for (const parent of menuel.children) {
@@ -211,15 +253,17 @@
       let submenu = []
       for (const child of children) {
         submenu.push({
-          'id' : child.dataset.pageid
+          'id' : child.dataset.pageid,
+          'attributes' : child.dataset.attributes,
         })
       }
       menu.push({
         'id' : parent.dataset.pageid,
-        'children' : submenu
+        'attributes' : parent.dataset.attributes,
+        'children' : submenu,
       })
     }
-    
+
     var menuJSON = document.querySelector('input[name="menujson"]')
     menuJSON.value = JSON.stringify(menu)
   }

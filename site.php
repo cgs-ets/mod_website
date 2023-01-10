@@ -68,7 +68,7 @@ if ($mode != 'preview') { // Used for iframe preview in mod_form.
 }
 
 $site->fetch($pageid);
-if (!$site->currentpage->get_id()) {
+if ( ! $site->currentpage->get_id() || ! $page->can_user_view() ) {
     $url->param('page', 0);
     redirect($url);
 }

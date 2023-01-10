@@ -212,13 +212,19 @@ class Menu {
         $editing = !$backend && !empty($related['mode']) ? $related['mode'] : false;
 
         $first = true;
-        foreach ($pages as &$menuitem) {
+        foreach ($pages as $i => &$menuitem) {
             $menuitem = (array) $menuitem;
-            $this->expand_menu_item($menuitem, $backend, $first, $editing);
+            $result = $this->expand_menu_item($menuitem, $backend, $first, $editing);
+            if ( ! $result ) {
+                // Menu item page no longer exists.
+                echo "<pre>"; var_export($pages[$i]); exit;
+                unset($pages[$i]);
+                continue;
+            }
             $first = false;
         }
 
-        return $pages;
+        return array_values($pages);
     }    
 
     /**
@@ -241,7 +247,7 @@ class Menu {
         $pagedata = $DB->get_record(static::TABLE_PAGES, $params, '*', IGNORE_MULTIPLE);
 
         if (empty($pagedata)) {
-            return;
+            return false;
         }
 
         $site = new \mod_website\site($this->data->siteid);
@@ -257,15 +263,36 @@ class Menu {
             'site' => $this->data->siteid,
             'page' => $pagedata->id,
         ));
+
+        // target from attributes.
+        $target = 'self';
+        if ( ! empty($menuitem['attributes']) ) {
+            $attributes = json_decode($menuitem['attributes']);
+            if (isset($attributes->target)) {
+                $target = $attributes->target;
+            }
+        }
+
         $menuitem['url'] = $url->out(false);
         $menuitem['children'] = empty($menuitem['children']) ? [] : $menuitem['children'];
         $menuitem['haschildren'] = count($menuitem['children']);
         $menuitem['hidden'] = $pagedata->hidden;
         $menuitem['ishomepage'] = $ishomepage;
+        $menuitem['target'] = $target;
 
-        foreach ($menuitem['children'] as &$childitem) {
-            $this->expand_menu_item($childitem, $backend, false, $editing);
+        foreach ($menuitem['children'] as $i => &$childitem) {
+            $result = $this->expand_menu_item($childitem, $backend, false, $editing);
+            if ( ! $result ) {
+                // Menu item page no longer exists.
+                unset($menuitem['children'][$i]);
+            }
         }
+        
+        if ($menuitem['children']) { 
+            $menuitem['children'] = array_values($menuitem['children']); 
+        }
+
+        return true;
     }
 
 

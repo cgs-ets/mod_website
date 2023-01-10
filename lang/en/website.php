@@ -133,3 +133,5 @@ $string['helplink'] = 'https://kb.cgs.act.edu.au/guides/website-builder-tool-in-
 $string['targetself'] = 'Same window';
 $string['targetblank'] = 'New tab';
 $string['linktarget'] = 'Open in';
+
+$string['pagehidden'] = 'This page is hidden. Only editors are able to view this page. Other users will be redirected to the site homepage.';

@@ -258,6 +258,7 @@ class Page {
         return array(
             'id' => $this->get_id(),
             'title' => $this->get_title(),
+            'hidden' => $this->get_hidden(),
             'bannerimage' => $bannerimage,
             'sections' => $sections,
             'numsections' => count($sections),
@@ -416,6 +417,22 @@ class Page {
         }
 
         return false;
+    }
+
+    public function can_user_view() {
+        global $USER;
+
+        // If this is an editor, they can always view the page.
+        if ($this->can_user_edit()) {
+            return true;
+        }
+
+        // If the page is hidden, then the user cannot view this page.
+        if ($this->get_hidden()) {
+            return false;
+        }
+
+        return true;
     }
 
      /**

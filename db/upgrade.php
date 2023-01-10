@@ -250,7 +250,5 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022120700, 'website');
     }
 
-
-
     return true;
 }

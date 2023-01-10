@@ -33,7 +33,7 @@
         <ul class="submenu">
           {{#children}}
             <li class="menuitem" data-hidden="{{hidden}}">
-              <a href="{{url}}">{{title}}</a>
+              <a {{#target}}target="_{{target}}"{{/target}} href="{{url}}">{{title}}</a>
             </li>
           {{/children}}
         </ul>

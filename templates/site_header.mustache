@@ -23,6 +23,9 @@
 <div class="site-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}" 
   {{#caneditpage}} data-formurl="{{embedded_editpageurl}}" {{/caneditpage}}
   {{#bannerimage}} style="background-image: url('{{path}}');" {{/bannerimage}} >
+  {{#page.hidden}}
+    <div class="alert-warning p-3">{{#str}} pagehidden, mod_website {{/str}}</div>
+  {{/page.hidden}}
   <h1 class="title">
     {{title}}
   </h1>
