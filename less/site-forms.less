@@ -21,13 +21,14 @@ label.col-form-label {
       padding-top: 0;
     }
   }
-  #fitem_id_content, 
+  #fitem_id_content,
   #fitem_id_buttonurl, 
   #fitem_id_buttonfile,
   #fitem_id_buttontitle, 
   #fgroup_id_buttonlinktypegroup, 
   #fgroup_id_includepicturegroup,
   #fitem_id_buttonpicture, 
+  #fgroup_id_linktargetgroup,
   #fitem_id_visibility, 
   #fgroup_id_buttonar, 
   .fdescription.required {
@@ -36,13 +37,14 @@ label.col-form-label {
   form[data-blocktype="picturebutton"] {
     #fitem_id_buttontitle, 
     #fitem_id_buttonpicture,
-    #fgroup_id_buttonlinktypegroup, 
+    #fgroup_id_buttonlinktypegroup,
     #fitem_id_visibility, 
     #fgroup_id_buttonar {
       display: flex;
     }
     &[data-linktype="url"] {
       #fitem_id_buttonurl, 
+      #fgroup_id_linktargetgroup,
       #fgroup_id_includepicturegroup {
         display: flex;
       }

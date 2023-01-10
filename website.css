@@ -33,6 +33,7 @@
 .path-mod-website#page-mod-website-edit-block #fgroup_id_buttonlinktypegroup,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_includepicturegroup,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttonpicture,
+.path-mod-website#page-mod-website-edit-block #fgroup_id_linktargetgroup,
 .path-mod-website#page-mod-website-edit-block #fitem_id_visibility,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_buttonar,
 .path-mod-website#page-mod-website-edit-block .fdescription.required {
@@ -53,6 +54,7 @@
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fitem_id_buttonurl,
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_linktargetgroup,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_includepicturegroup {
   display: flex;
 }

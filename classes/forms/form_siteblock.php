@@ -85,10 +85,9 @@ class form_siteblock extends \moodleform {
 
         // Open in / Target.
         $linktarget=array();
-        $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetself', 'mod_website'), '_self ', array('class' => 'linktype'));
+        $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetself', 'mod_website'), '_self', array('class' => 'linktype'));
         $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetblank', 'mod_website'), '_blank', array('class' => 'linktype'));
         $mform->addGroup($linktarget, 'linktargetgroup', get_string('linktarget', 'mod_website'));
-        $mform->hideIf('linktarget', 'buttonlinktype', 'neq', 'url');
 
         // Would you like a button photo?
         //$includepicture=array();
