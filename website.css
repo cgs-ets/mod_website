@@ -833,6 +833,7 @@
 }
 #page-mod-website-site .site-section[data-layout="4"] {
   padding: 0 20px;
+  overflow: visible;
 }
 #page-mod-website-site .site-section[data-layout="4"] .section-blocks {
   position: relative;
