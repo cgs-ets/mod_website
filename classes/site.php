@@ -405,14 +405,14 @@ class Site {
     public function copy_page_from($pageid) {
         global $DB;
         $copies = array();
-        $page = $DB->get_record(static::TABLE_PAGES, array(
+        $pagedata = $DB->get_record(static::TABLE_PAGES, array(
             'id' => $pageid,
         ));
-        unset($page->id);
+        unset($pagedata->id);
         // Update the data.
-        $page->siteid = $this->get_id();
+        $pagedata->siteid = $this->get_id();
         $newpage = new \mod_website\page();
-        $newpage = $newpage->create($page);
+        $newpage = $newpage->create($pagedata);
         return intval($newpage->get_id());
     }
 
@@ -933,7 +933,23 @@ class Site {
                 utils::is_user_mentor_of_student($USER->id, $this->get_userid()) ) {
                 return true;
             }
+        }
 
+        // Copy for each student.
+        if ($this->get_website()->distribution === '2') {
+            // Teachers, the student, and their mentors can view.
+            if (utils::is_grader()) {
+                return true;
+            }
+
+            $students = utils::get_students_from_groups($this->get_website()->groups, $this->get_website()->course);
+            if (in_array($USER->id, $students)) {
+                return true;
+            }
+
+            if (utils::is_user_mentor_of_students($USER->id, $students)) {
+                return true;
+            }
         }
 
         return false;

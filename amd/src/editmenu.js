@@ -250,10 +250,10 @@
     let menu = []
     for (const parent of menuel.children) {
       let tier2menu = []
-      let tier2children = parent.querySelectorAll(".list-group-item-tier2")
+      let tier2children = document.querySelectorAll(".active .menu-list > .list-group-item > .list-group > .list-group-item")
       for (const tier2child of tier2children) {
         let tier3menu = []
-        let tier3children = tier2child.querySelectorAll(".list-group-item-tier3")
+        let tier3children = document.querySelectorAll(".active .menu-list > .list-group-item > .list-group > .list-group-item > .list-group > .list-group-item")
         for (const tier3child of tier3children) {
           console.log("Pushing " + tier3child.dataset.pageid + " into tier 3")
           tier3menu.push({

@@ -56,6 +56,11 @@ class form_permissions extends \moodleform {
         }
         else if ($websitedata->distribution == 2) {
             $mform->addElement('html', get_string('distpagesharing', 'mod_website'));
+            // Current editors
+            $mform->addElement('html', $OUTPUT->render_from_template('mod_website/site_settings_editors', array(
+                'defaulteditors' => $defaulteditors,
+                'additionaleditors' => $additionaleditors,
+            )));
         }
         else if ($websitedata->distribution == 0) {
 
@@ -70,6 +75,7 @@ class form_permissions extends \moodleform {
                 'defaulteditors' => $defaulteditors,
                 'additionaleditors' => $additionaleditors,
             )));
+            $mform->addElement('html', '<h4>Modify editors</h4>');
 
             /* Editers defined by */
             $typearray=array();

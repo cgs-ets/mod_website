@@ -20,7 +20,7 @@
     A single section.
 }}
 {{#items}}
-<div class="list-group-item list-group-item-tier1" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+<div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
   {{#haschildren}}{{#hidden}}<i><small>Item and subitems are not visible</small></i>{{/hidden}}{{/haschildren}}
   {{^haschildren}}{{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}{{/haschildren}}
   <div class="page-details">
@@ -35,9 +35,9 @@
       <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
     </span>
   </div>
-  <div class="list-group nested-sortable {{classes}}">
+  <div class="list-group nested-sortable    list-move">
     {{#children}}
-      <div class="list-group-item list-group-item-tier2" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+      <div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
         {{#hidden}}<i><small>XXXItem is not visible</small></i>{{/hidden}}
         {{#haschildren}}{{#hidden}}<i><small>Item and subitems are not visible</small></i>{{/hidden}}{{/haschildren}}
         {{^haschildren}}{{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}{{/haschildren}}
@@ -53,12 +53,12 @@
             <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
           </span>
         </div>
-        <div class="list-group nested-sortable {{classes}}">
+        <div class="list-group nested-sortable    list-move">
         
 
 
     {{#children}}
-      <div class="list-group-item list-group-item-tier3" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+      <div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
         {{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}
         <div class="page-details">
           <span>{{title}}</span>
@@ -72,7 +72,7 @@
             <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
           </span>
         </div>
-        <div class="list-group nested-sortable {{classes}}"></div>
+        <div class="list-group nested-sortable    list-move"></div>
       </div>
     {{/children}}
 

@@ -116,6 +116,10 @@ $formsitemenu->set_data(array(
     'menujson' => $site->menu->get_json(),
 ));
 
+//$menu = new \mod_website\menu($site->menuid);
+//$menudata = $menu->menu_to_array();
+//echo "<pre>"; var_export($menudata); exit;
+
 // Add js.
 $PAGE->requires->js( new moodle_url($CFG->wwwroot . '/mod/website/vendor/Sortable.min.js'), true );
 $PAGE->requires->js_call_amd('mod_website/editmenu', 'init');

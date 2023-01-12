@@ -45,8 +45,9 @@ class Page {
     const TABLE_PERMISSIONS = 'website_permissions';
 
     private $data = array();
-    private $sections = array();
     private $permissions = array();
+
+    public $sections = array();
 
     private static function required_data() {
         return array('siteid');

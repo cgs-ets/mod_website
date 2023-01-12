@@ -217,7 +217,6 @@ class Menu {
             $result = $this->expand_menu_item($menuitem, $backend, $first, $editing);
             if ( ! $result ) {
                 // Menu item page no longer exists.
-                echo "<pre>"; var_export($pages[$i]); exit;
                 unset($pages[$i]);
                 continue;
             }

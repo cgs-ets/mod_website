@@ -53,6 +53,16 @@ class utils {
         return in_array($mentoruserid, $mentors);
     }
 
+    public static function is_user_mentor_of_students($mentoruserid, $studentids) {
+        foreach($studentids as $studentid) {
+            $mentors = static::get_users_mentors($studentuserid, 'id');
+            if (in_array($mentoruserid, $mentors)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function get_users_mentors($userid, $field = 'username') {
         global $DB;
 

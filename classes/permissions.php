@@ -154,7 +154,29 @@ class permissions {
 
         $DB->delete_records(static::TABLE_PERMISSIONS, (array) $data);
     }
-     
+
+    public static function create($resourcetype, $resourcekey, $userid) {
+        global $DB, $USER;
+
+        // Fundamental properties.
+        $data = new \stdClass();
+        $data->permissiontype = 'Edit';
+        $data->resourcetype = $resourcetype;
+        $data->resourcekey = $resourcekey;
+        $data->userid = $userid;
+
+        // Check if permission already exists
+        $existing = $DB->get_records(static::TABLE_PERMISSIONS, (array) $data, 'id', 'userid');
+        if ($existing) {
+            return false;
+        }
+
+        // Create the new records.
+        $data->ownerid = $USER->id;
+        $DB->insert_record(static::TABLE_PERMISSIONS, $data);
+
+        return true;
+    }
    
 
 }

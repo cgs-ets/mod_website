@@ -120,10 +120,14 @@ function website_add_instance($moduleinstance, $mform = null) {
         // If a template URL has been supplied, check if a speciic page is nominated.
         $templatepageid = 0;
         if (!empty($moduleinstance->useexistingurl)) {
-            $regex = '/\/mod\/website\/site\.php\?site\=(\d+)&page\=(\d)/';
+            $regex = '/\/mod\/website\/site\.php\?site\=(\d+)&page\=(\d+)/';
             preg_match($regex, $moduleinstance->useexistingurl, $matches);
             if (count($matches) == 3) {
                 $templatepageid = $matches[2];
+            } else {
+                // Use homepage if only siteid is provided.
+                $templatesite = new \mod_website\site($templatesiteid);
+                $templatepageid = $templatesite->homepageid;
             }
         }
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
@@ -142,7 +146,6 @@ function website_add_instance($moduleinstance, $mform = null) {
 
     website_grade_item_update($moduleinstance);
     
-
     return $moduleinstance->id;
 }
 
