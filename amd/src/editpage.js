@@ -33,11 +33,11 @@
     * Initializes the editpage component.
     */
   function init() {
-      Log.debug('mod_website/editpage: initializing');
+      Log.debug('mod_website/editpage: initializing')
 
     
-      var editpage = new EditPage();
-      editpage.main();
+      var editpage = new EditPage()
+      editpage.main()
   }
 
   /**
@@ -65,7 +65,7 @@
             data: deletebutton.dataset.pageid,
         },
         done: function (e) {
-          window.open(deletebutton.dataset.returnurl, '_parent');
+          window.open(deletebutton.dataset.returnurl, '_parent')
         },
         fail: Notification.exception
       }]);

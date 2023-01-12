@@ -70,7 +70,7 @@ class Page {
     }
 
     /**
-     * create a new site record in the db and return a site instance.
+     * create a new page record in the db and return a page instance.
      *
      * @param $data
      * @return static

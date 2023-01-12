@@ -20,16 +20,14 @@
     A single section.
 }}
 {{#items}}
-<div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+<div class="list-group-item list-group-item-tier1" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
   {{#haschildren}}{{#hidden}}<i><small>Item and subitems are not visible</small></i>{{/hidden}}{{/haschildren}}
   {{^haschildren}}{{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}{{/haschildren}}
   <div class="page-details">
     <span>{{title}}</span>
     <span class="item-options">
-
       <a class="target" data-target="blank" href="#" title="Make link open in new tab"><i class="fa fa-window-maximize" aria-hidden="true"></i></a>
       <a class="target" data-target="self"href="#" title="Make link open in same window"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
-
       <a class="promote-to-homepage" data-pageid="{{id}}" href="#" style="margin-right:4px;" title="Make homepage"><i class="fa fa-home" aria-hidden="true"></i><i class="fa fa-level-up" aria-hidden="true"></i></a>
       <span class="current-homepage"><i class="fa fa-home" aria-hidden="true" title="Current homepage"></i></span>
       <a class="option-visibility visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true" title="Make page hidden"></i></a>
@@ -39,15 +37,34 @@
   </div>
   <div class="list-group nested-sortable {{classes}}">
     {{#children}}
-      <div class="list-group-item" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+      <div class="list-group-item list-group-item-tier2" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
+        {{#hidden}}<i><small>XXXItem is not visible</small></i>{{/hidden}}
+        {{#haschildren}}{{#hidden}}<i><small>Item and subitems are not visible</small></i>{{/hidden}}{{/haschildren}}
+        {{^haschildren}}{{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}{{/haschildren}}
+        <div class="page-details">
+          <span>{{title}}</span>
+          <span class="item-options">
+            <a class="target" data-target="blank" href="#" title="Make link open in new tab"><i class="fa fa-window-maximize" aria-hidden="true"></i></a>
+            <a class="target" data-target="self"href="#" title="Make link open in same window"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
+            <a class="promote-to-homepage" data-pageid="{{id}}" href="#" style="margin-right:4px;" title="Make homepage"><i class="fa fa-home" aria-hidden="true"></i><i class="fa fa-level-up" aria-hidden="true"></i></a>
+            <span class="current-homepage"><i class="fa fa-home" aria-hidden="true" title="Current homepage"></i></span>
+            <a class="visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true" title="Make page hidden"></i></a>
+            <a class="visibility-hidden" data-pageid="{{id}}" href="#"><i class="fa fa-eye-slash" aria-hidden="true" title="Make page visible"></i></a>
+            <a href="{{url}}" target="_blank"><i class="fa fa-external-link-square" aria-hidden="true"></i></a>
+          </span>
+        </div>
+        <div class="list-group nested-sortable {{classes}}">
+        
+
+
+    {{#children}}
+      <div class="list-group-item list-group-item-tier3" data-pageid="{{id}}" data-hidden="{{hidden}}" data-ishomepage="{{ishomepage}}" data-target="{{target}}" data-attributes="{{attributes}}">
         {{#hidden}}<i><small>Item is not visible</small></i>{{/hidden}}
         <div class="page-details">
           <span>{{title}}</span>
           <span class="item-options">
-
             <a class="target" data-target="blank" href="#" title="Make link open in new tab"><i class="fa fa-window-maximize" aria-hidden="true"></i></a>
             <a class="target" data-target="self"href="#" title="Make link open in same window"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
-
             <a class="promote-to-homepage" data-pageid="{{id}}" href="#" style="margin-right:4px;" title="Make homepage"><i class="fa fa-home" aria-hidden="true"></i><i class="fa fa-level-up" aria-hidden="true"></i></a>
             <span class="current-homepage"><i class="fa fa-home" aria-hidden="true" title="Current homepage"></i></span>
             <a class="visibility-visible" data-pageid="{{id}}" href="#"><i class="fa fa-eye" aria-hidden="true" title="Make page hidden"></i></a>
@@ -56,6 +73,12 @@
           </span>
         </div>
         <div class="list-group nested-sortable {{classes}}"></div>
+      </div>
+    {{/children}}
+
+
+        
+        </div>
       </div>
     {{/children}}
   </div>

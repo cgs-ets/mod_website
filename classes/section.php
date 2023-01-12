@@ -91,6 +91,34 @@ class Section {
     }
 
     /**
+     * create a new section record based on this object.
+     *
+     * @param $data
+     * @return static
+     */
+    public function save_as() {
+        global $DB;
+
+        if (empty($this->get_id())) {
+            return false;
+        } 
+
+        unset($this->data->id);
+        $this->data->timecreated = time();
+        $this->data->timemodified = time();
+
+        $this->validate_data();
+        
+        $id = $DB->insert_record(static::TABLE, $this->data);
+
+        logging::log('Section', $id, array(
+            'event' => 'Section created'
+        ));
+
+        return $this->read($id);
+    }
+
+    /**
      * create a section record in the db and return the id.
      *
      * @param $data
@@ -259,6 +287,10 @@ class Section {
         if (isset($this->data->id)) {
             return $this->data->id;
         }
+    }
+
+    public function set_siteid($siteid) {
+        $this->data->siteid = $siteid;
     }
 
     public function get_blocks() {

@@ -401,6 +401,55 @@ class Site {
         return $copies;
     }
 
+    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
+    public function copy_page_from($pageid) {
+        global $DB;
+        $copies = array();
+        $page = $DB->get_record(static::TABLE_PAGES, array(
+            'id' => $pageid,
+        ));
+        unset($page->id);
+        // Update the data.
+        $page->siteid = $this->get_id();
+        $newpage = new \mod_website\page();
+        $newpage = $newpage->create($page);
+        return intval($newpage->get_id());
+    }
+
+    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
+    public function copy_sections_from_page($pageid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $page = new \mod_website\page($pageid); 
+        foreach ($page->sections as $section) {
+            // Keep track of the old id.
+            $oldid = $section->get_id();
+            // Update the data.
+            $section->set_siteid($this->get_id());
+            $newsection = $section->save_as();
+            $copies[$oldid] = intval($newsection->get_id());
+        }
+        return $copies;
+    }
+
+    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
+    public function copy_blocks_from_page($pageid) {
+        global $DB;
+        $copies = array(0 => 0);
+        $page = new \mod_website\page($pageid); 
+        foreach ($page->sections as $section) {
+            foreach ($section->blocks as $block) {
+                // Keep track of the old id.
+                $oldid = $block->get_id();
+                // Update the data.
+                $block->set_siteid($this->get_id());
+                $newblock = $block->save_as();
+                $copies[$oldid] = intval($newblock->get_id());
+            }
+        }
+        return $copies;
+    }
+
     /**
      * Load the data from the DB.
      *
@@ -617,11 +666,13 @@ class Site {
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
         ));
-        $editpermissionsurl = new \moodle_url('/mod/website/edit-permissions.php', array(
+        $sitepermissionsurl = new \moodle_url('/mod/website/edit-permissions.php', array(
             'type' => 'site',
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
         ));
+        $pagepermissionsurl = clone($sitepermissionsurl);
+        $pagepermissionsurl->param('type', 'page');
         $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
@@ -664,7 +715,8 @@ class Site {
         $output = array(
             'caneditsite' => $caneditsite,
             'caneditpage' => $caneditpage,
-            'editpermissionsurl' => $editpermissionsurl->out(false),
+            'sitepermissionsurl' => $sitepermissionsurl->out(false),
+            'pagepermissionsurl' => $pagepermissionsurl->out(false),
             'editsiteurl' => $editsiteurl->out(false),
             'editpageurl' => $editpageurl->out(false),
             'newpageurl' => $newpageurl->out(false),
@@ -685,13 +737,15 @@ class Site {
         );
 
         // Embedded Form URLs.
-        $editpermissionsurl->param('embed', 1);
+        $sitepermissionsurl->param('embed', 1);
+        $pagepermissionsurl->param('embed', 1);
         $editsiteurl->param('embed', 1);
         $editpageurl->param('embed', 1);
         $newpageurl->param('embed', 1);
         $editmenuurl->param('embed', 1);
         $newsectionurl->param('embed', 1);
-        $output['embedded_editpermissionsurl'] = $editpermissionsurl->out(false);
+        $output['embedded_sitepermissionsurl'] = $sitepermissionsurl->out(false);
+        $output['embedded_pagepermissionsurl'] = $pagepermissionsurl->out(false);
         $output['embedded_editsiteurl'] = $editsiteurl->out(false);
         $output['embedded_editpageurl'] = $editpageurl->out(false);
         $output['embedded_newpageurl'] = $newpageurl->out(false);

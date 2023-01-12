@@ -136,7 +136,6 @@ function website_add_instance($moduleinstance, $mform = null) {
                 'creatorid' => $USER->id,
                 'name' => $moduleinstance->name,
             ),
-            $templatesiteid,
             $templatepageid
         );
     }

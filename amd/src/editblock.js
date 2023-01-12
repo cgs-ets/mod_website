@@ -33,11 +33,11 @@
     * Initializes the editblock component.
     */
   function init() {
-      Log.debug('mod_website/editblock: initializing');
+      Log.debug('mod_website/editblock: initializing')
 
     
-      var editblock = new Editblock();
-      editblock.main();
+      var editblock = new Editblock()
+      editblock.main()
   }
 
   /**
@@ -55,13 +55,13 @@
   Editblock.prototype.main = function () {
     const self = this;
 
-    self.checkBlockType();
+    self.checkBlockType()
     let selectedlinktype = document.querySelector('.linktype input:checked')
     if (!selectedlinktype) {
       // Default is file.
       document.querySelector('.linktype input[value="file"]').checked = true
     }
-    self.checkLinkType();
+    self.checkLinkType()
     //self.checkIncludePicture();
 
     // Block type changed.
@@ -92,7 +92,7 @@
             data: deletebutton.dataset.blockid,
         },
         done: function (e) {
-          window.open(deletebutton.dataset.returnurl, '_parent');
+          window.open(deletebutton.dataset.returnurl, '_parent')
         },
         fail: Notification.exception
       }]);
@@ -110,7 +110,7 @@
 
   // Determine link type.
   Editblock.prototype.checkLinkType = function () {
-    let linktype = document.querySelector('.linktype input:checked');
+    let linktype = document.querySelector('.linktype input:checked')
     if (linktype == null) {
       return
     }

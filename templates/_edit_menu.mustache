@@ -102,6 +102,15 @@
 .list-group-item[data-hidden="0"] > .page-details .visibility-hidden {
   display: none;
 }
+/* Only 3 levels permitted */
+.menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable {
+  display: none;
+}
+/* Only 3 level for inactive and all */
+.inactive .menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable, .all .menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable {
+  display: none;
+}
+/* 2nd level */
 .menu-list .list-group-item > .nested-sortable > .list-group-item {
   background-color: #cccccc;
 }
@@ -114,14 +123,30 @@
   padding: 15px;
   border: 1px dashed #ccc;
 }
+/* 3rd level */
+.menu-list .list-group-item > .nested-sortable > .list-group-item > .nested-sortable > .list-group-item {
+  background-color: #aaa;
+}
+.menu-list > .list-group-item:not(.reordering) > .nested-sortable > .list-group-item  > .nested-sortable > .list-group-item:first-child {
+  margin-top: 10px;
+}
+.menu-list.sorting > .list-group-item:not(.reordering) > .nested-sortable > .list-group-item  > .nested-sortable {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 15px;
+  border: 1px dashed #aaa;
+}
+
 /* Only 2 levels permitted */
-.menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable {
+/*.menu-list > .list-group-item > .nested-sortable > .list-group-item > .nested-sortable {
   display: none;
 }
 /* Only 2 level for inactive and all */
-.inactive .menu-list > .list-group-item > .nested-sortable , .all .menu-list > .list-group-item > .nested-sortable {
+/*.inactive .menu-list > .list-group-item > .nested-sortable , .all .menu-list > .list-group-item > .nested-sortable {
   display: none;
-}
+}*/
+
+
 /* Hide/show homepage option depending on whether item is homepage or not */
 .list-group-item[data-ishomepage="1"] .item-options .promote-to-homepage {
   display: none;

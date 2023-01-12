@@ -33,7 +33,7 @@
     * Initializes the editmenu component.
     */
   function init() {
-      Log.debug('mod_website/editmenu: initializing');
+      Log.debug('mod_website/editmenu: initializing')
 
     
       var editmenu = new Editmenu();
@@ -249,18 +249,30 @@
     // Create the new json.
     let menu = []
     for (const parent of menuel.children) {
-      let children = parent.querySelectorAll(".list-group-item")
-      let submenu = []
-      for (const child of children) {
-        submenu.push({
-          'id' : child.dataset.pageid,
-          'attributes' : child.dataset.attributes,
+      let tier2menu = []
+      let tier2children = parent.querySelectorAll(".list-group-item-tier2")
+      for (const tier2child of tier2children) {
+        let tier3menu = []
+        let tier3children = tier2child.querySelectorAll(".list-group-item-tier3")
+        for (const tier3child of tier3children) {
+          console.log("Pushing " + tier3child.dataset.pageid + " into tier 3")
+          tier3menu.push({
+            'id' : tier3child.dataset.pageid,
+            'attributes' : tier3child.dataset.attributes,
+          })
+        }
+        console.log("Pushing " + tier2child.dataset.pageid + " into tier 2")
+        tier2menu.push({
+          'id' : tier2child.dataset.pageid,
+          'attributes' : tier2child.dataset.attributes,
+          'children' : tier3menu,
         })
       }
+      console.log("Pushing " + parent.dataset.pageid + " into top")
       menu.push({
         'id' : parent.dataset.pageid,
         'attributes' : parent.dataset.attributes,
-        'children' : submenu,
+        'children' : tier2menu,
       })
     }
 

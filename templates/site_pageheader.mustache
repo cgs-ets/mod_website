@@ -15,17 +15,20 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_website/site_header
+    @template mod_website/site_pageheader
 
     The header.
 }}
 
-<div class="site-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}" 
+<div class="page-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}" 
   {{#caneditpage}} data-formurl="{{embedded_editpageurl}}" {{/caneditpage}}
   {{#bannerimage}} style="background-image: url('{{path}}');" {{/bannerimage}} >
   {{#page.hidden}}
     <div class="alert-warning p-3">{{#str}} pagehidden, mod_website {{/str}}</div>
   {{/page.hidden}}
+  <a data-formurl="{{embedded_pagepermissionsurl}}" href="{{pagepermissionsurl}}" class="btn-edit-permissions editoption scaleonhover" title="Page permissions">
+    <i class="fa fa-user-plus" aria-hidden="true"></i>
+  </a>
   <h1 class="title">
     {{title}}
   </h1>

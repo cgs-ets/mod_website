@@ -102,6 +102,7 @@ if ($formsitemenu->is_cancelled()) {
 // Check if it is submitted.
 $formdata = $formsitemenu->get_data();
 if (!empty($formdata)) {
+    //echo "<pre>"; var_export($formdata->menujson); exit;
     // Save the menu.
     $menuarr = json_decode($formdata->menujson, true);
     $menu = new \mod_website\menu($menuid);

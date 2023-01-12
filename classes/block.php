@@ -95,6 +95,34 @@ class Block {
     }
 
     /**
+     * create a new block record based on this object.
+     *
+     * @param $data
+     * @return static
+     */
+    public function save_as() {
+        global $DB;
+
+        if (empty($this->get_id())) {
+            return false;
+        } 
+
+        unset($this->data->id);
+        $this->data->timecreated = time();
+        $this->data->timemodified = time();
+
+        $this->validate_data();
+        
+        $id = $DB->insert_record(static::TABLE, $this->data);
+
+        logging::log('Block', $id, array(
+            'event' => 'Block created'
+        ));
+
+        return $this->read($id);
+    }
+
+    /**
      * create a block record in the db and return the id.
      *
      * @param $data
@@ -406,6 +434,10 @@ class Block {
     
     public function get_hidden() {
         return $this->data->hidden;
+    }
+
+    public function set_siteid($siteid) {
+        $this->data->siteid = $siteid;
     }
 
      /**

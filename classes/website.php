@@ -356,24 +356,132 @@ class Website {
         }
     }
 
-    public function create_pages_for_students($students, $data, $templatesiteid = 0, $templatepageid = 0) {
-        // Page for students.
+    public function create_pages_for_students($students, $data, $templatepageid = 0) {
+
+        // Create the initial site.
+        $this->create_site($data);
+        $site = $website = new \mod_website\site(); 
+        $site->read_from_websiteid($data->websiteid);
+        if (empty($site->get_id())) {
+            return false;
+        }
+
+        // Create a page for each student.
         foreach ($students as $studentid) {
-            $data = (object) $data;
-            $sitedata = array(
-                'websiteid' => $data->websiteid,
-                'cmid' => $data->cmid,
-                'creatorid' => $data->creatorid,
-                'userid' => $studentid,
-                'title' => $data->name,
-                'siteoptions' => '',
-            );
-            $site = new \mod_website\site();
-            if (!$templatesiteid) {
-                $site->create($sitedata);
+            // Create a page and set the student as an editor.
+
+            // Page is based on a template.
+            if ($templatepageid) {
+                // Copy the page.
+                $pagecopy = $site->copy_page_from($pageid);
+                if (empty($pagecopy)) {
+                    return false;
+                }
+                // Copy the sections.
+                $sectioncopies = $site->copy_sections_from_page($pageid);
+                // Copy the blocks.
+                $blockcopies = $site->copy_blocks_from_page($pageid);
+
+                /*********
+                 * Relink the page, sections and blocks.
+                 *********/
+                // Page has sections.
+                $newpage = new \mod_website\page($pagecopy);
+                $sections = $newpage->get_sections();
+                foreach($sections as &$section) {
+                    $section = $sectioncopies[$section];
+                }
+                $newpage->set('sections', json_encode($sections));
+                $newpage->update();
+
+                // Sections have blocks.
+                foreach ($sectioncopies as $copy) {
+                    if ($copy == 0) { continue; }
+                    $newsection = new \mod_website\section($copy);
+                    $blocks = $newsection->get_blocks();
+                    foreach($blocks as &$block) {
+                        $block = $blockcopies[$block];
+                    }
+                    $newsection->set('blocks', json_encode($blocks));
+                    $newsection->update();
+                }
+
+                /*****
+                 * Copy page files.
+                 *****/
+                $oldcontext = \context_module::instance($site->get_cmid());
+                $newcontext = \context_module::instance($this->get_cmid());
+                $fs = get_file_storage();
+
+                // Page banners.
+                foreach ($pagecopies as $oldid => $newid) {
+                    if ($oldid == 0) { continue; }
+                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'bannerimage', $oldid, "filename", true)) {
+                        foreach ($files as $file) {
+                            $newrecord = new \stdClass();
+                            $newrecord->contextid = $newcontext->id;
+                            $newrecord->itemid = $newid;
+                            $fs->create_file_from_storedfile($newrecord, $file);
+                        }
+                    }
+                }
+
+                // Block button link to file.
+                foreach ($blockcopies as $oldid => $newid) {
+                    if ($oldid == 0) { continue; }
+                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
+                        foreach ($files as $file) {
+                            $newrecord = new \stdClass();
+                            $newrecord->contextid = $newcontext->id;
+                            $newrecord->itemid = $newid;
+                            $fs->create_file_from_storedfile($newrecord, $file);
+                        }
+                    }
+                }
+
+                // Block button picture.
+                foreach ($blockcopies as $oldid => $newid) {
+                    if ($oldid == 0) { continue; }
+                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
+                        foreach ($files as $file) {
+                            $newrecord = new \stdClass();
+                            $newrecord->contextid = $newcontext->id;
+                            $newrecord->itemid = $newid;
+                            $fs->create_file_from_storedfile($newrecord, $file);
+                        }
+                    }
+                }
+
+                // Block content files.
+                foreach ($blockcopies as $oldid => $newid) {
+                    if ($oldid == 0) { continue; }
+                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
+                        foreach ($files as $file) {
+                            $newrecord = new \stdClass();
+                            $newrecord->contextid = $newcontext->id;
+                            $newrecord->itemid = $newid;
+                            $fs->create_file_from_storedfile($newrecord, $file);
+                        }
+                    }
+                }
+
+
             } else {
-                $site->create_from_template($sitedata, $templatesiteid, true);
+                // A blank page
+                $page = new \mod_website\page();
+                $page->create([
+                    'siteid' => $site->get_id(),
+                    'title' => $site->get_title(),
+                    'sections' => '',
+                ]);
             }
+
+            // Set the menu.
+
+            // Set the page permissions.
+
+
+    
         }
     }
 

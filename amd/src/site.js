@@ -196,7 +196,8 @@
       }
     })
 
-    document.querySelectorAll('.menuitem.haschildren > a').forEach(a => {
+    // Expand tier 2
+    document.querySelectorAll('.menu > .menuitem.haschildren > a').forEach(a => {
       a.addEventListener('click', event => {
         // If in mobile view...
         const menuwrap = document.querySelector('.menuwrap')
@@ -207,6 +208,18 @@
           } else {
             a.parentNode.classList.add('expanded');
           }
+        }
+      })
+    })
+
+    // Expand tier 3
+    document.querySelectorAll('.submenu > .menuitem.haschildren > a').forEach(a => {
+      a.addEventListener('click', event => {
+        event.preventDefault();
+        if (a.parentNode.classList.contains('expanded')) {
+          a.parentNode.classList.remove('expanded');
+        } else {
+          a.parentNode.classList.add('expanded');
         }
       })
     })

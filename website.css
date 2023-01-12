@@ -456,6 +456,10 @@
   /* Disable links inside block content */
   /* Dragging / Sorting / Changing block position */
 }
+#page-mod-website-site .site-root[data-mode="edit"] .editoption:hover.scaleonhover {
+  transform: scale(1.2);
+  transition: all ease 0.2s;
+}
 #page-mod-website-site .site-root[data-mode="edit"] .editzone {
   margin: 20px !important;
   padding: 20px !important;
@@ -1056,7 +1060,8 @@ https://codepen.io/steveeeie/pen/NVWMEM
   }
 }
 #page-mod-website-site .menu,
-#page-mod-website-site .submenu {
+#page-mod-website-site .submenu,
+#page-mod-website-site .subsubmenu {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -1073,6 +1078,13 @@ https://codepen.io/steveeeie/pen/NVWMEM
   display: none;
   width: 200px;
   z-index: 10;
+}
+#page-mod-website-site .subsubmenu {
+  display: none;
+  background: #0A1628;
+}
+#page-mod-website-site .submenu .menuitem.expanded .subsubmenu {
+  display: block;
 }
 #page-mod-website-site .menuitem {
   position: relative;
@@ -1159,16 +1171,24 @@ https://codepen.io/steveeeie/pen/NVWMEM
   outline: none;
   border: none;
   box-shadow: none;
+  white-space: nowrap;
 }
 #page-mod-website-site .topbar .site-edit-options {
   display: flex;
   align-items: center;
 }
-#page-mod-website-site .site-header {
+#page-mod-website-site .page-header {
   background-size: cover;
   background-position: center center;
+  position: relative;
 }
-#page-mod-website-site .site-header .title {
+#page-mod-website-site .page-header .btn-edit-permissions {
+  color: #000;
+  position: absolute;
+  top: 5px;
+  right: 8px;
+}
+#page-mod-website-site .page-header .title {
   margin: 0;
   text-align: center;
   padding: 100px 30px;
@@ -1200,9 +1220,12 @@ https://codepen.io/steveeeie/pen/NVWMEM
   font-weight: 600;
   font-size: 16px;
 }
-#page-mod-website-site .site-header.has-banner h1 {
+#page-mod-website-site .page-header.has-banner h1 {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.3);
+}
+#page-mod-website-site .page-header.has-banner .btn-edit-permissions {
+  color: #fff;
 }
 /*Grading Style*/
 .path-mod-website [data-region="grading-navigation"] {
