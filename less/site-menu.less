@@ -47,7 +47,13 @@
   &[data-hidden="1"] {
     display: none;
   }
+  &.expanded {
+    > a .caret {
+      transform: rotateX(180deg);
+    }
+  }
 }
+
 
 .menuwrap {
   .menutoggle {
