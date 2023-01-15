@@ -302,9 +302,22 @@ class Block {
 
         if ($this->data->type == 'picturebutton') {
             if ($this->get_id()) {
-                $image = $this->export_buttonpicture($related);
-                list($fileurl, $filemimetype, $filemimetypeicon) = $this->export_buttonfile($related);
                 $settings = json_decode($this->data->content);
+                $image = $this->export_buttonpicture($related);
+                
+                $fileurl = '';
+                if ($settings->linktype == 'file') {
+                    list($fileurl, $buttonfilemime, $buttonfilemimeicon) = $this->export_buttonfile($related);
+                }
+                else if ($settings->linktype == 'url') {
+                    $buttonfilemime = 'url';
+                    $buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
+                }
+                else if ($settings->linktype == 'content') {
+                    $buttonfilemime = 'content';
+                    $buttonfilemimeicon = '<i class="fa fa-bars" aria-hidden="true"></i>';
+                }
+
                 $buttondata = array(
                     'buttontitle' => $settings->buttontitle,
                     'isfile' => $settings->linktype == 'file',
@@ -313,8 +326,8 @@ class Block {
                     'target' => $settings->linktarget ? trim($settings->linktarget) : '_self',
                     'buttonurl' => $settings->buttonurl,
                     'buttonfile' => $fileurl,
-                    'buttonfilemime' => $settings->linktype == 'file' ? $filemimetype : 'url',
-                    'buttonfilemimeicon' => $settings->linktype == 'file' ? $filemimetypeicon : '<i class="fa fa-link" aria-hidden="true"></i>',
+                    'buttonfilemime' => $buttonfilemime,
+                    'buttonfilemimeicon' => $buttonfilemimeicon,
                     'includepicture' => $image ? 1 : 0,
                     'buttonpicture' => $image,
                     'content' => $this->export_content($related, $settings->content),

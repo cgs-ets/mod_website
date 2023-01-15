@@ -923,6 +923,9 @@
   text-decoration: none;
   text-transform: uppercase;
 }
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="content"] {
+  background: #306BFF;
+}
 #page-mod-website-site a.picturebutton figure.nopicture[data-filetype="url"] {
   background: #306BFF;
 }
