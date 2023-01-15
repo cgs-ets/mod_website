@@ -79,7 +79,7 @@ class mod_website_mod_form extends moodleform_mod {
         $options = array(
             '0' => 'Single teacher-driven website, viewable by all students',
             '1' => 'Copy for each student, editable and viewable by the student',
-            //'2' => 'Page for each student, editable and viewable by the student',
+            '2' => 'Page for each student, editable by the student, viewable by all',
         );
         $select = $mform->addElement('select', 'distribution', get_string('distribution', 'mod_website'), $options);
         $select->setSelected('0');
