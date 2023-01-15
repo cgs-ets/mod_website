@@ -107,6 +107,11 @@ echo $OUTPUT->header();
 // Render the site. 
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 
+// Modal for any popup content.
+$modal = array('id' => 'popupcontent', 'body' => '');
+echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
+
+// Another modal for editing forms.
 if ($data->caneditsite || $data->caneditpage) {
     $modal = array('id' => 'embeddedform', 'body' => '');
     echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);

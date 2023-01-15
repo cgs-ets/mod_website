@@ -31,20 +31,12 @@
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttonfile,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttontitle,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_buttonlinktypegroup,
-.path-mod-website#page-mod-website-edit-block #fgroup_id_includepicturegroup,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttonpicture,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_linktargetgroup,
 .path-mod-website#page-mod-website-edit-block #fitem_id_visibility,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_buttonar,
 .path-mod-website#page-mod-website-edit-block .fdescription.required {
   display: none;
-}
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] {
-  /*&[data-includepicture="1"] {
-      #fitem_id_buttonpicture {
-        display: flex;
-      }
-    }*/
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_buttontitle,
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"] #fitem_id_buttonpicture,
@@ -54,12 +46,13 @@
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fitem_id_buttonurl,
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_linktargetgroup,
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_includepicturegroup {
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="url"] #fgroup_id_linktargetgroup {
   display: flex;
 }
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile,
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fgroup_id_includepicturegroup {
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="file"] #fitem_id_buttonfile {
+  display: flex;
+}
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="content"] #fitem_id_content {
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_content,
@@ -862,18 +855,10 @@
 #page-mod-website-site .site-block[data-hidden="1"] {
   display: none;
 }
-#page-mod-website-site .site-block-inner {
-  /* Other goodies
-https://codepen.io/cycosta/pen/vYLJxwq
-https://codepen.io/mrReiha/pen/RwPgLeM
-https://codepen.io/petegarvin1/pen/YzWBbRx
-https://codepen.io/steveeeie/pen/NVWMEM
-*/
-}
-#page-mod-website-site .site-block-inner a.picturebutton {
+#page-mod-website-site a.picturebutton {
   text-decoration: none;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure {
+#page-mod-website-site a.picturebutton figure {
   position: relative;
   display: flex;
   align-items: center;
@@ -886,11 +871,11 @@ https://codepen.io/steveeeie/pen/NVWMEM
   overflow: hidden;
   /* Show the mime icon */
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure:hover {
+#page-mod-website-site a.picturebutton figure:hover {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   transform: scale(1.05);
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure figcaption {
+#page-mod-website-site a.picturebutton figure figcaption {
   position: absolute;
   bottom: 0px;
   left: 0;
@@ -904,23 +889,23 @@ https://codepen.io/steveeeie/pen/NVWMEM
   line-height: 1;
   transition: 0.25s;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure figcaption h3 {
+#page-mod-website-site a.picturebutton figure figcaption h3 {
   margin: 0;
   padding: 0;
   font-weight: 400;
   font-size: 17px;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure h2 {
+#page-mod-website-site a.picturebutton figure h2 {
   opacity: 0;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture {
+#page-mod-website-site a.picturebutton figure.nopicture {
   background: #aaa;
   display: block;
   text-align: center;
   padding: 50px;
   color: #000;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture h2 {
+#page-mod-website-site a.picturebutton figure.nopicture h2 {
   margin: 0;
   padding: 0;
   color: white;
@@ -938,26 +923,32 @@ https://codepen.io/steveeeie/pen/NVWMEM
   text-decoration: none;
   text-transform: uppercase;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="url"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="url"] {
   background: #306BFF;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="pdf"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="pdf"] {
   background: #DA1618;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="word"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="word"] {
   background: #295497;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="sheet"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="sheet"] {
   background: #1F7244;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="powerpoint"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="powerpoint"] {
   background: #C9461F;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="archive"] {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="archive"] {
   background: #FFB739;
 }
-#page-mod-website-site .site-block-inner a.picturebutton figure.nopicture[data-filetype="archive"] h2 {
+#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="archive"] h2 {
   color: #000;
+}
+#page-mod-website-site a.picturebutton.picturebutton-type-content .picturebutton-content {
+  display: none;
+}
+#page-mod-website-site #modal-popupcontent .modal__body {
+  padding: 20px;
 }
 #page-mod-website-site .modal {
   opacity: 0;
@@ -1032,7 +1023,7 @@ https://codepen.io/steveeeie/pen/NVWMEM
   position: absolute;
   width: 2px;
   height: 1.5em;
-  background: #ccc;
+  background: #444;
   display: block;
   transform: rotate(45deg);
   left: 50%;

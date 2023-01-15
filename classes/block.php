@@ -157,14 +157,32 @@ class Block {
         }
 
         if ($data->type == 'picturebutton') {
+
+            // If the link type is content then we need to store the content and files too.
+            $popupcontent = '';
+            if ($data->buttonlinktypegroup['buttonlinktype'] == 'content') {
+                $popupcontent = file_save_draft_area_files(
+                    $data->content['itemid'], 
+                    $modulecontext->id, 
+                    'mod_website', 
+                    'content', 
+                    $this->data->id,
+                    form_siteblock::editor_options(), 
+                    $data->content['text'],
+                );
+            }
+
+            // Construct the json from selections/content.
             $this->data->content = json_encode(array(
                 'buttontitle' => $data->buttontitle,
                 'linktype' => $data->buttonlinktypegroup['buttonlinktype'],
                 'buttonurl' => $data->buttonurl,
-                'linktarget' => $data->linktargetgroup['linktarget'],
-                'includepicture' => $data->buttonpicture ? 1 : 0, //$data->includepicturegroup['includepicture'],
+                'linktarget' => isset($data->linktargetgroup['linktarget']) ? $data->linktargetgroup['linktarget'] : '',
+                'includepicture' => $data->buttonpicture ? 1 : 0,
+                'content' => $popupcontent,
             ));
-            // Save the file.
+
+            // Save the file if the button link type is file.
             if ($data->buttonfile) {
                 file_save_draft_area_files(
                     $data->buttonfile, 
@@ -175,6 +193,7 @@ class Block {
                     form_siteblock::file_options()
                 );
             }
+
             // Save the picture.
             if ($data->buttonpicture) {
                 file_save_draft_area_files(
@@ -278,26 +297,7 @@ class Block {
         // Generate the block html.
         $html = '';
         if ($this->data->type == 'editor' || empty($this->data->type)) {
-            if ($this->get_id()) {
-                $html = file_rewrite_pluginfile_urls(
-                    $this->data->content, 
-                    'pluginfile.php', 
-                    $related['modulecontext']->id,
-                    'mod_website', 
-                    'content', 
-                    $this->get_id()
-                );
-                
-                // Custom purification.
-                $html = utils::purify_html($html);
-                // Moodle's filters - without cleaning because we use custom cleaning.
-                $options = (object) array(
-                    'context' => $related['modulecontext'],
-                    'noclean' => true, //utils::should_clean_content($related['website']),
-                    'nocache' => true,
-                );
-                $html = format_text($html, FORMAT_HTML, $options);
-            }
+            $html = $this->export_content($related, $this->data->content);
         }
 
         if ($this->data->type == 'picturebutton') {
@@ -309,6 +309,7 @@ class Block {
                     'buttontitle' => $settings->buttontitle,
                     'isfile' => $settings->linktype == 'file',
                     'isurl' => $settings->linktype == 'url',
+                    'iscontent' => $settings->linktype == 'content',
                     'target' => $settings->linktarget ? trim($settings->linktarget) : '_self',
                     'buttonurl' => $settings->buttonurl,
                     'buttonfile' => $fileurl,
@@ -316,6 +317,7 @@ class Block {
                     'buttonfilemimeicon' => $settings->linktype == 'file' ? $filemimetypeicon : '<i class="fa fa-link" aria-hidden="true"></i>',
                     'includepicture' => $image ? 1 : 0,
                     'buttonpicture' => $image,
+                    'content' => $this->export_content($related, $settings->content),
                 );
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
             }
@@ -328,6 +330,31 @@ class Block {
             'blockurl' => $blockurl->out(false),
             'embedded_blockurl' => $embeddedblockurl->out(false),
         );
+    }
+
+    public function export_content($related, $content) {
+        $html = '';
+        if ($this->get_id()) {
+            $html = file_rewrite_pluginfile_urls(
+                $content, 
+                'pluginfile.php', 
+                $related['modulecontext']->id,
+                'mod_website', 
+                'content', 
+                $this->get_id()
+            );
+            
+            // Custom purification.
+            $html = utils::purify_html($html);
+            // Moodle's filters - without cleaning because we use custom cleaning.
+            $options = (object) array(
+                'context' => $related['modulecontext'],
+                'noclean' => true, //utils::should_clean_content($related['website']),
+                'nocache' => true,
+            );
+            $html = format_text($html, FORMAT_HTML, $options);
+        }
+        return $html;
     }
 
     private function export_buttonpicture($related) {

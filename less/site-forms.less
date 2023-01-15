@@ -25,8 +25,7 @@ label.col-form-label {
   #fitem_id_buttonurl, 
   #fitem_id_buttonfile,
   #fitem_id_buttontitle, 
-  #fgroup_id_buttonlinktypegroup, 
-  #fgroup_id_includepicturegroup,
+  #fgroup_id_buttonlinktypegroup,
   #fitem_id_buttonpicture, 
   #fgroup_id_linktargetgroup,
   #fitem_id_visibility, 
@@ -44,22 +43,20 @@ label.col-form-label {
     }
     &[data-linktype="url"] {
       #fitem_id_buttonurl, 
-      #fgroup_id_linktargetgroup,
-      #fgroup_id_includepicturegroup {
+      #fgroup_id_linktargetgroup {
         display: flex;
       }
     }
     &[data-linktype="file"] {
-      #fitem_id_buttonfile, 
-      #fgroup_id_includepicturegroup {
+      #fitem_id_buttonfile {
         display: flex;
       }
     }
-    /*&[data-includepicture="1"] {
-      #fitem_id_buttonpicture {
+    &[data-linktype="content"] {
+      #fitem_id_content {
         display: flex;
       }
-    }*/
+    }
   }
   form[data-blocktype="editor"] {
     #fitem_id_content,

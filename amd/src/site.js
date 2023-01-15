@@ -100,8 +100,27 @@
         document.body.classList.add('fullscreen')
       }
     })
-    
 
+    // Block popup content.
+    document.querySelectorAll('.picturebutton-type-content').forEach(btn => {
+      btn.addEventListener('click', e => {
+
+        if (self.rootel.dataset.mode === 'edit') { return; }
+
+        e.preventDefault();
+        e.stopPropagation();
+        
+        let contentbody = btn.querySelector('.picturebutton-content');
+
+        let modalbody = document.querySelector('#modal-popupcontent .modal__body');
+        modalbody.innerHTML = contentbody.innerHTML;
+   
+        let modalstate = document.getElementById('modal-state-popupcontent');
+        modalstate.checked = true;
+        
+      })
+    })
+    
     // User is editor in some capacity (site or page).
     if (self.rootel.dataset.caneditpage == '1') {
 
@@ -143,6 +162,7 @@
           e.target.classList.add("hover")
         })
         item.addEventListener('mouseleave', e => {
+          if (self.rootel.dataset.mode !== 'edit') { return; }
           e.target.classList.remove("hover")
           // If going from a child editzone into a parent editzone, add hover to the parent as mouseenter would not be triggered.
           if (e.toElement && ( e.toElement.classList.contains('editzone') )) {

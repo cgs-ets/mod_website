@@ -55,10 +55,6 @@ class form_siteblock extends \moodleform {
 
 
 
-        /*----------------------
-        *   Content editor
-        *----------------------*/
-        $mform->addElement('editor', 'content', '', null, static::editor_options());
 
         /*----------------------
         *   Picture button
@@ -72,6 +68,7 @@ class form_siteblock extends \moodleform {
 
         // What are you linking to?
         $buttonlinktype=array();
+        $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttoncontent', 'mod_website'), 'content', array('class' => 'linktype'));
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonfile', 'mod_website'), 'file', array('class' => 'linktype'));
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonurl', 'mod_website'), 'url', array('class' => 'linktype'));
         $mform->addGroup($buttonlinktype, 'buttonlinktypegroup', get_string('buttonlinktype', 'mod_website'));
@@ -89,11 +86,10 @@ class form_siteblock extends \moodleform {
         $linktarget[] = $mform->createElement('radio', 'linktarget', null, get_string('targetblank', 'mod_website'), '_blank', array('class' => 'linktype'));
         $mform->addGroup($linktarget, 'linktargetgroup', get_string('linktarget', 'mod_website'));
 
-        // Would you like a button photo?
-        //$includepicture=array();
-        //$includepicture[] = $mform->createElement('radio', 'includepicture', null, 'Yes', 1, array('class' => 'includepicture'));
-        //$includepicture[] = $mform->createElement('radio', 'includepicture', null, 'No', 0, array('class' => 'includepicture'));
-        //$mform->addGroup($includepicture, 'includepicturegroup', get_string('includepicture', 'mod_website'));
+        /*----------------------
+        *   Content editor
+        *----------------------*/
+        $mform->addElement('editor', 'content', '', null, static::editor_options());
         
         /*----------------------
         *   Visibility

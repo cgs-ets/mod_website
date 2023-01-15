@@ -19,7 +19,7 @@
 
     A picture button.
 }}
-<a target="{{target}}" class="picturebutton" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{^isfile}}{{buttonurl}}{{/isfile}}">
+<a {{^iscontent}}target="{{target}}"{{/iscontent}} class="picturebutton {{#iscontent}}picturebutton-type-content{{/iscontent}}" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{#isurl}}{{buttonurl}}{{/isurl}}{{#iscontent}}#{{/iscontent}}">
   <figure 
     class="image-block {{^includepicture}}nopicture{{/includepicture}}" 
     {{^includepicture}}data-filetype="{{buttonfilemime}}"{{/includepicture}}
@@ -35,4 +35,9 @@
       </h3>
     </figcaption>
   </figure>
+  {{#iscontent}}
+  <div class="picturebutton-content">
+    {{{content}}}
+  </div>
+  {{/iscontent}}
 </a>

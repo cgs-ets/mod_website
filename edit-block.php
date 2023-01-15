@@ -140,7 +140,20 @@ if ($blockid) {
         // Button image filemanager.
         $draftpictureitemid = file_get_submitted_draft_itemid('picturebutton');
         file_prepare_draft_area($draftpictureitemid, $modulecontext->id, 'mod_website', 'picturebutton', $blockid, form_siteblock::picture_options());
+
+        // If the button link type is popup content then set up the content editor.
+        $content = null;
+        if ($settings->linktype == "content") {
+            $draftideditor = file_get_submitted_draft_itemid('content');
+            $contenttext = file_prepare_draft_area($draftideditor, $modulecontext->id, 'mod_website', 'content', $blockid, form_siteblock::editor_options(), $settings->content);
+            $content = array(
+                'text' => $contenttext,
+                'format' => editors_get_preferred_format(),
+                'itemid' => $draftideditor
+            );
+        }
         
+        // Set the form fields.
         $formsiteblock->set_data(array(
             'type' => $block->type,
             'buttontitle' => $settings->buttontitle,
@@ -150,10 +163,9 @@ if ($blockid) {
             'buttonfile' => $draftfileitemid,
             'includepicturegroup[includepicture]' => $settings->includepicture,
             'buttonpicture' => $draftpictureitemid,
+            'content' => $content,
         ));
     }
-    
-    
 }
 $PAGE->requires->js_call_amd('mod_website/editblock', 'init');
 
