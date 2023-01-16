@@ -1074,7 +1074,8 @@
   width: 100%;
   background: #3C495A;
   display: none;
-  width: 200px;
+  width: auto;
+  min-width: 200px;
   z-index: 10;
 }
 #page-mod-website-site .subsubmenu {
