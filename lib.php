@@ -171,10 +171,13 @@ function website_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->groups = json_encode($moduleinstance->distgroups);
 
     // Once set, distribution cannot be changed.
+    $dist = $moduleinstance->distribution;
     unset($moduleinstance->distribution);
 
     // Sync student sites.
-    utils::sync_student_sites($moduleinstance->id, $moduleinstance->distgroups, $moduleinstance->course, $moduleinstance->coursemodule, $USER->id, $moduleinstance->name);
+    if ($dist == '1') {
+        utils::sync_student_sites($moduleinstance->id, $moduleinstance->distgroups, $moduleinstance->course, $moduleinstance->coursemodule, $USER->id, $moduleinstance->name);
+    }
 
     return $DB->update_record('website', $moduleinstance);
 }
