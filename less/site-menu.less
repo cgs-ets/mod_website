@@ -25,7 +25,6 @@
 }
 .menuitem {
   position: relative;
-  //white-space: nowrap;
   a {
     display: flex;
     align-items: center;
@@ -47,23 +46,30 @@
   &[data-hidden="1"] {
     display: none;
   }
-  &.expanded {
-    > a .caret {
-      transform: rotateX(180deg);
-    }
-  }
-}
 
+}
+// Rotate caret on tier 1 menu items on hover.
+.menu > .menuitem:hover > a .caret {
+  transform: rotateX(180deg);
+}
+/* Always rotate caret on submenu */
+.submenu .menuitem.expanded > a .caret {
+  transform: rotateX(180deg);
+}
 
 .menuwrap {
   .menutoggle {
     cursor: pointer;
     display: none;
+    // Move the toggle to the left side. 
+    position: absolute;
+    left: 4px;
+    top: -3px;
   }
 }
 
 // MOBILE MENU
-.menuwrap.mobile {
+.topbar.mobile {
   .menutoggle {
     display: block;
   }
@@ -71,8 +77,8 @@
     display: none;
     flex-direction: column;
     position: absolute;
-    right: 0;
-    top: 53px;
+    left: 0;
+    top: 52px;
     background: #546e7a;
     width: 100%;
     max-width: 300px;
@@ -87,8 +93,17 @@
   .menu.expanded, .menuitem.expanded .submenu {
     display: block;
   }
+  .logo {
+    margin-left: 43px;
+  }
+  // rotate caret on tier 1 menu items when clicked.
+  .menuitem:hover > a .caret {
+    transform: rotateX(0);
+  }
+  .menuitem.expanded > a .caret {
+    transform: rotateX(180deg) !important;
+  }
 }
-
 .menuwrap.checkingsize {
   opacity: 0;
 }

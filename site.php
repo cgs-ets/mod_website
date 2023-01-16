@@ -44,6 +44,7 @@ $website = $DB->get_record('website', array('id' => $cm->instance), '*', MUST_EX
 
 require_login($course, true, $cm);
 
+// Set up page.
 $modulecontext = context_module::instance($cm->id);
 $url = new moodle_url('/mod/website/site.php', array(
     'site' => $siteid,
@@ -55,6 +56,7 @@ $PAGE->set_title(format_string($website->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+// Check view site permission.
 if ( ! $site->can_user_view() ) {
     notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
@@ -67,6 +69,7 @@ if ($mode != 'preview') { // Used for iframe preview in mod_form.
     }
 }
 
+// Get the page.
 $site->fetch($pageid);
 if ( ! $site->currentpage->get_id() || ! $page->can_user_view() ) {
     $url->param('page', 0);

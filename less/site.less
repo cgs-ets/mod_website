@@ -26,6 +26,7 @@
   padding-left: 16px;
   padding-right: 16px;
   background-color: rgba(84,110,122,1);
+  overflow-x: clip;
   .logo {
     display: flex;
     align-items: center;
@@ -61,10 +62,16 @@
   .title {
     margin: 0;
     text-align: center;
-    padding: 100px 30px;
     font-size: 34px;
     font-weight: bold;
     font-family: 'Poppins','sans serif';
+    padding: 35px 30px 35px 30px;
+    background: #f2f4f6;
+  }
+  &.has-banner {
+    .title {
+      padding: 100px 30px;
+    }
   }
 }
 

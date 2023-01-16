@@ -28,6 +28,7 @@
     <div class="logo">
       <a target="_parent" href="{{course.url}}">{{course.shortname}}</a> / 
       <a href="{{siteurl}}">{{website.name}}</a>
+      {{^isonhome}} / <a href="{{currentpageurl}}">{{page.title}}</a>{{/isonhome}}
     </div>
     <div class="topbar-right flex">
       {{>mod_website/site_menu}}

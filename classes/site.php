@@ -661,6 +661,11 @@ class Site {
             'site' => $this->data->id,
         ));
 
+        $currentpageurl = new \moodle_url('/mod/website/site.php', array(
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
+
         // Editing URLs
         $editsiteurl = new \moodle_url('/mod/website/edit-site.php', array(
             'site' => $this->data->id,
@@ -731,9 +736,11 @@ class Site {
             'course' => (array) $related['course'],
             'website' => (array) $related['website'],
             'page' => $currentpage,
+            'isonhome' => ($this->currentpage->get_id() == $this->homepageid),
             'mode' => $related['mode'],
             'editing' => $related['mode'] == 'edit',
             'siteurl' => $siteurl->out(false),
+            'currentpageurl' => $siteurl->out(false),
         );
 
         // Embedded Form URLs.

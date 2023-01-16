@@ -314,6 +314,7 @@
   /* Rounded sliders */
   /* [Object] Modal
  * =============================== */
+  /* Always rotate caret on submenu */
 }
 @font-face {
   font-family: 'Poppins';
@@ -631,6 +632,9 @@
 #page-mod-website-site .site-root[data-mode="edit"] .site-sections.sorting .site-section .section-title {
   display: block;
   padding: 10px;
+}
+#page-mod-website-site .site-root[data-mode="edit"] .page-header .title {
+  background-color: transparent;
 }
 #page-mod-website-site .site-editor {
   display: flex;
@@ -1102,36 +1106,51 @@
 #page-mod-website-site .menuitem[data-hidden="1"] {
   display: none;
 }
-#page-mod-website-site .menuitem.expanded > a .caret {
+#page-mod-website-site .menu > .menuitem:hover > a .caret {
+  transform: rotateX(180deg);
+}
+#page-mod-website-site .submenu .menuitem.expanded > a .caret {
   transform: rotateX(180deg);
 }
 #page-mod-website-site .menuwrap .menutoggle {
   cursor: pointer;
   display: none;
+  position: absolute;
+  left: 4px;
+  top: -3px;
 }
-#page-mod-website-site .menuwrap.mobile .menutoggle {
+#page-mod-website-site .topbar.mobile .menutoggle {
   display: block;
 }
-#page-mod-website-site .menuwrap.mobile .menu {
+#page-mod-website-site .topbar.mobile .menu {
   display: none;
   flex-direction: column;
   position: absolute;
-  right: 0;
-  top: 53px;
+  left: 0;
+  top: 52px;
   background: #546e7a;
   width: 100%;
   max-width: 300px;
   z-index: 10;
 }
-#page-mod-website-site .menuwrap.mobile .menu .submenu {
+#page-mod-website-site .topbar.mobile .menu .submenu {
   position: relative;
   margin: 0;
   width: auto;
   display: none;
 }
-#page-mod-website-site .menuwrap.mobile .menu.expanded,
-#page-mod-website-site .menuwrap.mobile .menuitem.expanded .submenu {
+#page-mod-website-site .topbar.mobile .menu.expanded,
+#page-mod-website-site .topbar.mobile .menuitem.expanded .submenu {
   display: block;
+}
+#page-mod-website-site .topbar.mobile .logo {
+  margin-left: 43px;
+}
+#page-mod-website-site .topbar.mobile .menuitem:hover > a .caret {
+  transform: rotateX(0);
+}
+#page-mod-website-site .topbar.mobile .menuitem.expanded > a .caret {
+  transform: rotateX(180deg) !important;
 }
 #page-mod-website-site .menuwrap.checkingsize {
   opacity: 0;
@@ -1153,6 +1172,7 @@
   padding-left: 16px;
   padding-right: 16px;
   background-color: #546e7a;
+  overflow-x: clip;
 }
 #page-mod-website-site .topbar .logo {
   display: flex;
@@ -1188,10 +1208,14 @@
 #page-mod-website-site .page-header .title {
   margin: 0;
   text-align: center;
-  padding: 100px 30px;
   font-size: 34px;
   font-weight: bold;
   font-family: 'Poppins', 'sans serif';
+  padding: 35px 30px 35px 30px;
+  background: #f2f4f6;
+}
+#page-mod-website-site .page-header.has-banner .title {
+  padding: 100px 30px;
 }
 #page-mod-website-site .site-sections {
   position: relative;

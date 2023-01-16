@@ -219,9 +219,9 @@
     // Expand tier 2
     document.querySelectorAll('.menu > .menuitem.haschildren > a').forEach(a => {
       a.addEventListener('click', event => {
-        // If in mobile view...
-        const menuwrap = document.querySelector('.menuwrap')
-        if (menuwrap.classList.contains('mobile')) {
+        // If in mobile view.
+        const topbar = document.querySelector('.topbar')
+        if (topbar.classList.contains('mobile')) {
           event.preventDefault();
           if (a.parentNode.classList.contains('expanded')) {
             a.parentNode.classList.remove('expanded');
@@ -283,14 +283,14 @@
     menu.classList.add("checkingsize")
 
     // Get element in desktop view to measure width.
-    menu.classList.remove("mobile")
+    topbar.classList.remove("mobile")
     let rightwidth = right.offsetWidth;
     let topbarwidth = topbar.offsetWidth;
     let logowidth = logo.offsetWidth;
 
     // If menu is too big, add mobile view.
     if (rightwidth > topbarwidth - logowidth - 50) { // 50 px buffer.
-      menu.classList.add("mobile")
+      topbar.classList.add("mobile")
     }
     // Done checking.
     menu.classList.remove("checkingsize")
