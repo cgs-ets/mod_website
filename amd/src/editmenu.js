@@ -243,6 +243,7 @@
   }
 
   Editmenu.prototype.regenerateJson = function () {
+    var self = this
     let menuel = document.querySelector(".active .menu-list")
     menuel.classList.remove("sorting")
 
@@ -250,10 +251,12 @@
     let menu = []
     for (const parent of menuel.children) {
       let tier2menu = []
-      let tier2children = document.querySelectorAll(".active .menu-list > .list-group-item > .list-group > .list-group-item")
+      const tier2listgroup = parent.querySelectorAll(':scope > .list-group')
+      const tier2children  = tier2listgroup[0].querySelectorAll(':scope > .list-group-item')
       for (const tier2child of tier2children) {
         let tier3menu = []
-        let tier3children = document.querySelectorAll(".active .menu-list > .list-group-item > .list-group > .list-group-item > .list-group > .list-group-item")
+        const tier3listgroup = tier2child.querySelectorAll(':scope > .list-group')
+        const tier3children  = tier3listgroup[0].querySelectorAll(':scope > .list-group-item')
         for (const tier3child of tier3children) {
           console.log("Pushing " + tier3child.dataset.pageid + " into tier 3")
           tier3menu.push({
