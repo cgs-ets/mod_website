@@ -73,6 +73,8 @@
         cursor: pointer;
         .caret {
           display: inline-block;
+          -webkit-transform: rotateX(180deg);
+                  transform: rotateX(180deg);
         }
       }
   
@@ -81,8 +83,8 @@
           display: none;
         }
         .section-title .caret {
-          -webkit-transform: rotateX(180deg);
-              transform: rotateX(180deg);
+          -webkit-transform: none;
+                  transform: none;
         }
       }
     }
