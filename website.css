@@ -950,6 +950,9 @@
 #page-mod-website-site a.picturebutton figure.nopicture[data-filetype="archive"] h2 {
   color: #000;
 }
+#page-mod-website-site a.picturebutton.picturebutton-type-file figure.nopicture {
+  display: block;
+}
 #page-mod-website-site a.picturebutton.picturebutton-type-file figure.nopicture h2 {
   font-size: 56px;
   color: white;
