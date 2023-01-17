@@ -39,7 +39,7 @@ class form_sitemenu extends \moodleform {
 
         $mform =& $this->_form;
         $menu = $this->_customdata['menu'];
-        $unusedpages = $this->_customdata['unusedpages'];
+        //$unusedpages = $this->_customdata['unusedpages'];
         $allpages = $this->_customdata['allpages'];
         $embed = $this->_customdata['embed'];
         
@@ -48,7 +48,7 @@ class form_sitemenu extends \moodleform {
         
         $html = $OUTPUT->render_from_template('mod_website/_edit_menu', [
             'menu' => $menu,
-            'unusedpages' => $unusedpages,
+            //'unusedpages' => $unusedpages,
             'allpages' => $allpages,
         ]);
         $mform->addElement('html', $html);

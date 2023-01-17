@@ -76,13 +76,13 @@ $formsitemenu = new form_sitemenu($thisurl->out(false), array(
         )),
         'classes' => 'list-move list-active'
     ),
-    'unusedpages' => array(
-        'items' => $site->menu->export(array(
-            'pages' => $site->get_unused_pages(), 
-            'backend' => true,
-        )),
-        'classes' => 'list-move list-inactive'
-    ),
+    //'unusedpages' => array(
+    //    'items' => $site->menu->export(array(
+    //        'pages' => $site->get_unused_pages(), 
+    //        'backend' => true,
+    //    )),
+    //    'classes' => 'list-move list-inactive'
+    //),
     'allpages' => array(
         'items' => $site->menu->export(array(
             'pages' => $site->get_all_pages(), 

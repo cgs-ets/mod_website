@@ -33,7 +33,8 @@
   </div>
 
   <div class="right">
-    <div class="inactive">
+    
+      {{#unusedpages}}<div class="inactive">
       <h4>Inactive pages</h4>
       {{#unusedpages}}
         <div class="menu-list list-group nested-sortable {{classes}}">
@@ -41,6 +42,7 @@
         </div>
       {{/unusedpages}}
     </div>
+      {{/unusedpages}}
 
     <div class="all">
       <h4>All pages</h4>
