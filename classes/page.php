@@ -323,6 +323,20 @@ class Page {
         return isset($this->data->siteid) ? $this->data->siteid : 0;
     }
 
+    public function get_pageurl() {
+        if (!isset($this->data->id)) {
+            return '';
+        }
+        if (!isset($this->data->siteid)) {
+            return '';
+        }
+        $pageurl = new \moodle_url('/mod/website/site.php', array(
+            'site' => $this->data->siteid,
+            'page' => $this->data->id,
+        ));
+        return $pageurl;
+    }
+
     public function toggle_hide($visibility) {
         if ( ! $this->data->siteid ) {
             throw new \coding_exception('Toggle hide: siteid is missing.');

@@ -28,6 +28,7 @@
 }
 .path-mod-website#page-mod-website-edit-block #fitem_id_content,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttonurl,
+.path-mod-website#page-mod-website-edit-block #fitem_id_buttonpage,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttonfile,
 .path-mod-website#page-mod-website-edit-block #fitem_id_buttontitle,
 .path-mod-website#page-mod-website-edit-block #fgroup_id_buttonlinktypegroup,
@@ -53,6 +54,9 @@
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="content"] #fitem_id_content {
+  display: flex;
+}
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="page"] #fitem_id_buttonpage {
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_content,

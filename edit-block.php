@@ -71,6 +71,8 @@ if ( ! $page->can_user_edit()) {
     notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
+$sitepages = $site->get_all_pages();
+
 // Initialise the form.
 $formsiteblock = new form_siteblock(
     $thisurl->out(false), 
@@ -78,6 +80,7 @@ $formsiteblock = new form_siteblock(
         'blockid' => $blockid,
         'returnurl' => $gobackurl->out(),
         'embed' => $embed,
+        'sitepages' => $sitepages,
     ), 
     'post', 
     '', 
@@ -159,6 +162,7 @@ if ($blockid) {
             'buttontitle' => $settings->buttontitle,
             'buttonlinktypegroup[buttonlinktype]' => $settings->linktype,
             'buttonurl' => $settings->buttonurl,
+            'buttonpage' => isset($settings->buttonpage) ? $settings->buttonpage : null,
             'linktargetgroup[linktarget]' => $settings->linktarget,
             'buttonfile' => $draftfileitemid,
             'includepicturegroup[includepicture]' => $settings->includepicture,

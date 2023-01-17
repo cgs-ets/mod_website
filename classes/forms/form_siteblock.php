@@ -42,6 +42,7 @@ class form_siteblock extends \moodleform {
         $blockid = $this->_customdata['blockid'];
         $returnurl = $this->_customdata['returnurl'];
         $embed = $this->_customdata['embed'];
+        $sitepages = $this->_customdata['sitepages'];
 
         /*----------------------
         *   Type of block
@@ -69,16 +70,26 @@ class form_siteblock extends \moodleform {
         // What are you linking to?
         $buttonlinktype=array();
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttoncontent', 'mod_website'), 'content', array('class' => 'linktype'));
+        $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonpage', 'mod_website'), 'page', array('class' => 'linktype'));
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonfile', 'mod_website'), 'file', array('class' => 'linktype'));
         $buttonlinktype[] = $mform->createElement('radio', 'buttonlinktype', null, get_string('buttonurl', 'mod_website'), 'url', array('class' => 'linktype'));
         $mform->addGroup($buttonlinktype, 'buttonlinktypegroup', get_string('buttonlinktype', 'mod_website'));
 
-        // URL.
+        // Linked page.
+        $options = array();
+        foreach($sitepages as $page) {
+            $options[$page->id] = $page->title;
+        }
+        $select = $mform->addElement('select', 'buttonpage', get_string('buttonpage', 'mod_website'), $options);
+
+        // Linked URL.
         $mform->addElement('text', 'buttonurl', get_string('buttonurl', 'mod_website'), 'size="48"');
         $mform->setType('buttonurl', PARAM_TEXT);
 
-        // Link to file.
+        // Linked file.
         $mform->addElement('filemanager', 'buttonfile', get_string('uploadfile', 'mod_website'), get_string('buttonfile', 'mod_website'), static::file_options()); 
+
+
 
         // Open in / Target.
         $linktarget=array();

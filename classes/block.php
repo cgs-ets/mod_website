@@ -177,6 +177,7 @@ class Block {
                 'buttontitle' => $data->buttontitle,
                 'linktype' => $data->buttonlinktypegroup['buttonlinktype'],
                 'buttonurl' => $data->buttonurl,
+                'buttonpage' => $data->buttonpage ? $data->buttonpage : '',
                 'linktarget' => isset($data->linktargetgroup['linktarget']) ? $data->linktargetgroup['linktarget'] : '',
                 'includepicture' => $data->buttonpicture ? 1 : 0,
                 'content' => $popupcontent,
@@ -306,6 +307,7 @@ class Block {
                 $image = $this->export_buttonpicture($related);
                 
                 $fileurl = '';
+                $buttonpageurl = '';
                 if ($settings->linktype == 'file') {
                     list($fileurl, $buttonfilemime, $buttonfilemimeicon) = $this->export_buttonfile($related);
                 }
@@ -317,14 +319,23 @@ class Block {
                     $buttonfilemime = 'content';
                     $buttonfilemimeicon = '<i class="fa fa-bars" aria-hidden="true"></i>';
                 }
+                else if ($settings->linktype == 'page') {
+                    $buttonfilemime = 'page';
+                    $buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
+                    $buttonpage = new \mod_website\page($settings->buttonpage);  
+                    $buttonpageurl = $buttonpage->get_pageurl();
+                }
 
                 $buttondata = array(
                     'buttontitle' => $settings->buttontitle,
+                    'ispage' => $settings->linktype == 'page',
                     'isfile' => $settings->linktype == 'file',
                     'isurl' => $settings->linktype == 'url',
                     'iscontent' => $settings->linktype == 'content',
                     'target' => $settings->linktarget ? trim($settings->linktarget) : '_self',
                     'buttonurl' => $settings->buttonurl,
+                    'buttonpage' => isset($settings->buttonpage) ? $settings->buttonpage : '',
+                    'buttonpageurl' => $buttonpageurl ? $buttonpageurl->out(false) : '',
                     'buttonfile' => $fileurl,
                     'buttonfilemime' => $buttonfilemime,
                     'buttonfilemimeicon' => $buttonfilemimeicon,

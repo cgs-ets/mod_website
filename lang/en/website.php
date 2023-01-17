@@ -81,6 +81,7 @@ $string['picturebutton'] = 'Picture button';
 $string['buttontitle'] = 'Button caption';
 $string['buttonlinktype'] = 'What is the button linking to?';
 $string['buttoncontent'] = 'Popup content';
+$string['buttonpage'] = 'Existing page';
 $string['buttonfile'] = 'File';
 $string['buttonurl'] = 'URL';
 $string['uploadfile'] = 'Upload file';

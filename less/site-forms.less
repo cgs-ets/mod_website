@@ -23,6 +23,7 @@ label.col-form-label {
   }
   #fitem_id_content,
   #fitem_id_buttonurl, 
+  #fitem_id_buttonpage, 
   #fitem_id_buttonfile,
   #fitem_id_buttontitle, 
   #fgroup_id_buttonlinktypegroup,
@@ -54,6 +55,11 @@ label.col-form-label {
     }
     &[data-linktype="content"] {
       #fitem_id_content {
+        display: flex;
+      }
+    }
+    &[data-linktype="page"] {
+      #fitem_id_buttonpage {
         display: flex;
       }
     }
