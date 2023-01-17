@@ -909,7 +909,7 @@
 }
 #page-mod-website-site a.picturebutton figure.nopicture {
   background: #eee;
-  display: block;
+  display: flex;
   text-align: center;
   padding: 50px;
   color: #000;
@@ -928,7 +928,7 @@
   top: 0;
   left: 0;
   text-decoration: none;
-  font-size: 30px;
+  font-size: 23px;
   color: #000;
   line-height: 1.24;
 }
