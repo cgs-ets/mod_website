@@ -56,7 +56,8 @@
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="content"] #fitem_id_content {
   display: flex;
 }
-.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="page"] #fitem_id_buttonpage {
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="page"] #fitem_id_buttonpage,
+.path-mod-website#page-mod-website-edit-block form[data-blocktype="picturebutton"][data-linktype="page"] #fgroup_id_linktargetgroup {
   display: flex;
 }
 .path-mod-website#page-mod-website-edit-block form[data-blocktype="editor"] #fitem_id_content,
