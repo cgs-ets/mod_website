@@ -908,7 +908,7 @@
   opacity: 0;
 }
 #page-mod-website-site a.picturebutton figure.nopicture {
-  background: #aaa;
+  background: #eee;
   display: block;
   text-align: center;
   padding: 50px;
@@ -917,7 +917,6 @@
 #page-mod-website-site a.picturebutton figure.nopicture h2 {
   margin: 0;
   padding: 0;
-  color: white;
   font-weight: 600;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   right: 20px;
@@ -925,18 +924,13 @@
   overflow: hidden;
   word-break: break-word;
   opacity: 1;
-  font-size: 56px;
   position: relative;
   top: 0;
   left: 0;
   text-decoration: none;
-  text-transform: uppercase;
-}
-#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="content"] {
-  background: #306BFF;
-}
-#page-mod-website-site a.picturebutton figure.nopicture[data-filetype="url"] {
-  background: #306BFF;
+  font-size: 30px;
+  color: #000;
+  line-height: 1.24;
 }
 #page-mod-website-site a.picturebutton figure.nopicture[data-filetype="pdf"] {
   background: #DA1618;
@@ -955,6 +949,10 @@
 }
 #page-mod-website-site a.picturebutton figure.nopicture[data-filetype="archive"] h2 {
   color: #000;
+}
+#page-mod-website-site a.picturebutton.picturebutton-type-file figure.nopicture h2 {
+  font-size: 56px;
+  color: white;
 }
 #page-mod-website-site a.picturebutton.picturebutton-type-content .picturebutton-content {
   display: none;

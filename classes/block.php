@@ -307,21 +307,23 @@ class Block {
                 $image = $this->export_buttonpicture($related);
                 
                 $fileurl = '';
+                $buttonfilemime = '';
+                $buttonfilemimeicon = '';
                 $buttonpageurl = '';
                 if ($settings->linktype == 'file') {
                     list($fileurl, $buttonfilemime, $buttonfilemimeicon) = $this->export_buttonfile($related);
                 }
                 else if ($settings->linktype == 'url') {
-                    $buttonfilemime = 'url';
-                    $buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
+                    //$buttonfilemime = 'url';
+                    //$buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
                 }
                 else if ($settings->linktype == 'content') {
-                    $buttonfilemime = 'content';
-                    $buttonfilemimeicon = '<i class="fa fa-bars" aria-hidden="true"></i>';
+                    //$buttonfilemime = 'content';
+                    //$buttonfilemimeicon = '<i class="fa fa-bars" aria-hidden="true"></i>';
                 }
                 else if ($settings->linktype == 'page') {
-                    $buttonfilemime = 'page';
-                    $buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
+                    //$buttonfilemime = 'page';
+                    //$buttonfilemimeicon = '<i class="fa fa-link" aria-hidden="true"></i>';
                     $buttonpage = new \mod_website\page($settings->buttonpage);  
                     $buttonpageurl = $buttonpage->get_pageurl();
                 }
@@ -332,7 +334,7 @@ class Block {
                     'isfile' => $settings->linktype == 'file',
                     'isurl' => $settings->linktype == 'url',
                     'iscontent' => $settings->linktype == 'content',
-                    'target' => $settings->linktarget ? trim($settings->linktarget) : '_self',
+                    'target' => isset($settings->linktarget) ? $settings->linktarget : '_self',
                     'buttonurl' => $settings->buttonurl,
                     'buttonpage' => isset($settings->buttonpage) ? $settings->buttonpage : '',
                     'buttonpageurl' => $buttonpageurl ? $buttonpageurl->out(false) : '',
@@ -341,7 +343,7 @@ class Block {
                     'buttonfilemimeicon' => $buttonfilemimeicon,
                     'includepicture' => $image ? 1 : 0,
                     'buttonpicture' => $image,
-                    'content' => $this->export_content($related, $settings->content),
+                    'content' => isset($settings->content) ? $this->export_content($related, $settings->content) : '',
                 );
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
             }
