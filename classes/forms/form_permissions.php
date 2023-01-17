@@ -154,12 +154,12 @@ class form_permissions extends \moodleform {
                 $select->setMultiple(true);
                 $mform->hideIf('sharingusers', 'distribution', 'neq', '0');
                 $mform->hideIf('sharingusers', 'editorstype', 'neq', 'users');
+                $currentselected = array();
+                foreach($additionaleditors as $u) {
+                    $currentselected[] = $u->id . '_user';
+                }
+                $mform->getElement('sharingusers')->setSelected($currentselected);
             }
-            $currentselected = array();
-            foreach($additionaleditors as $u) {
-                $currentselected[] = $u->id . '_user';
-            }
-            $mform->getElement('sharingusers')->setSelected($currentselected);
             /************************
             * End of sharing/permissions area
             *************************/
