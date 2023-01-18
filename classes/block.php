@@ -345,7 +345,9 @@ class Block {
                     'buttonpicture' => $image,
                     'content' => isset($settings->content) ? $this->export_content($related, $settings->content) : '',
                 );
+
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
+                //echo "<pre>"; var_export($html); exit;
             }
         }
 

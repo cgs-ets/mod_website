@@ -970,7 +970,7 @@
   font-size: 56px;
   color: white;
 }
-#page-mod-website-site a.picturebutton.picturebutton-type-content .picturebutton-content {
+#page-mod-website-site .picturebutton-wrap .picturebutton-content {
   display: none;
 }
 #page-mod-website-site #modal-popupcontent .modal__body {

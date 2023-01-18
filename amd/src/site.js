@@ -104,13 +104,13 @@
     // Block popup content.
     document.querySelectorAll('.picturebutton-type-content').forEach(btn => {
       btn.addEventListener('click', e => {
-
         if (self.rootel.dataset.mode === 'edit') { return; }
 
         e.preventDefault();
         e.stopPropagation();
         
-        let contentbody = btn.querySelector('.picturebutton-content');
+        let parent = e.currentTarget.parentNode;
+        let contentbody = parent.querySelector('.picturebutton-content');
 
         let modalbody = document.querySelector('#modal-popupcontent .modal__body');
         modalbody.innerHTML = contentbody.innerHTML;

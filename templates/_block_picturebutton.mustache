@@ -19,35 +19,34 @@
 
     A picture button.
 }}
-<a {{^iscontent}}target="{{target}}"{{/iscontent}} class="picturebutton {{#iscontent}}picturebutton-type-content{{/iscontent}} {{#isfile}}picturebutton-type-file{{/isfile}}" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{#isurl}}{{buttonurl}}{{/isurl}}{{#ispage}}{{buttonpageurl}}{{/ispage}}{{#iscontent}}#{{/iscontent}}">
-  <figure 
-    class="image-block {{^includepicture}}nopicture{{/includepicture}}" 
-    {{^includepicture}}data-filetype="{{buttonfilemime}}"{{/includepicture}}
-    {{#includepicture}}style="background-image: url({{buttonpicture.path}})"{{/includepicture}}
-    >
+<div class="picturebutton-wrap">
+  <a {{^iscontent}}target="{{target}}"{{/iscontent}} class="picturebutton {{#iscontent}}picturebutton-type-content{{/iscontent}} {{#isfile}}picturebutton-type-file{{/isfile}}" href="{{#isfile}}{{buttonfile}}{{/isfile}}{{#isurl}}{{buttonurl}}{{/isurl}}{{#ispage}}{{buttonpageurl}}{{/ispage}}{{#iscontent}}#{{/iscontent}}">
+    <figure 
+      class="image-block {{^includepicture}}nopicture{{/includepicture}}" 
+      {{^includepicture}}data-filetype="{{buttonfilemime}}"{{/includepicture}}
+      {{#includepicture}}style="background-image: url({{buttonpicture.path}})"{{/includepicture}}
+      >
 
-
-    {{#isfile}}
-      <h2>
-        {{#buttonfilemimeicon}} {{{buttonfilemimeicon}}} {{/buttonfilemimeicon}}
-        {{^buttonfilemimeicon}} {{buttonfilemime}} {{/buttonfilemimeicon}}
-      </h2>
-      <figcaption><h3>{{buttontitle}}</h3></figcaption>
-    {{/isfile}}
-
-
-    {{^isfile}}
-      {{^includepicture}}<h2>{{buttontitle}}</h2>{{/includepicture}}
-      {{#includepicture}}
+      {{#isfile}}
+        <h2>
+          {{#buttonfilemimeicon}} {{{buttonfilemimeicon}}} {{/buttonfilemimeicon}}
+          {{^buttonfilemimeicon}} {{buttonfilemime}} {{/buttonfilemimeicon}}
+        </h2>
         <figcaption><h3>{{buttontitle}}</h3></figcaption>
-      {{/includepicture}}
-    {{/isfile}}
+      {{/isfile}}
 
+      {{^isfile}}
+        {{^includepicture}}<h2>{{buttontitle}}</h2>{{/includepicture}}
+        {{#includepicture}}
+          <figcaption><h3>{{buttontitle}}</h3></figcaption>
+        {{/includepicture}}
+      {{/isfile}}
 
-  </figure>
+    </figure>
+  </a>
   {{#iscontent}}
-  <div class="picturebutton-content">
-    {{{content}}}
-  </div>
+    <div class="picturebutton-content">
+      {{{content}}}
+    </div>
   {{/iscontent}}
-</a>
+</div>
