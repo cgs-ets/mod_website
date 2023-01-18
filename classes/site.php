@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 use mod_website\utils;
 use mod_website\logging;
 use mod_website\permissions;
+use mod_website\copying;
 
 /**
  * Provides utility functions for this plugin.
@@ -165,18 +166,10 @@ class Site {
         /*****
          * Copy everything from template site.
          *****/
-        // Copy menus.
-        $menucopies = $this->copy_menus_from($oldsiteid);
-
-        // Copy pages.
-        $pagecopies = $this->copy_pages_from($oldsiteid);
-
-        // Copy sections.
-        $sectioncopies = $this->copy_sections_from($oldsiteid);
-
-        // Copy blocks.
-        $blockcopies = $this->copy_blocks_from($oldsiteid);
-
+        $menucopies = copying::copy_menus($oldsiteid, $this->get_id());
+        $pagecopies = copying::copy_pages($oldsiteid, $this->get_id());
+        $sectioncopies = copying::copy_sections($oldsiteid, $this->get_id());
+        $blockcopies = copying::copy_blocks($oldsiteid, $this->get_id());
 
         /*****
          * Update id references throughout.
@@ -189,131 +182,21 @@ class Site {
         $DB->update_record(static::TABLE, $this->data);
         $this->read($id);
 
-        // Menus have pages.
-        foreach ($menucopies as $copy) {
-            if ($copy == 0) { continue; }
-            $newmenu = new \mod_website\menu($copy);
-            $items = $newmenu->menu_to_array();
-            foreach ($items as &$item) {
-                $oldpage = $item['id'];
-                if (isset($pagecopies[$oldpage])) {
-                    $item['id'] = $pagecopies[$oldpage];
-                    foreach ($item['children'] as &$child) {
-                        $oldpage = $child['id'];
-                        if (isset($pagecopies[$oldpage])) {
-                            $child['id'] = $pagecopies[$oldpage];
-                        } else {
-                            unset($child);
-                        }
-                    }
-                } else {
-                    unset($item);
-                }
-            }
-            $newmenu->update_menu_from_array($items);
-        }
-        
-        // Pages have sections.
-        foreach ($pagecopies as $copy) {
-            if ($copy == 0) { continue; }
-            $newpage = new \mod_website\page($copy);
-            $sections = $newpage->get_sections();
-            foreach($sections as &$section) {
-                $section = $sectioncopies[$section];
-            }
-            $newpage->set('sections', json_encode($sections));
-            $newpage->update();
-        }
-
-        // Sections have blocks.
-        foreach ($sectioncopies as $copy) {
-            if ($copy == 0) { continue; }
-            $newsection = new \mod_website\section($copy);
-            $blocks = $newsection->get_blocks();
-            foreach($blocks as &$block) {
-                $block = $blockcopies[$block];
-            }
-            $newsection->set('blocks', json_encode($blocks));
-            $newsection->update();
-        }
+        copying::update_menu_page_references($menucopies, $pagecopies);
+        copying::update_page_section_references($pagecopies, $sectioncopies);
+        copying::update_section_block_references($sectioncopies, $blockcopies);
 
         /*****
          * Copy files.
          *****/
         $oldcontext = \context_module::instance($oldsite->get_cmid());
         $newcontext = \context_module::instance($this->get_cmid());
-        $fs = get_file_storage();
-
-        // Page banners.
-        foreach ($pagecopies as $oldid => $newid) {
-            if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'bannerimage', $oldid, "filename", true)) {
-                foreach ($files as $file) {
-                    $newrecord = new \stdClass();
-                    $newrecord->contextid = $newcontext->id;
-                    $newrecord->itemid = $newid;
-                    $fs->create_file_from_storedfile($newrecord, $file);
-                }
-            }
-        }
-
-        // Block button link to file.
-        foreach ($blockcopies as $oldid => $newid) {
-            if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
-                foreach ($files as $file) {
-                    $newrecord = new \stdClass();
-                    $newrecord->contextid = $newcontext->id;
-                    $newrecord->itemid = $newid;
-                    $fs->create_file_from_storedfile($newrecord, $file);
-                }
-            }
-        }
-
-        // Block button picture.
-        foreach ($blockcopies as $oldid => $newid) {
-            if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
-                foreach ($files as $file) {
-                    $newrecord = new \stdClass();
-                    $newrecord->contextid = $newcontext->id;
-                    $newrecord->itemid = $newid;
-                    $fs->create_file_from_storedfile($newrecord, $file);
-                }
-            }
-        }
-
-        // Block content files.
-        foreach ($blockcopies as $oldid => $newid) {
-            if ($oldid == 0) { continue; }
-            if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
-                foreach ($files as $file) {
-                    $newrecord = new \stdClass();
-                    $newrecord->contextid = $newcontext->id;
-                    $newrecord->itemid = $newid;
-                    $fs->create_file_from_storedfile($newrecord, $file);
-                }
-            }
-        }
+        copying::copy_page_files($pagecopies, $oldcontext, $newcontext);
+        copying::copy_block_files($blockcopies, $oldcontext, $newcontext);
 
         // Attempt to replace links to old site within new site.
         if ($attemptreplacelinks) {
-            foreach ($blockcopies as $blockid) {
-                if ($blockid == 0) { continue; }
-                $block = new \mod_website\block($blockid);
-                $content = $block->get_content();
-                
-                // Replace site param.
-                $content = str_replace('site=' . $oldsiteid, 'site=' . $this->get_id(), $content);
-
-                // Replace page params.
-                foreach ($pagecopies as $oldpageid => $newpageid) {
-                    $content = str_replace('page=' . $oldpageid, 'page=' . $newpageid, $content);
-                }
-
-                $block->set('content', $content);
-                $block->update();
-            }
+            copying::update_content_links($pagecopies, $blockcopies, $oldsite->get_id(), $this->get_id());
         }
 
         logging::log('Site', $id, array(
@@ -321,133 +204,6 @@ class Site {
         ));
 
         return $this;
-    }
-
-    public function copy_menus_from($siteid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $menus = $DB->get_records(static::TABLE_MENUS, array(
-            'siteid' => $siteid,
-        ));
-        foreach ($menus as $menu) {
-            // Keep track of the old id.
-            $oldid = $menu->id;
-            unset($menu->id);
-            // Update the data.
-            $menu->siteid = $this->get_id();
-            $newmenu = new \mod_website\menu();
-            $newmenu = $newmenu->create($menu);
-            $copies[$oldid] = intval($newmenu->get_id());
-        }
-        return $copies;
-    }
-
-    public function copy_pages_from($siteid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $pages = $DB->get_records(static::TABLE_PAGES, array(
-            'siteid' => $siteid,
-        ));
-        foreach ($pages as $page) {
-            // Keep track of the old id.
-            $oldid = $page->id;
-            unset($page->id);
-            // Update the data.
-            $page->siteid = $this->get_id();
-            $newpage = new \mod_website\page();
-            $newpage = $newpage->create($page);
-            $copies[$oldid] = intval($newpage->get_id());
-        }
-        return $copies;
-    }
-
-    public function copy_sections_from($siteid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $sections = $DB->get_records(static::TABLE_SECTIONS, array(
-            'siteid' => $siteid,
-        ));
-        foreach ($sections as $section) {
-            // Keep track of the old id.
-            $oldid = $section->id;
-            unset($section->id);
-            // Update the data.
-            $section->siteid = $this->get_id();
-            $newsection = new \mod_website\section();
-            $newsection = $newsection->create($section);
-            $copies[$oldid] = intval($newsection->get_id());
-        }
-        return $copies;
-    }
-
-    public function copy_blocks_from($siteid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $blocks = $DB->get_records(static::TABLE_BLOCKS, array(
-            'siteid' => $siteid,
-        ));
-        foreach ($blocks as $block) {
-            // Keep track of the old id.
-            $oldid = $block->id;
-            unset($block->id);
-            // Update the data.
-            $block->siteid = $this->get_id();
-            $newblock = new \mod_website\block();
-            $newblock = $newblock->create($block);
-            $newblock->set('content', $block->content);
-            $newblock->update();
-            $copies[$oldid] = intval($newblock->get_id());
-        }
-        return $copies;
-    }
-
-    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
-    public function copy_page_from($pageid) {
-        global $DB;
-        $copies = array();
-        $pagedata = $DB->get_record(static::TABLE_PAGES, array(
-            'id' => $pageid,
-        ));
-        unset($pagedata->id);
-        // Update the data.
-        $pagedata->siteid = $this->get_id();
-        $newpage = new \mod_website\page();
-        $newpage = $newpage->create($pagedata);
-        return intval($newpage->get_id());
-    }
-
-    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
-    public function copy_sections_from_page($pageid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $page = new \mod_website\page($pageid); 
-        foreach ($page->sections as $section) {
-            // Keep track of the old id.
-            $oldid = $section->get_id();
-            // Update the data.
-            $section->set_siteid($this->get_id());
-            $newsection = $section->save_as();
-            $copies[$oldid] = intval($newsection->get_id());
-        }
-        return $copies;
-    }
-
-    /* This is used to copy a single page based on a provided template URL. Used when creating page per student distribution */
-    public function copy_blocks_from_page($pageid) {
-        global $DB;
-        $copies = array(0 => 0);
-        $page = new \mod_website\page($pageid); 
-        foreach ($page->sections as $section) {
-            foreach ($section->blocks as $block) {
-                // Keep track of the old id.
-                $oldid = $block->get_id();
-                // Update the data.
-                $block->set_siteid($this->get_id());
-                $newblock = $block->save_as();
-                $copies[$oldid] = intval($newblock->get_id());
-            }
-        }
-        return $copies;
     }
 
     /**

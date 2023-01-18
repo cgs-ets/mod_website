@@ -137,3 +137,6 @@ $string['targetblank'] = 'New tab';
 $string['linktarget'] = 'Open in';
 
 $string['pagehidden'] = 'This page is hidden. Only editors are able to view this page. Other users will be redirected to the site homepage.';
+
+$string['copysection'] = 'Copy section';
+$string['copytopage'] = 'Copy section to';

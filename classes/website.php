@@ -29,6 +29,7 @@ require_once($CFG->libdir.'/gradelib.php');
 use mod_website\site;
 use mod_website\utils;
 use mod_website\permissions;
+use mod_website\copying;
 
 /**
  * Provides utility functions for this plugin.
@@ -386,99 +387,29 @@ class Website {
             utils::load_user_display_info($user);
             // Page is based on a template.
             if ($templatepageid) {
-
                 // Copy the page.
-                $pagecopy = $site->copy_page_from($templatepageid);
+                $pagecopy = copying::copy_page($templatepageid, $site->get_id());
                 if (empty($pagecopy)) {
                     return false;
                 }
                 $newpage = new \mod_website\page($pagecopy);
                 $newpage->set('title', $user->fullname);
-                // Copy the sections.
-                $sectioncopies = $site->copy_sections_from_page($templatepageid);
-                // Copy the blocks.
-                $blockcopies = $site->copy_blocks_from_page($templatepageid);
-
-                /*****
-                 * Copy page files.
-                 *****/
-                $oldcontext = \context_module::instance($oldsite->get_cmid());
-                $newcontext = \context_module::instance($site->get_cmid());
-                $fs = get_file_storage();
-
-                // Page banners.
-                if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'bannerimage', $templatepageid, "filename", true)) {
-                    foreach ($files as $file) {
-                        $newrecord = new \stdClass();
-                        $newrecord->contextid = $newcontext->id;
-                        $newrecord->itemid = $pagecopy;
-                        $fs->create_file_from_storedfile($newrecord, $file);
-                    }
-                }
-
-                // Block button link to file.
-                foreach ($blockcopies as $oldid => $newid) {
-                    if ($oldid == 0) { continue; }
-                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'buttonfile', $oldid, "filename", true)) {
-                        foreach ($files as $file) {
-                            $newrecord = new \stdClass();
-                            $newrecord->contextid = $newcontext->id;
-                            $newrecord->itemid = $newid;
-                            $fs->create_file_from_storedfile($newrecord, $file);
-                        }
-                    }
-                }
-
-                // Block button picture.
-                foreach ($blockcopies as $oldid => $newid) {
-                    if ($oldid == 0) { continue; }
-                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'picturebutton', $oldid, "filename", true)) {
-                        foreach ($files as $file) {
-                            $newrecord = new \stdClass();
-                            $newrecord->contextid = $newcontext->id;
-                            $newrecord->itemid = $newid;
-                            $fs->create_file_from_storedfile($newrecord, $file);
-                        }
-                    }
-                }
-
-                // Block content files.
-                foreach ($blockcopies as $oldid => $newid) {
-                    if ($oldid == 0) { continue; }
-                    if ($files = $fs->get_area_files($oldcontext->id, 'mod_website', 'content', $oldid, "filename", true)) {
-                        foreach ($files as $file) {
-                            $newrecord = new \stdClass();
-                            $newrecord->contextid = $newcontext->id;
-                            $newrecord->itemid = $newid;
-                            $fs->create_file_from_storedfile($newrecord, $file);
-                        }
-                    }
-                }
-
-                /*********
-                 * Relink the page, sections and blocks.
-                 *********/
-                // Page has sections.
-                $sections = $newpage->get_sections();
-                foreach($sections as &$section) {
-                    $section = $sectioncopies[$section];
-                }
-                $newpage->set('sections', json_encode($sections));
                 $newpage->update();
 
+                // Copy components.
+                $pagecopies = array($templatepageid => $pagecopy);
+                $sectioncopies = copying::copy_page_sections($templatepageid, $site->get_id());
+                $blockcopies = copying::copy_page_blocks($templatepageid, $site->get_id());
 
-                // Sections have blocks.
-                foreach ($sectioncopies as $copy) {
-                    if ($copy == 0) { continue; }
-                    $newsection = new \mod_website\section($copy);
-                    $blocks = $newsection->get_blocks();
-                    foreach($blocks as &$block) {
-                        $block = $blockcopies[$block];
-                    }
-                    $newsection->set('blocks', json_encode($blocks));
-                    $newsection->update();
-                }
-
+                //Copy files
+                $oldcontext = \context_module::instance($oldsite->get_cmid());
+                $newcontext = \context_module::instance($site->get_cmid());
+                copying::copy_page_files($pagecopies, $oldcontext, $newcontext);
+                copying::copy_block_files($blockcopies, $oldcontext, $newcontext);
+  
+                // Relink the page, sections and blocks.
+                copying::update_page_section_references($pagecopies, $sectioncopies);
+                copying::update_section_block_references($sectioncopies, $blockcopies);
 
             } else {
                 // A blank page
@@ -498,7 +429,6 @@ class Website {
                 'children' => array(),
             );
             $menu->update_menu_from_array($menudata);
-
 
             // Set the page edit permissions - resourcetype, resourcekey, userid.
             permissions::create('Page', $newpage->get_id(), $studentid);

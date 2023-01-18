@@ -258,6 +258,14 @@ class Section {
         $embeddednewblockurl = clone($newblockurl);
         $embeddednewblockurl->param('embed', 1);
 
+        $copysectionurl = new \moodle_url('/mod/website/edit-copysection.php', array(
+            'site' => $this->data->siteid,
+            'page' => $related['pageid'],
+            'section' => $this->data->id,
+        ));
+        $embeddedcopysectionurl = clone($copysectionurl);
+        $embeddedcopysectionurl->param('embed', 1);
+
         $blocks = array();
         foreach ($this->blocks as $block) {
             $blocks[] = $block->export(array(
@@ -273,8 +281,10 @@ class Section {
             'blocks' => $blocks,
             'sectionurl' => $sectionurl->out(false),
             'newblockurl' => $newblockurl->out(false),
+            'copysectionurl' => $copysectionurl->out(false),
             'embedded_sectionurl' => $embeddedsectionurl->out(false),
             'embedded_newblockurl' => $embeddednewblockurl->out(false),
+            'embedded_copysectionurl' => $embeddedcopysectionurl->out(false),
             'title' => $this->data->title,
             'layout' => $this->data->layout,
             'hidden' => $this->data->hidden,

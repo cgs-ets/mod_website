@@ -121,30 +121,41 @@
   
   .site-section {
     .section-options {
-      display: block;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: baseline;
       position: absolute;
       bottom: 5px;
       right: 2px;
       padding: 0;
       height: 35px;
       margin: 5px;
-      .btn-add-site-block {
+      a {
         background-color: #2196F3;
         color: #fff;
         border-radius: 20px;
-        font-size: 24px;
+        font-size: 14px;
         font-weight: 800;
         text-transform: uppercase;
         text-decoration: none;
         cursor: pointer;
         width: 35px;
         height: 35px;
-        display: block;
+        display: flex;
         text-align: center;
         transition: all ease 0.2s;
+        margin-left: 10px;
+        justify-content: center;
+        align-items: center;
         &:hover {
           background-color: #1d87da;
           transform: scale(1.2);
+        }
+        &.option-secondary {
+          background-color: #888;
+          width: 28px;
+          height: 28px;
+          font-size: 12px;
         }
       }
     }

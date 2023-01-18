@@ -545,7 +545,9 @@
   text-align: center;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options {
-  display: block;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: baseline;
   position: absolute;
   bottom: 5px;
   right: 2px;
@@ -553,24 +555,33 @@
   height: 35px;
   margin: 5px;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options .btn-add-site-block {
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options a {
   background-color: #2196F3;
   color: #fff;
   border-radius: 20px;
-  font-size: 24px;
+  font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   width: 35px;
   height: 35px;
-  display: block;
+  display: flex;
   text-align: center;
   transition: all ease 0.2s;
+  margin-left: 10px;
+  justify-content: center;
+  align-items: center;
 }
-#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options .btn-add-site-block:hover {
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options a:hover {
   background-color: #1d87da;
   transform: scale(1.2);
+}
+#page-mod-website-site .site-root[data-mode="edit"] .site-section .section-options a.option-secondary {
+  background-color: #888;
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
 }
 #page-mod-website-site .site-root[data-mode="edit"] .site-section .section-title .caret {
   display: none;
