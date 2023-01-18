@@ -974,7 +974,7 @@
   display: none;
 }
 #page-mod-website-site #modal-popupcontent .modal__body {
-  padding: 20px;
+  padding: 25px 35px;
 }
 #page-mod-website-site .modal {
   opacity: 0;
