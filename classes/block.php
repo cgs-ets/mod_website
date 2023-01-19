@@ -345,6 +345,10 @@ class Block {
                     'buttonpicture' => $image,
                     'content' => isset($settings->content) ? $this->export_content($related, $settings->content) : '',
                 );
+                // Make target _blank for files.
+                if ($buttondata['isfile']) {
+                    $buttondata['isfile'] = '_blank';
+                }
 
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
                 //echo "<pre>"; var_export($html); exit;
