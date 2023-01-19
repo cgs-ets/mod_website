@@ -347,7 +347,7 @@ class Block {
                 );
                 // Make target _blank for files.
                 if ($buttondata['isfile']) {
-                    $buttondata['isfile'] = '_blank';
+                    $buttondata['target'] = '_blank';
                 }
 
                 $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
