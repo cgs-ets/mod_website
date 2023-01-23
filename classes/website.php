@@ -258,7 +258,9 @@ class Website {
     }
 
     public function get_groups() {
-        return isset($this->data->groups) ? json_decode($this->data->groups) : null;
+        $distgroups = isset($this->data->groups) ? json_decode($this->data->groups) : [];
+        $distgroups = empty($distgroups) ? ['00_everyone'] : $distgroups;
+        return $distgroups;
     }
 
     public function get_course() {
@@ -412,7 +414,7 @@ class Website {
                 copying::update_section_block_references($sectioncopies, $blockcopies);
 
             } else {
-                // A blank page
+                // A blank page.
                 $newpage = new \mod_website\page();
                 $newpage->create([
                     'siteid' => $site->get_id(),
@@ -421,7 +423,7 @@ class Website {
                 ]);
             }
 
-            // Add page to menu.
+            // Add student page to menu.
             $menudata = $menu->menu_to_array();
             $menudata[0]['children'][] = array (
                 'id' => $newpage->get_id(),

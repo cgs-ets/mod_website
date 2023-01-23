@@ -265,6 +265,7 @@ class Site {
         global $DB;
 
         $this->data = $DB->get_record(static::TABLE, array(
+            'websiteid' => $websiteid,
             'userid' => $studentid, 
             'deleted' => 0
         ), '*', IGNORE_MULTIPLE);
@@ -698,14 +699,13 @@ class Site {
             }
         }
 
-        // Copy for each student.
+        // Copy for each student. Teachers, the student, and their mentors can view.
         if ($this->get_website()->distribution === '2') {
-            // Teachers, the student, and their mentors can view.
             if (utils::is_grader()) {
                 return true;
             }
-
-            $students = utils::get_students_from_groups($this->get_website()->groups, $this->get_website()->course);
+            $website = new \mod_website\website($this->data->websiteid);
+            $students = utils::get_students_from_groups($website->get_groups(), $website->get_course());
             if (in_array($USER->id, $students)) {
                 return true;
             }

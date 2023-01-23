@@ -61,6 +61,7 @@ if ( ! $site->can_user_view() ) {
     notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
 
+
 // Check edit mode preference.
 if ($mode != 'preview') { // Used for iframe preview in mod_form.
     $mode = 'view';

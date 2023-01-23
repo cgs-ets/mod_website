@@ -55,7 +55,7 @@ class utils {
 
     public static function is_user_mentor_of_students($mentoruserid, $studentids) {
         foreach($studentids as $studentid) {
-            $mentors = static::get_users_mentors($studentuserid, 'id');
+            $mentors = static::get_users_mentors($studentid, 'id');
             if (in_array($mentoruserid, $mentors)) {
                 return true;
             }

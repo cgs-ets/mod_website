@@ -59,8 +59,17 @@ $PAGE->set_title(format_string($website->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-// Check if single site or copy for each student.
-if ($website->distribution === '1') {
+if ($website->distribution === '0') 
+{
+    // Get the single site instance.
+    $site = new Site();
+    $site->read_from_websiteid($website->id);
+    $url = new moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
+    redirect($url->out(false));
+    exit;
+} 
+else if ($website->distribution === '1') 
+{
     if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
         echo $OUTPUT->header();
@@ -99,11 +108,13 @@ if ($website->distribution === '1') {
             }
         }
     }
-} else {
-    // Get the single site instance.
+}
+else if ($website->distribution === '2') 
+{
+    // Get the site instance.
     $site = new Site();
     $site->read_from_websiteid($website->id);
     $url = new moodle_url('/mod/website/site.php', array('site' => $site->get_id()));
-	redirect($url->out(false));
-	exit;
+    redirect($url->out(false));
+    exit;
 }
