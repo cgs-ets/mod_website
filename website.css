@@ -1009,7 +1009,7 @@
   height: 100%;
   width: 100%;
 }
-#page-mod-website-site .modal-state:checked + .modal .modal__body iframe {
+#page-mod-website-site .modal-state:checked + .modal .modal__body > iframe {
   width: 100%;
   position: absolute;
   height: 100%;
