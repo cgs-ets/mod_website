@@ -223,16 +223,16 @@ class Block {
     public function update() {
         global $DB;
 
-        if ($this->data->id) {
+        if (!empty($this->data->id)) {
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
+            logging::log('Block', $this->data->id, array(
+                'event' => 'Block updated'
+            ));
+            return $this->data->id;
         }
 
-        logging::log('Block', $this->data->id, array(
-            'event' => 'Block updated'
-        ));
-        
-        return $this->data->id;
+        return;
     }
 
     /**
