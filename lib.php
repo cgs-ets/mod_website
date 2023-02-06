@@ -102,7 +102,7 @@ function website_add_instance($moduleinstance, $mform = null) {
             $templatesiteid
         );
     } else if ($moduleinstance->distribution === '1') { 
-        // Copies for students.
+        // Site per student.
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
         $website->create_sites_for_students(
