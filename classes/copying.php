@@ -71,6 +71,7 @@ class copying {
         $copies = array(0 => 0);
         $pages = $DB->get_records(static::TABLE_PAGES, array(
             'siteid' => $fromsiteid,
+            'deleted' => 0,
         ));
         foreach ($pages as $page) {
             // Keep track of the old id.
@@ -90,6 +91,7 @@ class copying {
         $copies = array(0 => 0);
         $sections = $DB->get_records(static::TABLE_SECTIONS, array(
             'siteid' => $fromsiteid,
+            'deleted' => 0,
         ));
         foreach ($sections as $section) {
             // Keep track of the old id.
@@ -109,6 +111,7 @@ class copying {
         $copies = array(0 => 0);
         $blocks = $DB->get_records(static::TABLE_BLOCKS, array(
             'siteid' => $fromsiteid,
+            'deleted' => 0,
         ));
         foreach ($blocks as $block) {
             // Keep track of the old id.
@@ -131,6 +134,7 @@ class copying {
         $copies = array();
         $pagedata = $DB->get_record(static::TABLE_PAGES, array(
             'id' => $copypageid,
+            'deleted' => 0,
         ));
         unset($pagedata->id);
         // Update the data.
@@ -180,6 +184,7 @@ class copying {
         $copies = array();
         $sectiondata = $DB->get_record(static::TABLE_SECTIONS, array(
             'id' => $copysectionid,
+            'deleted' => 0,
         ));
         unset($sectiondata->id);
         // Update the data.

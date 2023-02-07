@@ -171,8 +171,6 @@ class Site {
         $sectioncopies = copying::copy_sections($oldsiteid, $this->get_id());
         $blockcopies = copying::copy_blocks($oldsiteid, $this->get_id());
 
-        error_log("Block copies: " . json_encode($blockcopies));
-
         /*****
          * Update id references throughout.
          *****/
