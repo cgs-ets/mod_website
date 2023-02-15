@@ -83,7 +83,7 @@ if ($type == 'site')
     // Get current editors of the site.
     //$defaulteditors = [$site->export_user()];
     $defaulteditors = array_merge([$site->export_user()], $site->export_course_role_editors());
-    $defaulteditors = array_unique($defaulteditors, SORT_REGULAR);
+    //echo "<pre>";var_export($defaulteditors); exit;
     $additionaleditors = $site->export_editors();
 }
 else if ($type == 'page') 
@@ -91,7 +91,6 @@ else if ($type == 'page')
     // Get current editors of the page.
     // Default editors are (a) the site owner, (b) additional site editors.
     $defaulteditors = array_merge([$site->export_user()], $site->export_editors(), $site->export_course_role_editors());
-    $defaulteditors = array_unique($defaulteditors, SORT_REGULAR);
     $additionaleditors = $page->export_editors();
 }
 
@@ -102,8 +101,8 @@ $formsite = new form_permissions(
         'embed' => $embed,
         'type' => $type,
         'websitedata' => $website,
-        'defaulteditors' => $defaulteditors,
-        'additionaleditors' => $additionaleditors,
+        'defaulteditors' => array_values(array_unique($defaulteditors, SORT_REGULAR)),
+        'additionaleditors' => array_values(array_unique($additionaleditors, SORT_REGULAR)),
     ), 
     'post', 
     '', 
