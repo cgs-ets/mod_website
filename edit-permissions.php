@@ -81,14 +81,17 @@ $page->load_editors();
 if ($type == 'site') 
 {
     // Get current editors of the site.
-    $defaulteditors = [$site->export_user()];
+    //$defaulteditors = [$site->export_user()];
+    $defaulteditors = array_merge([$site->export_user()], $site->export_course_role_editors());
+    $defaulteditors = array_unique($defaulteditors, SORT_REGULAR);
     $additionaleditors = $site->export_editors();
 }
 else if ($type == 'page') 
 {
     // Get current editors of the page.
     // Default editors are (a) the site owner, (b) additional site editors.
-    $defaulteditors = array_merge([$site->export_user()], $site->export_editors());
+    $defaulteditors = array_merge([$site->export_user()], $site->export_editors(), $site->export_course_role_editors());
+    $defaulteditors = array_unique($defaulteditors, SORT_REGULAR);
     $additionaleditors = $page->export_editors();
 }
 

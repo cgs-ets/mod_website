@@ -67,9 +67,6 @@ if ( ! $site->can_user_edit()) {
 
 // Get current editors of the site.
 $site = new \mod_website\site($siteid);
-$site->load_editors();
-$defaulteditors = [$site->export_user()];
-$additionaleditors = $site->export_editors();
 
 // Initialise the form.
 $formsite = new form_site(

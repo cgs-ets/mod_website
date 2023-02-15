@@ -659,14 +659,14 @@ class Site {
     }
 
     public function can_user_edit() {
-        global $USER, $DB;
+        global $USER, $DB, $COURSE;
 
         // Site creator can always edit.
         if ($this->get_userid() === $USER->id) {
             return true;
         }
 
-        // Permissions.
+        // Website permissions.
         $permissions = $DB->get_record(static::TABLE_PERMISSIONS, array(
             'permissiontype' => 'Edit',
             'resourcetype' => 'Site',
@@ -674,6 +674,14 @@ class Site {
             'userid' => $USER->id,
         ), '*', IGNORE_MULTIPLE);
         if ($permissions) {
+            return true;
+        }
+
+        // Course roles - editingteacher, manager.
+        $context = \context_course::instance($COURSE->id);
+        $roles = get_user_roles($context, $USER->id, true);
+        $rolenames = array_column($roles, 'shortname');
+        if ( in_array('editingteacher', $rolenames) || in_array('manager', $rolenames) ) {
             return true;
         }
 
@@ -762,5 +770,25 @@ class Site {
         }
         return $editors;
     }
+
+    public function export_course_role_editors() {
+        global $COURSE, $DB;
+
+        $editors = array();
+        $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+        $managerrole = $DB->get_record('role', array('shortname' => 'manager'));
+        $context = \context_course::instance($COURSE->id);
+        $teachers = get_role_users($teacherrole->id, $context);
+        $managers = get_role_users($managerrole->id, $context);
+        $courseusers = array_merge($teachers, $managers);
+        foreach ($courseusers as $courseuser) {
+            $user = \core_user::get_user($courseuser->id);
+            utils::load_user_display_info($user);
+            $editors[] = $user;
+        }
+        return $editors;
+
+    }
+    
 
 }
