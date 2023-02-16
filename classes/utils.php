@@ -163,11 +163,10 @@ class utils {
         $website = new Website($websiteid, $cmid);
         $website->load_sites();
         foreach ($website->get_sites() as $site) {
-            if ( $i = array_search($site->get_userid(), $newstudents) ) {
+            $i = array_search($site->get_userid(), $newstudents);
+            if ( $i !== false ) {
                 unset($newstudents[$i]);
                 continue;
-            } else {
-                //$site->delete();
             }
         }
         // Create the left over.
