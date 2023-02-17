@@ -167,10 +167,12 @@ function website_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->distgroups = isset($moduleinstance->distgroups) ? $moduleinstance->distgroups : ['00_everyone'];
     if (empty($moduleinstance->distgroups)) {
         $website = new \mod_website\website($moduleinstance->id, $moduleinstance->coursemodule);
-        $moduleinstance->groups = json_encode($website->get_groups());
-    } else {
-        $moduleinstance->groups = json_encode($moduleinstance->distgroups);
+        $moduleinstance->distgroups = $website->get_groups();
+        if (empty($moduleinstance->distgroups)) {
+             $moduleinstance->distgroups = ['00_everyone'];
+        }
     }
+    $moduleinstance->groups = json_encode($moduleinstance->distgroups);
 
     // Once set, distribution cannot be changed.
     $dist = $moduleinstance->distribution;
