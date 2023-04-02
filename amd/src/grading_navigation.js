@@ -169,7 +169,8 @@ define(['jquery', 'core/notification', 'core/ajax', 'core/str', 'mod_website/sav
             url.searchParams.get('userid');
             url.searchParams.set('userid', userid);
             // We do this so a browser refresh will return to the same user.
-            window.history.replaceState({}, "", url);
+            //window.history.replaceState({}, "", url);
+            window.location = url;
         };
 
         /**

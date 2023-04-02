@@ -112,9 +112,9 @@ trait get_participant_by_id {
         }
 
         foreach ($results as $record) {
-        // Get the user's site.
-        $site = new Site();
-        $site->read_for_studentid($userid);
+            // Get the user's site.
+            $site = new Site();
+            $site->read_for_studentid($websiteid, $userid);
             $siteurl = new \moodle_url('/mod/website/site.php', array('site' => $record->id));
             $data->userid = $userid;
             $data->siteurl =  $siteurl->out();
