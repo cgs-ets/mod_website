@@ -704,7 +704,7 @@ class Site {
             return true;
         }
 
-        // Copy for each student.
+        // Site for each student.
         if ($this->get_website()->distribution === '1') {
             // Teachers, the student, and their mentors can view.
             if (utils::is_grader() || 
@@ -714,7 +714,7 @@ class Site {
             }
         }
 
-        // Copy for each student. Teachers, the student, and their mentors can view.
+        // Page for each student. Teachers, the student, and their mentors can view.
         if ($this->get_website()->distribution === '2') {
             if (utils::is_grader()) {
                 return true;

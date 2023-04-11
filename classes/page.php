@@ -201,6 +201,19 @@ class Page {
             return;
         }
 
+        if ( ! $this->data->siteid ) {
+            return;
+        }
+
+        $site = new \mod_website\site($this->data->siteid);
+        if ($site->homepageid == $this->data->id) {
+            return 'Cannot delete site homepage.';
+        }
+        // Only a site editor can delete pages. This prevents users deleting their own page in per page distribution.
+        if (!$site->can_user_edit()) {
+            return 'Cannot delete page.';
+        }
+
         $this->data->deleted = 1;
         $this->data->timemodified = time();
         $this->update();
