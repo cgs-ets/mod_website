@@ -156,10 +156,14 @@ class Page {
      *
      * @param int $id If set, this is the id of an existing record, used to load the data.
      */
-    public function read_for_site($siteid, $pageid) {
+    public function read_for_site($siteid, $pageid, $includedeleted = false) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('id' => $pageid, 'siteid' => $siteid, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+        $conditions = array('id' => $pageid, 'siteid' => $siteid, 'deleted' => 0);
+        if ($includedeleted) {
+            unset($conditions['deleted']);
+        }
+        $this->data = $DB->get_record(static::TABLE, $conditions, '*', IGNORE_MULTIPLE);
         $this->read_sections();
 
         return $this;
@@ -198,11 +202,33 @@ class Page {
         }
 
         $this->data->deleted = 1;
+        $this->data->timemodified = time();
         $this->update();
 
         logging::log('Page', $this->data->id, array(
             'event' => 'Page deleted'
         ));
+    }
+
+    public function restore() {
+        if (empty($this->get_id())) {
+            return false;
+        }
+        
+        // Make sure user can perform this action.
+        if ( ! $this->can_user_edit()) {
+            return false;
+        }
+
+        $this->data->deleted = 0;
+        $this->data->timemodified = time();
+        $this->update();
+
+        logging::log('Page', $this->get_id(), array(
+            'event' => 'Page restored'
+        ));
+
+        return true;
     }
 
     /**
@@ -371,6 +397,29 @@ class Page {
             $this->data->sections = json_encode($sections);
             $DB->update_record(static::TABLE, $this->data);
         }
+    }
+
+    public function has_section($sectionid) {
+        global $DB;
+
+        if (empty($sectionid)) {
+            return false;
+        }
+        
+        if ( ! $this->data->id ) {
+            return false;
+        }
+
+        $sections = $this->get_sections();
+        if ( empty($sections) ) {
+            return false;
+        }
+
+        if ( in_array($sectionid, $sections)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function sync_permission_selections($data) {

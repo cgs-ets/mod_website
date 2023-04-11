@@ -181,6 +181,21 @@ class Section {
     }
 
     /**
+     * Load the data from the DB.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function read_deleted($id) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+        $this->read_blocks();
+
+        return $this;
+    }
+
+    /**
      * Get the section blocks.
      *
      * @return static
@@ -228,12 +243,31 @@ class Section {
         }
 
         $this->data->deleted = 1;
+        $this->data->timemodified = time();
         $this->update();
 
         logging::log('Section', $this->data->id, array(
             'event' => 'Section deleted'
         ));
     }
+
+
+    public function restore() {
+        if (empty($this->get_id())) {
+            return false;
+        }
+
+        $this->data->deleted = 0;
+        $this->data->timemodified = time();
+        $this->update();
+
+        logging::log('Section', $this->data->id, array(
+            'event' => 'Section restored'
+        ));
+
+        return true;
+    }
+    
 
     /**
      * Serialise data based on related info to a structure ready for rendering.
@@ -291,7 +325,7 @@ class Section {
             'id' => $this->data->id,
             'options' => json_decode($this->data->sectionoptions),
         );
-    }    
+    } 
 
     public function get_id() {
         if (isset($this->data->id)) {

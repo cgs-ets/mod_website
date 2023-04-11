@@ -111,6 +111,15 @@ trait apicontrol {
             return 1;
         }
 
+        if ($action == 'restore_deleted') {
+            $data = json_decode($data);
+            $site = new \mod_website\site($data->siteid);
+            if ($site->get_id()) {
+                return $site->restore_deleted_element($data);
+            }
+            return false;
+        }
+
         if ($action == 'page_visibility') {
             $data = json_decode($data);
             $page = new \mod_website\page($data->pageid);

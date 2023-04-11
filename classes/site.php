@@ -451,6 +451,10 @@ class Site {
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
         ));
+        $recyclebinurl = new \moodle_url('/mod/website/recyclebin.php', array(
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
 
         // Go back / Course URL
         $courseurl = new \moodle_url('/course/view.php', array(
@@ -484,6 +488,7 @@ class Site {
             'newpageurl' => $newpageurl->out(false),
             'editmenuurl' => $editmenuurl->out(false),
             'newsectionurl' => $newsectionurl->out(false),
+            'recyclebinurl' => $recyclebinurl->out(false),
             'id' => $this->data->id,
             'websiteid' => $this->data->websiteid,
             'cmid' => $this->data->cmid,
@@ -508,6 +513,7 @@ class Site {
         $newpageurl->param('embed', 1);
         $editmenuurl->param('embed', 1);
         $newsectionurl->param('embed', 1);
+        $recyclebinurl->param('embed', 1);
         $output['embedded_sitepermissionsurl'] = $sitepermissionsurl->out(false);
         $output['embedded_pagepermissionsurl'] = $pagepermissionsurl->out(false);
         $output['embedded_editsiteurl'] = $editsiteurl->out(false);
@@ -515,6 +521,7 @@ class Site {
         $output['embedded_newpageurl'] = $newpageurl->out(false);
         $output['embedded_editmenuurl'] = $editmenuurl->out(false);
         $output['embedded_newsectionurl'] = $newsectionurl->out(false);
+        $output['embedded_recyclebinurl'] = $recyclebinurl->out(false);
 
         return (object) $output;
     }
@@ -789,6 +796,80 @@ class Site {
         return $editors;
 
     }
-    
+
+    public function get_deleted_pages() {
+        global $DB;
+
+        $pages = $DB->get_records(static::TABLE_PAGES, array(
+            'siteid' => $this->data->id,
+            'deleted' => 1,
+        ));
+
+        foreach ($pages as &$page) {
+            $page->timedeletedformatted = date('j M Y H:m',  $page->timemodified);
+        }
+
+        return array_values($pages);
+    }
+
+    public function get_deleted_sections() {
+        global $DB;
+
+        $sections = $DB->get_records(static::TABLE_SECTIONS, array(
+            'siteid' => $this->data->id,
+            'deleted' => 1,
+        ));
+
+        foreach ($sections as &$section) {
+            $section->timedeletedformatted = date('j M Y H:m',  $section->timemodified);
+        }
+
+        return array_values($sections);
+    }
+
+    public function get_deleted_blocks() {
+        global $DB;
+
+        $blocks = $DB->get_records(static::TABLE_BLOCKS, array(
+            'siteid' => $this->data->id,
+            'deleted' => 1,
+        ));
+
+        foreach ($blocks as &$block) {
+            $block->timedeletedformatted = date('j M Y H:m',  $block->timemodified);
+        }
+
+        return array_values($blocks);
+    }
+
+    public function restore_deleted_element($data) {
+        global $DB;
+
+        if (!$this->can_user_edit()) {
+            return false;
+        }
+
+        switch ($data->type) {
+            case 'page':
+                $page = new \mod_website\page();
+                $page->read_for_site($this->get_id(), $data->id, true);
+                return $page->restore();
+                break;
+            case 'section':
+                $section = new \mod_website\section();
+                $section->read_deleted($data->id);
+                return $section->restore();
+                break;
+            case 'block':
+                $block = new \mod_website\block();
+                $block->read_deleted($data->id);
+                return $block->restore();
+                break;
+        }
+        
+        return false;
+    }
+
+
 
 }

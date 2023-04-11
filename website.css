@@ -296,6 +296,26 @@
 .path-mod-website .ml-25 {
   margin-left: 25px;
 }
+.path-mod-website#page-mod-website-recyclebin table {
+  border: 1px solid #ccc;
+  width: 100%;
+}
+.path-mod-website#page-mod-website-recyclebin table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  word-break: break-all;
+}
+.path-mod-website#page-mod-website-recyclebin table thead {
+  font-weight: 600;
+}
+.path-mod-website#page-mod-website-recyclebin table .nostretch {
+  width: 1%;
+  white-space: nowrap;
+}
+.path-mod-website#page-mod-website-recyclebin table .mono {
+  font-family: 'Courier New', Courier, monospace;
+  color: darkgreen;
+}
 #page-mod-website-site {
   /* devanagari */
   /* latin-ext */
@@ -531,7 +551,7 @@
   text-transform: uppercase;
   text-decoration: none;
   height: 37px;
-  margin-right: 10px;
+  margin-left: 10px;
   cursor: pointer;
   transition: background-color ease 0.3s;
   white-space: nowrap;

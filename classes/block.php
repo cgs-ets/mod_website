@@ -250,6 +250,20 @@ class Block {
     }
 
     /**
+     * Load the data from the DB.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function read_deleted($id) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+
+        return $this;
+    }
+
+    /**
      * Soft delete the block.
      *
      * @param $id
@@ -267,11 +281,28 @@ class Block {
         }
 
         $this->data->deleted = 1;
+        $this->data->timemodified = time();
         $this->update();
         
         logging::log('Block', $this->data->id, array(
             'event' => 'Block deleted'
         ));
+    }
+
+    public function restore() {
+        if (empty($this->get_id())) {
+            return false;
+        }
+
+        $this->data->deleted = 0;
+        $this->data->timemodified = time();
+        $this->update();
+
+        logging::log('Block', $this->data->id, array(
+            'event' => 'Block restored'
+        ));
+
+        return true;
     }
 
 

@@ -90,7 +90,7 @@ class form_sitepage extends \moodleform {
         /*----------------------
         *   Delete
         *----------------------*/
-        if ($pageid) {
+        if ($pageid && !$ishomepage) {
             $mform->addElement('html', '<a data-pageid="' . $pageid . '" data-returnurl="' . $returnurl . '" class="btn-delete btn btn-danger float-right">Delete page</a>');
         }
 

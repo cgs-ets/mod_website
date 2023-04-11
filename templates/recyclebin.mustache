@@ -1,0 +1,102 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_website/site_menu
+
+    The main menu.
+}}
+<div class="editors">
+  <div>
+    {{#deletedpages.0}}
+      <h5>Deleted Pages</h5>
+      <table class="deleted-pages">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Deleted</td>
+            <td>Title</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+        {{#deletedpages}}
+          <tr>
+            <td class="nostretch">{{id}}</td>
+            <td class="nostretch">{{timedeletedformatted}}</td>
+            <td>{{title}}</td>
+            <td class="nostretch"><a class="btn-restore" href="#" data-id="{{id}}" data-siteid="{{siteid}}" data-type="page">Restore</a></td>
+          </tr>
+        {{/deletedpages}}
+      </table>
+      <br>
+    {{/deletedpages.0}}
+
+
+    {{#deletedsections.0}}
+      <h5>Deleted Sections</h5>
+      <table class="deleted-sections">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Deleted</td>
+            <td>Title</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+        {{#deletedsections}}
+          <tr>
+            <td class="nostretch">{{id}}</td>
+            <td class="nostretch">{{timedeletedformatted}}</td>
+            <td>{{title}}</td>
+            <td class="nostretch"><a class="btn-restore" href="#" data-id="{{id}}" data-siteid="{{siteid}}" data-type="section">Restore</a></td>
+          </tr>
+        {{/deletedsections}}
+      </table>
+      <br>
+    {{/deletedsections.0}}
+
+
+    {{#deletedblocks.0}}
+      <h5>Deleted Blocks</h5>
+      <table class="deleted-blocks">
+        <thead>
+          <tr>
+            <td>ID</td>
+            <td>Deleted</td>
+            <td>Data</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+        {{#deletedblocks}}
+          <tr>
+            <td class="nostretch">{{id}}</td>
+            <td class="nostretch">{{timedeletedformatted}}</td>
+            <td class="mono"><small>{{content}}</small></td>
+            <td class="nostretch"><a class="btn-restore" href="#" data-id="{{id}}" data-siteid="{{siteid}}" data-type="block">Restore</a></td>
+          </tr>
+        {{/deletedblocks}}
+      </table>
+    {{/deletedblocks.0}}
+    
+    {{^deletedpages.0}}{{^deletedsections.0}}{{^deletedblocks.0}}
+      No deleted content.
+    {{/deletedblocks.0}}{{/deletedsections.0}}{{/deletedpages.0}}
+    
+  </div>
+</div>

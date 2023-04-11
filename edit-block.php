@@ -70,6 +70,10 @@ $PAGE->add_body_class('limitedwidth');
 if ( ! $page->can_user_edit()) {
     notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
+// Ensure section being edited is on this page.
+if ( ! $page->has_section($sectionid)) {
+    notice(get_string('nopermissiontoedit', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
+}
 
 $sitepages = $site->get_all_pages();
 
@@ -163,7 +167,7 @@ if ($blockid) {
             'buttonlinktypegroup[buttonlinktype]' => $settings->linktype,
             'buttonurl' => $settings->buttonurl,
             'buttonpage' => isset($settings->buttonpage) ? $settings->buttonpage : null,
-            'linktargetgroup[linktarget]' => $settings->linktarget,
+            'linktargetgroup[linktarget]' => isset($settings->linktarget) ? $settings->linktarget : '',
             'buttonfile' => $draftfileitemid,
             'includepicturegroup[includepicture]' => $settings->includepicture,
             'buttonpicture' => $draftpictureitemid,

@@ -140,3 +140,5 @@ $string['pagehidden'] = 'This page is hidden. Only editors are able to view this
 
 $string['copysection'] = 'Copy section';
 $string['copytopage'] = 'Copy section to';
+
+$string['recyclebin'] = 'Recycle bin';
