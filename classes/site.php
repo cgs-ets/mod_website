@@ -377,7 +377,7 @@ class Site {
         $page = new \mod_website\page();
         if ($pageid) {
             $this->currentpage = $page->read_for_site($this->get_id(), $pageid);
-        } else {        echo "<pre>";
+        } else {
             if ($this->homepageid) {
                 $this->currentpage = $page->read_for_site($this->get_id(), $this->homepageid);
             }

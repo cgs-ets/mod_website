@@ -106,7 +106,19 @@ class restore_website_activity_structure_step extends restore_activity_structure
         
         
         // if oldid is the sections column for any pages in this website, update the sections column to use newitemid.
-        
+        $site = new Site($data->siteid);
+        $pages = $site->get_all_pages();
+        foreach ($pages as $pagerec) {
+            $page = new \mod_website\page($pagerec->id);
+            $sections = $page->get_sections();
+            foreach($sections as &$sectionid) {
+                if ((int)$sectionid == (int)$oldid) {
+                    $sectionid = $newitemid;
+                }
+            }
+            $page->set('sections', json_encode($sections));
+            $page->update();
+        }
 
     }
 
@@ -121,6 +133,24 @@ class restore_website_activity_structure_step extends restore_activity_structure
         $this->set_mapping('website_block', $oldid, $newitemid, true);
         
         // if oldid is the blocks column for any sections in this website, update the blocks column to use newitemid.
+        $site = new Site($data->siteid);
+        $pages = $site->get_all_pages();
+        foreach ($pages as $pagerec) {
+            $page = new \mod_website\page($pagerec->id);
+            $sections = $page->get_sections();
+            foreach($sections as $sectionid) {
+                $section = new \mod_website\section($sectionid);
+                $blocks = $page->get_blocks();
+                foreach($blocks as &$blockid) {
+                    if ((int)$blockid == (int)$oldid) {
+                        $blockid = $newitemid;
+                    }
+                }
+                $section->set('blocks', json_encode($blocks));
+                $section->update();
+            }
+        }
+
     }
 
     protected function process_website_menu($data) {
@@ -135,6 +165,13 @@ class restore_website_activity_structure_step extends restore_activity_structure
         
         
         // if oldid is the menu for the website, update the website record to use newitemid.
+        $site = new Site($data->siteid);
+        if ($site->menuid == $oldid) {
+            $siteoptions = json_decode($site->get_siteoptions(), true);
+            $siteoptions['menu'] = $newitemid;
+            $site->set('siteoptions', json_encode($siteoptions));
+            $site->update();
+        }
     }
 
     protected function after_execute() {
