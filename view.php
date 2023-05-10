@@ -46,6 +46,7 @@ if ($id) {
 }
 require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
+
 $event = \mod_website\event\course_module_viewed::create(array(
     'objectid' => $website->id,
     'context' => $modulecontext

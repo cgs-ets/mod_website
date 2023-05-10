@@ -377,7 +377,7 @@ class Site {
         $page = new \mod_website\page();
         if ($pageid) {
             $this->currentpage = $page->read_for_site($this->get_id(), $pageid);
-        } else {
+        } else {        echo "<pre>";
             if ($this->homepageid) {
                 $this->currentpage = $page->read_for_site($this->get_id(), $this->homepageid);
             }
@@ -564,6 +564,10 @@ class Site {
 
     public function get_websiteid() {
         return isset($this->data->websiteid) ? $this->data->websiteid : null;
+    }
+
+    public function get_siteoptions() {
+        return isset($this->data->siteoptions) ? $this->data->siteoptions : null;
     }
 
     public function get_website() {

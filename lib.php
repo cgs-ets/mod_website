@@ -38,6 +38,8 @@ define('WEBSITE_GRADING_STATUS_NOT_GRADED', 'notgraded');
  */
 function website_supports($feature) {
     switch ($feature) {
+        case FEATURE_BACKUP_MOODLE2:  
+            return true;
         case FEATURE_GRADE_HAS_GRADE:
             return true;
         //case FEATURE_ADVANCED_GRADING:
@@ -437,8 +439,8 @@ function website_grade_item_delete($moduleinstance) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
-    $DB->delete_records('website_grades', array('websiteid' => $website->id));
-    $DB->delete_records('website_feedback', array('website' => $website->id));
+    $DB->delete_records('website_grades', array('websiteid' => $moduleinstance->id));
+    $DB->delete_records('website_feedback', array('websiteid' => $moduleinstance->id));
     
     return grade_update('/mod/website', $moduleinstance->course, 'mod', 'website',
                         $moduleinstance->id, 0, null, array('deleted' => 1));
