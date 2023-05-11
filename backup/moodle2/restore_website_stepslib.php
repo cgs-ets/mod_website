@@ -140,7 +140,7 @@ class restore_website_activity_structure_step extends restore_activity_structure
             $sections = $page->get_sections();
             foreach($sections as $sectionid) {
                 $section = new \mod_website\section($sectionid);
-                $blocks = $page->get_blocks();
+                $blocks = $section->get_blocks();
                 foreach($blocks as &$blockid) {
                     if ((int)$blockid == (int)$oldid) {
                         $blockid = $newitemid;

@@ -92,6 +92,10 @@ class backup_website_activity_structure_step extends backup_activity_structure_s
 
         // Define file annotations
         $website->annotate_files('mod_website', 'intro', null); // This file area hasn't itemid
+        $page->annotate_files('mod_website', 'bannerimage', 'id');
+        $block->annotate_files('mod_website', 'content', 'id');
+        $block->annotate_files('mod_website', 'buttonfile', 'id');
+        $block->annotate_files('mod_website', 'picturebutton', 'id');
 
         // Return the root element (website), wrapped into standard activity structure
         return $this->prepare_activity_structure($website);
