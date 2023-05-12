@@ -497,7 +497,12 @@ class Page {
     }
 
     public function can_user_view() {
-        global $USER;
+        global $USER, $DB;
+
+        // If page is not specified then return true so that site can load a default page.
+        if (empty($this->get_id())) {
+            return true;
+        }
 
         // If this is an editor, they can always view the page.
         if ($this->can_user_edit()) {
@@ -509,7 +514,39 @@ class Page {
             return false;
         }
 
-        return true;
+        // If this is page-per-student distribution, staff and students can view all pages but parents can
+        // only view their childs page.
+        $site = new \mod_website\site($this->get_siteid());
+        $website = new \mod_website\website($site->get_websiteid());
+        if ($website->get_distribution() == '2') {
+            // Is staff?
+            if (utils::is_grader()) {
+                return true;
+            }
+            // Is student?
+            $students = utils::get_students_from_groups($website->get_groups(), $website->get_course());
+            if (in_array($USER->id, $students)) {
+                return true;
+            }
+            // Is mentor?
+            if (utils::is_user_mentor_of_students($USER->id, $students)) {
+                // Is this their child's page? Child has edit access.
+                $mentees = utils::get_users_mentees($USER->id, 'id');
+                foreach($mentees as $mentee) {
+                    $permissions = $DB->get_record(static::TABLE_PERMISSIONS, array(
+                        'permissiontype' => 'Edit',
+                        'resourcetype' => 'Page',
+                        'resourcekey' => $this->get_id(),
+                        'userid' => $mentee,
+                    ), '*', IGNORE_MULTIPLE);
+                    if ($permissions) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
      /**

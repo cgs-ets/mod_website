@@ -60,7 +60,7 @@ $PAGE->set_title(format_string($website->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
-if ($website->distribution === '0') 
+if ($website->distribution === '0')  // Single teacher site.
 {
     // Get the single site instance.
     $site = new Site();
@@ -69,7 +69,7 @@ if ($website->distribution === '0')
     redirect($url->out(false));
     exit;
 } 
-else if ($website->distribution === '1') 
+else if ($website->distribution === '1')  // Site per student.
 {
     if (utils::is_grader()) {
         // Get a list of sites (student copies) and print a table of links.
@@ -110,7 +110,7 @@ else if ($website->distribution === '1')
         }
     }
 }
-else if ($website->distribution === '2') 
+else if ($website->distribution === '2') // Page per student.
 {
     // Get the site instance.
     $site = new Site();

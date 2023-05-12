@@ -251,6 +251,11 @@ class Menu {
 
         $site = new \mod_website\site($this->data->siteid);
         $ishomepage = ($pagedata->id == $site->homepageid);
+        
+        $page = new \mod_website\page($pagedata->id);
+        if (!$ishomepage && !$page->can_user_view()) {
+            return false;
+        }
 
         // On the front end, the homepage is renamed to "home" if it is the first menu item.
         $menuitem['title'] = !$backend && $ishomepage && $first ? 'Home' : $pagedata->title;

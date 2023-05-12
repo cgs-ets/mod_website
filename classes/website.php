@@ -275,6 +275,10 @@ class Website {
         return $this->sites;
     }
 
+    public function get_distribution() {
+        return isset($this->data->distribution) ? $this->data->distribution : null;
+    }
+
     public function get_grade_comments($websiteid, $userid) {
         global $DB;
 

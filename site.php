@@ -68,11 +68,18 @@ if ($mode != 'preview') { // Used for iframe preview in mod_form.
         $mode = 'edit';
     }
 }
-
 // Get the page.
 $site->fetch($pageid);
 if ( ! $site->currentpage->get_id() || ! $page->can_user_view() ) {
     $url->param('page', 0);
+    // In the case of dist 2 (page per student), if the user cannot view the page that's been requested,
+    // then send them back to the course as there is no page they can view.
+    //if ($website->distribution == 2) {
+    //    $url = new moodle_url('/course/view.php', array(
+    //        'id' => $course->id,
+    //    ));
+   // }
+
     redirect($url);
 }
 
