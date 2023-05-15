@@ -223,6 +223,19 @@ class Site {
         return $this;
     }
 
+    /**
+     * Load the data from the DB.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function read_skel($id) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+
+        return $this;
+    }
 
     /**
      * Load the data from the DB.
@@ -570,6 +583,24 @@ class Site {
         return isset($this->data->siteoptions) ? $this->data->siteoptions : null;
     }
 
+    public function get_homepage_by_siteid($siteid) {
+        global $DB;
+    
+        $site = $DB->get_record(static::TABLE, array(
+            'id' => $siteid,
+        ), '*', IGNORE_MULTIPLE);
+
+        $homepageid = 0;
+        $siteoptions = json_decode($site->siteoptions);
+        if (!empty($siteoptions)) {
+            if (property_exists($siteoptions, 'homepage')) {
+                $homepageid = $siteoptions->homepage;
+            }
+        }
+    
+        return $homepageid;
+    }
+
     public function get_website() {
         global $DB;
     
@@ -873,7 +904,5 @@ class Site {
         
         return false;
     }
-
-
 
 }

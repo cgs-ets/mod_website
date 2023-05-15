@@ -185,6 +185,20 @@ class Page {
     }
 
     /**
+     * Load the data from the DB.
+     *
+     * @param $id
+     * @return static
+     */
+    final public function read_skel($id) {
+        global $DB;
+
+        $this->data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+
+        return $this;
+    }
+
+    /**
      * Soft delete the page.
      *
      * @param $id
@@ -477,7 +491,8 @@ class Page {
         global $USER, $DB;
 
         // Site permissions first.
-        $site = new \mod_website\site($this->get_siteid());
+        $site = new \mod_website\site();
+        $site->read_skel($this->get_siteid());
         if ($site->can_user_edit()) {
             return true;
         }
@@ -516,7 +531,8 @@ class Page {
 
         // If this is page-per-student distribution, staff and students can view all pages but parents can
         // only view their childs page.
-        $site = new \mod_website\site($this->get_siteid());
+        $site = new \mod_website\site();
+        $site->read_skel($this->get_siteid());
         $website = new \mod_website\website($site->get_websiteid());
         if ($website->get_distribution() == '2') {
             // Is staff?

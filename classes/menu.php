@@ -211,10 +211,13 @@ class Menu {
         $backend = !empty($related['backend']) ? $related['backend'] : false;
         $editing = !$backend && !empty($related['mode']) ? $related['mode'] : false;
 
+        $site = new \mod_website\site();
+        $homepageid = $site->get_homepage_by_siteid($this->data->siteid);
+
         $first = true;
         foreach ($pages as $i => &$menuitem) {
             $menuitem = (array) $menuitem;
-            $result = $this->expand_menu_item($menuitem, $backend, $first, $editing);
+            $result = $this->expand_menu_item($menuitem, $backend, $first, $editing, $homepageid);
             if ( ! $result ) {
                 // Menu item page no longer exists.
                 unset($pages[$i]);
@@ -231,7 +234,7 @@ class Menu {
      *
      * @return array
      */
-    private function expand_menu_item(&$menuitem, $backend, $first, $editing) {
+    private function expand_menu_item(&$menuitem, $backend, $first, $editing, $homepageid) {
         global $DB;
         
         $params = array(
@@ -249,10 +252,10 @@ class Menu {
             return false;
         }
 
-        $site = new \mod_website\site($this->data->siteid);
-        $ishomepage = ($pagedata->id == $site->homepageid);
-        
-        $page = new \mod_website\page($pagedata->id);
+
+        $ishomepage = ($pagedata->id == $homepageid);
+        $page = new \mod_website\page();
+        $page->read_skel($pagedata->id);
         if (!$ishomepage && !$page->can_user_view()) {
             return false;
         }
@@ -285,7 +288,7 @@ class Menu {
         $menuitem['target'] = $target;
 
         foreach ($menuitem['children'] as $i => &$childitem) {
-            $result = $this->expand_menu_item($childitem, $backend, false, $editing);
+            $result = $this->expand_menu_item($childitem, $backend, false, $editing, $homepageid);
             if ( ! $result ) {
                 // Menu item page no longer exists.
                 unset($menuitem['children'][$i]);
