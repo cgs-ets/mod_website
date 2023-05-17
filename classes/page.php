@@ -514,26 +514,34 @@ class Page {
     public function can_user_view() {
         global $USER, $DB;
 
+        // Order of checks is intentional!
+
         // If page is not specified then return true so that site can load a default page.
         if (empty($this->get_id())) {
             return true;
         }
 
-        // If this is an editor, they can always view the page.
+        // If this is an editor, they can always view the pag, even if it is hidden.
         if ($this->can_user_edit()) {
             return true;
         }
 
-        // If the page is hidden, then the user cannot view this page.
+        // If the page is hidden the user cannot view this page.
         if ($this->get_hidden()) {
             return false;
         }
 
-        // If this is page-per-student distribution, staff and students can view all pages but parents can
-        // only view their childs page.
         $site = new \mod_website\site();
         $site->read_skel($this->get_siteid());
         $website = new \mod_website\website($site->get_websiteid());
+
+        // Single site: as long as the page is not hidden, anyone can view it.
+        // Site per student: accessible by staff, the student and their parents, but this access is managed in site.php.
+        if ($website->get_distribution() == '0' || $website->get_distribution() == '1') {
+            return true;
+        }
+
+        // Page-per-student: Staff and students can view all pages but parents can only view their childs page.
         if ($website->get_distribution() == '2') {
             // Is staff?
             if (utils::is_grader()) {
@@ -560,7 +568,10 @@ class Page {
                     }
                 }
             }
+            return false;
         }
+
+
 
         return false;
     }

@@ -207,7 +207,7 @@ class Menu {
         } else {
             $pages = $this->menu_to_array();
         }
-        
+
         $backend = !empty($related['backend']) ? $related['backend'] : false;
         $editing = !$backend && !empty($related['mode']) ? $related['mode'] : false;
 
@@ -251,7 +251,6 @@ class Menu {
         if (empty($pagedata)) {
             return false;
         }
-
 
         $ishomepage = ($pagedata->id == $homepageid);
         $page = new \mod_website\page();
