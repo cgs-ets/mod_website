@@ -250,5 +250,21 @@ function xmldb_website_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022120700, 'website');
     }
 
+    if ($oldversion < 2023091900) {
+
+        // Define field exhibition to be added to website.
+        $table = new xmldb_table('website');
+        $field = new xmldb_field('exhibition', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'distribution');
+
+        // Conditionally launch add field exhibition.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2023091900, 'website');
+    }
+
+
     return true;
 }

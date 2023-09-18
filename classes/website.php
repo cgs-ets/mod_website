@@ -279,6 +279,10 @@ class Website {
         return isset($this->data->distribution) ? $this->data->distribution : null;
     }
 
+    public function get_exhibition() {
+        return isset($this->data->exhibition) ? $this->data->exhibition : null;
+    }
+
     public function get_grade_comments($websiteid, $userid) {
         global $DB;
 

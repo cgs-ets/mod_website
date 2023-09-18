@@ -732,6 +732,11 @@ class Site {
 
     public function can_user_view() {
         global $USER;
+
+        // If this is an exhibition site, anyone can view.
+        if ($this->get_website()->exhibition === '1') {
+            return true;
+        }
         
         // Single site
         if ($this->get_website()->distribution === '0') {

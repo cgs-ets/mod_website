@@ -38,6 +38,7 @@ $string['websitefieldset'] = 'Website Fieldset';
 $string['website:addinstance'] = 'Add a new website instance';
 
 $string['distribution'] = 'Distribution';
+$string['exhibition'] = 'Exhibition';
 $string['pagetitle'] = 'Page title';
 $string['editpage'] = 'Edit page';
 $string['addtomenu'] = 'Site menu';

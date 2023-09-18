@@ -521,7 +521,7 @@ class Page {
             return true;
         }
 
-        // If this is an editor, they can always view the pag, even if it is hidden.
+        // If this is an editor, they can always view the page, even if it is hidden.
         if ($this->can_user_edit()) {
             return true;
         }
@@ -534,6 +534,11 @@ class Page {
         $site = new \mod_website\site();
         $site->read_skel($this->get_siteid());
         $website = new \mod_website\website($site->get_websiteid());
+
+        // If this is an exhibition site, anyone can view.
+        if ($website->get_exhibition() == '1') {
+            return true;
+        }
 
         // Single site: as long as the page is not hidden, anyone can view it.
         // Site per student: accessible by staff, the student and their parents, but this access is managed in site.php.

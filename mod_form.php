@@ -84,6 +84,14 @@ class mod_website_mod_form extends moodleform_mod {
         $select = $mform->addElement('select', 'distribution', get_string('distribution', 'mod_website'), $options);
         $select->setSelected('0');
 
+        // Exhibition site
+        $options = array(
+            '0' => 'No - normal access, based on distribution method',
+            '1' => 'Yes - all pages viewable by visitors/parents',
+        );
+        $select = $mform->addElement('select', 'exhibition', get_string('exhibition', 'mod_website'), $options);
+        $select->setSelected('0');
+
         /************************
         * Groups
         *************************/
