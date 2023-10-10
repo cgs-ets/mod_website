@@ -110,15 +110,25 @@
         e.stopPropagation();
         
         let parent = e.currentTarget.parentNode;
-        let contentbody = parent.querySelector('.picturebutton-content');
-
-        let modalbody = document.querySelector('#modal-popupcontent .modal__body');
-        modalbody.innerHTML = contentbody.innerHTML;
-   
+        //let contentbody = parent.querySelector('.picturebutton-content');
+        //let modalbody = document.querySelector('#modal-popupcontent .modal__body');
+        //modalbody.innerHTML = contentbody.innerHTML;
+        // Dont copy, move content so multimedia players still work.
+        document.querySelector('#modal-popupcontent .modal__body').appendChild(parent.querySelector('.picturebutton-content'))
         let modalstate = document.getElementById('modal-state-popupcontent');
         modalstate.checked = true;
-        
       })
+    })
+
+    document.getElementById('modal-state-popupcontent').addEventListener('change', function (e) {
+      if (!this.checked) {
+        // Move content back.
+        let modalblockcontent = document.querySelector('#modal-popupcontent .modal__body .picturebutton-content');
+        document.querySelector('.site-block[data-blockid="' + modalblockcontent.dataset.id + '"] .picturebutton-wrap').appendChild(document.querySelector('#modal-popupcontent .modal__body .picturebutton-content'));
+        // pause all media.
+        document.querySelectorAll('audio').forEach(aud => aud.pause());
+        document.querySelectorAll('video').forEach(vid => vid.pause());
+      }
     })
     
     // User is editor in some capacity (site or page).

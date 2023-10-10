@@ -360,6 +360,7 @@ class Block {
                 }
 
                 $buttondata = array(
+                    'blockid' => $this->get_id(),
                     'buttontitle' => $settings->buttontitle,
                     'ispage' => $settings->linktype == 'page',
                     'isfile' => $settings->linktype == 'file',
