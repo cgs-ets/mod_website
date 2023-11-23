@@ -50,8 +50,9 @@ class form_permissions extends \moodleform {
         // Edit permissions title
         $mform->addElement('html', '<h3>' . get_string('editpermissions', 'mod_website', $type) . '</h3>');
 
+        // Removed logic to allow the modification of page editors regardless of distribution method.
         // Default editors blurb
-        if ($websitedata->distribution == 1) {
+        /*if ($websitedata->distribution == 1) {
             $mform->addElement('html', get_string('distmultisharing', 'mod_website'));
         }
         else if ($websitedata->distribution == 2) {
@@ -62,7 +63,7 @@ class form_permissions extends \moodleform {
                 'additionaleditors' => $additionaleditors,
             )));
         }
-        else if ($websitedata->distribution == 0) {
+        else if ($websitedata->distribution == 0) {*/
 
             if ($type == 'site') {
                 $mform->addElement('html', get_string('sitepermissionsblurb', 'mod_website'));
@@ -172,7 +173,7 @@ class form_permissions extends \moodleform {
             *----------------------*/
             $this->add_action_buttons(!$embed);
 
-        }
+        /*}*/
     }
 
 }

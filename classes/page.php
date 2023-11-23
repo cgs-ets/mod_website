@@ -541,6 +541,7 @@ class Page {
         }
 
         // Single site: as long as the page is not hidden, anyone can view it.
+        
         // Site per student: accessible by staff, the student and their parents, but this access is managed in site.php.
         if ($website->get_distribution() == '0' || $website->get_distribution() == '1') {
             return true;
