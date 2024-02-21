@@ -239,6 +239,7 @@ class Menu {
         
         $params = array(
             'id' => $menuitem['id'],
+            'siteid' => $this->data->siteid,
             'deleted' => 0,
         );
         // Show hidden pages to editor. Do not show them to viewers.
