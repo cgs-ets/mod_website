@@ -160,10 +160,27 @@ class restore_website_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->siteid = $this->get_new_parentid('website_site');
+        $menu = json_decode($data->json, true);
+        foreach($menu as $i => $item) {
+            $newid = $this->get_mappingid('website_page', $item['id']);
+            if ($newid) {
+                $menu[$i]['id'] = $newid;
+                foreach($item['children'] as $j => $childitem) {
+                    $newid = $this->get_mappingid('website_page', $item['id']);
+                    if ($newid) {
+                        $menu[$i]['children'][$j]['id'] = $newid;
+                    } else {
+                        unset($menu[$i]['children'][$j]);
+                    }
+                }
+            } else {
+                unset($menu[$i]);
+            }
+        }
+        $data->json = json_encode($menu);
         $newitemid = $DB->insert_record('website_site_menus', $data);
         $this->set_mapping('website_menu', $oldid, $newitemid, true);
-        
-        
+
         // if oldid is the menu for the website, update the website record to use newitemid.
         $site = new Site($data->siteid);
         if ($site->menuid == $oldid) {
