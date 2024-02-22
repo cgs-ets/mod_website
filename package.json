@@ -8,9 +8,6 @@
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.1"
   },
-  "engines": {
-    "node": ">=8.9 <9"
-  },
   "version": "1.0.0",
   "main": "Gruntfile.js",
   "dependencies": {
@@ -21,9 +18,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://cgs-ets@bitbucket.org/cgs-ets/moodle-mod_website.git"
+    "url": "git+https://cgs-ets@bitbucket.org/cgs-ets/moodle-local_excursions.git"
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/cgs-ets/moodle-mod_website#readme"
+  "homepage": "https://bitbucket.org/cgs-ets/moodle-local_excursions#readme"
 }

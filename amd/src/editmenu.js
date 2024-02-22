@@ -183,14 +183,14 @@
   
   Editmenu.prototype.SortEnd = function (e) {
     // Taken from all to active.
-    if (e.from.classList.contains('list-all') && e.to.classList.contains('list-active')) {
+    /*if (e.from.classList.contains('list-all') && e.to.classList.contains('list-active')) {
       let isinactive = document.querySelectorAll('.inactive .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]').length
       // It is present in the inactive list. Remove it.
       if ( isinactive ) {
         let item = document.querySelector('.inactive .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]')
         item.remove()
       }
-    }
+    }*/
 
     // Taken from active to all.
     if (e.from.classList.contains('list-active') && e.to.classList.contains('list-all')) {
@@ -199,33 +199,33 @@
       if ( isactive ) {
         e.item.remove()
       }
-      let isinactive = document.querySelectorAll('.inactive .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]').length
+      /*let isinactive = document.querySelectorAll('.inactive .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]').length
       // It is not in the active list, and it is not in the inactive list, and it is not already being moved to inactive. Move it to inactive.
       if ( !isactive && !isinactive ){
         let inactive = document.querySelector(".inactive .menu-list")
         inactive.appendChild(e.item)
-      }
+      }*/
     }
 
     // Taken from active to inactive.
-    if (e.from.classList.contains('list-active') && e.to.classList.contains('list-inactive')) {
+    /*if (e.from.classList.contains('list-active') && e.to.classList.contains('list-inactive')) {
       let isactive = document.querySelectorAll('.active .list-group-item[data-pageid="' + e.item.dataset.pageid + '"]').length
       if ( isactive ) {
         e.item.remove()
       }
-    }
+    }*/
 
     // Taken from inactive to all.
-    if (e.from.classList.contains('list-inactive') && e.to.classList.contains('list-all')) {
+    /*if (e.from.classList.contains('list-inactive') && e.to.classList.contains('list-all')) {
       // Put it back.
       let inactive = document.querySelector(".inactive .menu-list")
       inactive.appendChild(e.item)
-    }
+    }*/
 
     // Taken from all to inactive.
-    if (e.from.classList.contains('list-all') && e.to.classList.contains('list-inactive')) {
+    /*if (e.from.classList.contains('list-all') && e.to.classList.contains('list-inactive')) {
       e.item.remove()
-    }
+    }*/
 
     var editmenu = new Editmenu();
     editmenu.regenerateJson();
