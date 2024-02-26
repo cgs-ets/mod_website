@@ -359,6 +359,14 @@ class Block {
                     $buttonpageurl = $buttonpage->get_pageurl();
                 }
 
+
+                $contenturl = new \moodle_url('/mod/website/block.php', array(
+                    'site' => $this->data->siteid,
+                    'page' => $related['pageid'],
+                    'section' => $related['sectionid'],
+                    'block' => $this->get_id() ? $this->get_id() : 0,
+                ));
+
                 $buttondata = array(
                     'blockid' => $this->get_id(),
                     'buttontitle' => $settings->buttontitle,
@@ -376,13 +384,15 @@ class Block {
                     'includepicture' => $image ? 1 : 0,
                     'buttonpicture' => $image,
                     'content' => isset($settings->content) ? $this->export_content($related, $settings->content) : '',
+                    'isloadwithpage' => false, //$this->data->loadwithpage, //TODO: make this an option in the UI. For now, load popups via iframe to help with media element display.
+                    'contenturl' => $settings->linktype == 'content' ? $contenturl->out(false) : "", // Used for popup content only.
                 );
                 // Make target _blank for files.
                 if ($buttondata['isfile']) {
                     $buttondata['target'] = '_blank';
                 }
 
-                $html = $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
+                $html = isset($related['rawcontent']) ? $buttondata['content'] : $OUTPUT->render_from_template('mod_website/_block_picturebutton', $buttondata);
                 //echo "<pre>"; var_export($html); exit;
             }
         }
@@ -525,6 +535,10 @@ class Block {
     
     public function get_hidden() {
         return $this->data->hidden;
+    }
+
+    public function get_siteid() {
+        return $this->data->siteid;
     }
 
     public function set_siteid($siteid) {

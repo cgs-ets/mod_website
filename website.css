@@ -217,6 +217,7 @@
 .path-mod-website.embedded #page {
   padding: 1em 2em !important;
   background: #fff !important;
+  overflow: auto !important;
 }
 .path-mod-website .btn-fullscreen {
   cursor: pointer;
@@ -996,6 +997,9 @@
 }
 #page-mod-website-site #modal-popupcontent .modal__body {
   padding: 25px 35px;
+}
+#page-mod-website-site #modal-popupcontent .modal__body.no_padding {
+  padding: 0;
 }
 #page-mod-website-site .modal {
   opacity: 0;

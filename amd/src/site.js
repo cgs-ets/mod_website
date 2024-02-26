@@ -113,8 +113,22 @@
         //let contentbody = parent.querySelector('.picturebutton-content');
         //let modalbody = document.querySelector('#modal-popupcontent .modal__body');
         //modalbody.innerHTML = contentbody.innerHTML;
+
+        let modalbody = document.querySelector('#modal-popupcontent .modal__body')
+
         // Dont copy, move content so multimedia players still work.
-        document.querySelector('#modal-popupcontent .modal__body').appendChild(parent.querySelector('.picturebutton-content'))
+        if (parent.querySelector('.picturebutton-content').dataset.loadwithpage == '1') {
+          modalbody.appendChild(parent.querySelector('.picturebutton-content'))
+        } else
+        {
+          // If load via iframe, then inject an iframe with a src to the block content. This is needed to load Youtube videos properly in popup. Also, using this can improve performance of site load.
+          modalbody.textContent = '';
+          var makeIframe = document.createElement("iframe");
+          makeIframe.setAttribute("src", parent.querySelector('.picturebutton-content').dataset.contenturl);
+          modalbody.appendChild(makeIframe);
+          modalbody.classList.add("no_padding");
+        }
+
         let modalstate = document.getElementById('modal-state-popupcontent');
         modalstate.checked = true;
       })
@@ -122,12 +136,20 @@
 
     document.getElementById('modal-state-popupcontent').addEventListener('change', function (e) {
       if (!this.checked) {
-        // Move content back.
-        let modalblockcontent = document.querySelector('#modal-popupcontent .modal__body .picturebutton-content');
-        document.querySelector('.site-block[data-blockid="' + modalblockcontent.dataset.id + '"] .picturebutton-wrap').appendChild(document.querySelector('#modal-popupcontent .modal__body .picturebutton-content'));
-        // pause all media.
-        document.querySelectorAll('audio').forEach(aud => aud.pause());
-        document.querySelectorAll('video').forEach(vid => vid.pause());
+        let modalbody = document.querySelector('#modal-popupcontent .modal__body')
+        // Add padding back to modal body in case of preloaded content (not iframe)
+        if (modalbody.classList.contains('no_padding')) {
+          modalbody.classList.remove("no_padding");
+          // Remove iframe loaded based content.
+          modalbody.textContent = '';
+        } else {
+          // Move content back.
+          let modalblockcontent = document.querySelector('#modal-popupcontent .modal__body .picturebutton-content');
+          document.querySelector('.site-block[data-blockid="' + modalblockcontent.dataset.id + '"] .picturebutton-wrap').appendChild(document.querySelector('#modal-popupcontent .modal__body .picturebutton-content'));
+          // pause all media.
+          document.querySelectorAll('audio').forEach(aud => aud.pause());
+          document.querySelectorAll('video').forEach(vid => vid.pause());
+        }
       }
     })
     

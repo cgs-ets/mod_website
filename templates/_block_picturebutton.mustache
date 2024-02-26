@@ -45,8 +45,10 @@
     </figure>
   </a>
   {{#iscontent}}
-    <div class="picturebutton-content" data-id="{{blockid}}">
-      {{{content}}}
+    <div class="picturebutton-content" data-id="{{blockid}}" data-loadwithpage="{{isloadwithpage}}" data-contenturl="{{contenturl}}">
+      {{#isloadwithpage}}
+        {{{content}}}
+      {{/isloadwithpage}}
       <br>
     </div>
   {{/iscontent}}
