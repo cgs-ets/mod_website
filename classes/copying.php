@@ -344,7 +344,9 @@ class copying {
             $newpage = new \mod_website\page($copy);
             $sections = $newpage->get_sections();
             foreach($sections as &$section) {
-                $section = $sectioncopies[$section];
+                if (isset($sectioncopies[$section])) {
+                    $section = $sectioncopies[$section];
+                }
             }
             $newpage->set('sections', json_encode($sections));
             $newpage->update();
@@ -357,7 +359,9 @@ class copying {
             $newsection = new \mod_website\section($copy);
             $blocks = $newsection->get_blocks();
             foreach($blocks as &$block) {
-                $block = $blockcopies[$block];
+                if (isset($blockcopies[$block])) {
+                    $block = $blockcopies[$block];
+                }
             }
             $newsection->set('blocks', json_encode($blocks));
             $newsection->update();
