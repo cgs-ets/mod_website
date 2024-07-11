@@ -303,7 +303,9 @@ class copying {
             // Replace page params.
             foreach ($pagecopies as $oldpageid => $newpageid) {
                 $content = str_replace('page=' . $oldpageid, 'page=' . $newpageid, $content);
-                $content = str_replace(`"buttonpage":"$oldpageid"`, `"buttonpage":"$newpageid"`, $content);
+                $propold = '"buttonpage":"' . $oldpageid . '"';
+                $propnew = '"buttonpage":"' . $newpageid . '"';
+                $content = str_replace($propold, $propnew, $content);
             }
 
             $block->set('content', $content);
