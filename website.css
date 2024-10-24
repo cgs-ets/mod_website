@@ -162,6 +162,9 @@
 .path-mod-website.fullscreen .drawers-bottom-region-wrap {
   margin: 0 !important;
 }
+.path-mod-website.fullscreen .drawers-top-region-wrap {
+  margin: 0 !important;
+}
 .path-mod-website.fullscreen .drawer {
   display: none !important;
 }
