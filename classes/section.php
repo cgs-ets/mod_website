@@ -174,7 +174,8 @@ class Section {
     final public function read($id) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+        $data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
+        $this->data = $data ? $data : array();
         $this->read_blocks();
 
         return $this;
@@ -189,7 +190,8 @@ class Section {
     final public function read_deleted($id) {
         global $DB;
 
-        $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+        $data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
+        $this->data = $data ? $data : array();
         $this->read_blocks();
 
         return $this;

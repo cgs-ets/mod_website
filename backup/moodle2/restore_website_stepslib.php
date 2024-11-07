@@ -99,17 +99,21 @@ class restore_website_activity_structure_step extends restore_activity_structure
         global $DB;
 
         $data = (object)$data;
-        $oldid = $data->id;
-        $data->siteid = $this->get_new_parentid('website_site');
-        $newitemid = $DB->insert_record('website_site_sections', $data);
+        $oldid = $data->id; // Extract the old section id from the section data.
+        $data->siteid = $this->get_new_parentid('website_site'); // Set the sections siteid to the new site.
+        $newitemid = $DB->insert_record('website_site_sections', $data); // Copy the section, getting the new section id.
         $this->set_mapping('website_section', $oldid, $newitemid, true);
         
         
+        // Go through the new website's pages, and update the old section id to the new sectionid.
         // if oldid is the sections column for any pages in this website, update the sections column to use newitemid.
         $site = new Site($data->siteid);
         $pages = $site->get_all_pages();
         foreach ($pages as $pagerec) {
             $page = new \mod_website\page($pagerec->id);
+            if (empty($page)) {
+                continue;
+            }
             $sections = $page->get_sections();
             foreach($sections as &$sectionid) {
                 if ((int)$sectionid == (int)$oldid) {
@@ -139,7 +143,11 @@ class restore_website_activity_structure_step extends restore_activity_structure
             $page = new \mod_website\page($pagerec->id);
             $sections = $page->get_sections();
             foreach($sections as $sectionid) {
-                $section = new \mod_website\section($sectionid);
+                $section = new \mod_website\section();
+                $section->read_deleted($sectionid);
+                if (empty($section)) {
+                    continue;
+                }
                 $blocks = $section->get_blocks();
                 foreach($blocks as &$blockid) {
                     if ((int)$blockid == (int)$oldid) {
