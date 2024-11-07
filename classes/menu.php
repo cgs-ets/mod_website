@@ -102,7 +102,11 @@ class Menu {
 
         $this->data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
 
-        $this->numpages = sizeof($this->menu_to_array(), 1);
+        $this->numpages = 0;
+        $menu = $this->menu_to_array();
+        if (!empty($menu)) {
+            $this->numpages = sizeof($this->menu_to_array(), 1);
+        }
 
         return $this;
     }
