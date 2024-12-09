@@ -187,6 +187,8 @@ function website_update_instance($moduleinstance, $mform = null) {
 
     $DB->update_record('website', $moduleinstance);
 
+    website_grade_item_update($moduleinstance); // Update the grade setting in the gradebook.
+
     return true; 
 }
 
