@@ -1,0 +1,27 @@
+<div class = 'container website-logs-container'>
+<table class ="table table-bordered">
+<thead>
+    <tr>
+      <th scope="col">Time</th>
+      <th scope="col">User full name</th>
+      <th scope="col">Component</th>
+      <th scope="col">Event</th>
+    </tr>
+  </thead>
+<tbody id  = 'mod-website-logs'>
+{{#logdata}}
+<tr>
+    <td>{{logtime}}</td>
+    <td>{{{user}}}</td>
+    <td>{{resourcetype}} {{#sectiontitle}}( {{sectiontitle}}){{/sectiontitle}}</td>
+    <td>{{logdata}}</td>
+</tr>
+{{/logdata}}
+</tbody>
+</table>
+</div>
+
+<nav aria-label="Page" class="pagination pagination-centered justify-content-center mod-website-logs-pagination">
+      <ul class="mt-1 pagination" id="myPager"></ul>
+</nav>
+</div>

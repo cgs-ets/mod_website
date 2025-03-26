@@ -47,7 +47,7 @@ class Site {
     const TABLE_MENUS = 'website_site_menus';
     const TABLE_WEBSITE = 'website';
     const TABLE_PERMISSIONS = 'website_permissions';
-    
+
 
     private $data = array();
 
@@ -98,7 +98,7 @@ class Site {
 
         $pagetitle = $this->data['title'];
         unset($this->data['title']);
-        
+
         $id = $DB->insert_record(static::TABLE, $this->data);
         $this->read($id);
 
@@ -279,7 +279,7 @@ class Site {
 
         $this->data = $DB->get_record(static::TABLE, array(
             'websiteid' => $websiteid,
-            'userid' => $studentid, 
+            'userid' => $studentid,
             'deleted' => 0
         ), '*', IGNORE_MULTIPLE);
 
@@ -302,7 +302,7 @@ class Site {
             $this->validate_data();
             $DB->update_record(static::TABLE, $this->data);
         }
-        
+
         return $this->data->id;
     }
 
@@ -426,7 +426,7 @@ class Site {
         ) {
             $caneditsite = $caneditpage = false;
         }
-        
+
         $siteurl = new \moodle_url('/mod/website/site.php', array(
             'site' => $this->data->id,
         ));
@@ -446,6 +446,8 @@ class Site {
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
         ));
+
+
         $pagepermissionsurl = clone($sitepermissionsurl);
         $pagepermissionsurl->param('type', 'page');
         $editpageurl = new \moodle_url('/mod/website/edit-page.php', array(
@@ -491,11 +493,19 @@ class Site {
             ));
         }
 
+        // Logs Url
+        $sitelogsurl = new \moodle_url('/mod/website/logs.php', array(
+            'type' => 'site',
+            'site' => $this->data->id,
+            'page' => $this->currentpage->get_id(),
+        ));
+
         $output = array(
             'caneditsite' => $caneditsite,
             'caneditpage' => $caneditpage,
             'sitepermissionsurl' => $sitepermissionsurl->out(false),
             'pagepermissionsurl' => $pagepermissionsurl->out(false),
+            'sitelogsurl' => $sitelogsurl->out(false),
             'editsiteurl' => $editsiteurl->out(false),
             'editpageurl' => $editpageurl->out(false),
             'newpageurl' => $newpageurl->out(false),
@@ -566,7 +576,7 @@ class Site {
             }
         }
     }
-    
+
     public function set($property, $value) {
         $this->data->$property = $value;
     }
@@ -585,7 +595,7 @@ class Site {
 
     public function get_homepage_by_siteid($siteid) {
         global $DB;
-    
+
         $site = $DB->get_record(static::TABLE, array(
             'id' => $siteid,
         ), '*', IGNORE_MULTIPLE);
@@ -597,20 +607,20 @@ class Site {
                 $homepageid = $siteoptions->homepage;
             }
         }
-    
+
         return $homepageid;
     }
 
     public function get_website() {
         global $DB;
-    
+
         $website = $DB->get_record(static::TABLE_WEBSITE, array(
             'id' => $this->data->websiteid,
         ), '*', IGNORE_MULTIPLE);
 
         return $website;
     }
-    
+
     public function get_cmid() {
         return isset($this->data->cmid) ? $this->data->cmid : null;
     }
@@ -621,9 +631,9 @@ class Site {
 
     public function get_section($id) {
         global $DB;
-    
+
         $section = $DB->get_record(static::TABLE_SECTIONS, array(
-            'id' => $id, 
+            'id' => $id,
             'siteid' => $this->data->id,
             'deleted' => 0,
         ), '*', IGNORE_MULTIPLE);
@@ -633,9 +643,9 @@ class Site {
 
     public function get_block($id) {
         global $DB;
-    
+
         $block = $DB->get_record(static::TABLE_BLOCKS, array(
-            'id' => $id, 
+            'id' => $id,
             'siteid' => $this->data->id,
             'deleted' => 0,
         ), '*', IGNORE_MULTIPLE);
@@ -737,7 +747,7 @@ class Site {
         if ($this->get_website()->exhibition === '1') {
             return true;
         }
-        
+
         // Single site
         if ($this->get_website()->distribution === '0') {
             // Everyone can view.
@@ -747,8 +757,8 @@ class Site {
         // Site for each student.
         if ($this->get_website()->distribution === '1') {
             // Teachers, the student, and their mentors can view.
-            if (utils::is_grader() || 
-                $this->get_userid() === $USER->id || 
+            if (utils::is_grader() ||
+                $this->get_userid() === $USER->id ||
                 utils::is_user_mentor_of_student($USER->id, $this->get_userid()) ) {
                 return true;
             }
@@ -782,13 +792,13 @@ class Site {
         if ($website->distribution !== '0') {
             return;
         }
-        
+
         permissions::sync_permission_selections('Site', $this->get_id(), $data);
     }
-     
+
     public function load_editors() {
-        global $DB; 
-        
+        global $DB;
+
         if (empty($this->get_id())) {
             return;
         }
@@ -906,7 +916,7 @@ class Site {
                 return $block->restore();
                 break;
         }
-        
+
         return false;
     }
 
