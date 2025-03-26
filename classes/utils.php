@@ -411,22 +411,33 @@ class utils {
             $data['logdata'][] = $d;
 
         }
-
-        // Get section(s)
-        $sql = "SELECT  distinct ss.id AS sectionid, ss.title AS sectiontitle, ss.blocks, ss.deleted, ss.timecreated, ss.timemodified
+        // We need the sectionid from the sections column in website_site_pages to be able to filter the section, based
+        // on siteid and pageid. Just doing a join wouldnt work because it would bring sections from any pages in the site. Which wouldnt be
+        // correct if the distribution tipe is page for each student.
+        $sql = " SELECT DISTINCT ss.id AS sectionid,  ss.title AS sectiontitle,  ss.blocks,  ss.deleted,  ss.timecreated,
+                ss.timemodified
                 FROM {website_sites} s
                 JOIN {website} w ON s.websiteid = w.id
                 JOIN {website_site_sections} ss ON ss.siteid = s.id
                 JOIN {website_site_pages} sp ON sp.siteid = s.id
-                WHERE s.id = :siteid;";
-        $params = [ 'siteid' => $site];
+                CROSS APPLY STRING_SPLIT(
+                    REPLACE(
+                        REPLACE(
+                            REPLACE(sp.sections, '[', ''),
+                            ']', ''
+                        ),
+                        '\"', ''
+                    ),
+                    ','
+                ) AS split_values
+                WHERE s.id = :siteid AND sp.id = :pageid AND ss.id = TRY_CAST(split_values.value AS INT) ";
+
+        $params = [ 'siteid' => $site, 'pageid' => $pageid];
 
         $r2 = $DB->get_records_sql($sql, $params);
 
-        //  Get the section logs
-
         $sectionids = array_merge(...array_map(function ($item) {
-            return [$item->sectionid];
+            return [$item->sectionid] ?: [];
         }, $r2));
 
         if (count($sectionids) > 0) {
@@ -462,11 +473,11 @@ class utils {
             }
         }
 
-
         // Get blocks logs.
 
         $blockids = array_merge(...array_map(function ($item) {
-            return json_decode($item->blocks, true);
+            return json_decode($item->blocks, true) ?: [];
+
         }, $r2));
 
         if (count($blockids) > 0) {
