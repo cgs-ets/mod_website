@@ -119,6 +119,6 @@ if ($data->caneditsite || $data->caneditpage) {
     echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
 }
 
-$PAGE->requires->js('/mod/website/scrollmobilecontrol.js');
+$PAGE->requires->js('/mod/website/js/scrollmobilecontrol.js');
 
 echo $OUTPUT->footer();
