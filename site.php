@@ -36,7 +36,7 @@ $mode = optional_param('mode', '', PARAM_TEXT);
 
 // Get the single site instance.
 $site = new Site($siteid);
-$page = new Page($pageid);  
+$page = new Page($pageid);
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -106,7 +106,7 @@ $PAGE->requires->js_call_amd('mod_website/site', 'init');
 // Wrap it in moodle.
 echo $OUTPUT->header();
 
-// Render the site. 
+// Render the site.
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 
 // Modal for any popup content.
@@ -118,5 +118,7 @@ if ($data->caneditsite || $data->caneditpage) {
     $modal = array('id' => 'embeddedform', 'body' => '');
     echo $OUTPUT->render_from_template('mod_website/site_modal', $modal);
 }
+
+$PAGE->requires->js('/mod/website/scrollmobilecontrol.js');
 
 echo $OUTPUT->footer();

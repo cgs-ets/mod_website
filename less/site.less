@@ -90,3 +90,18 @@
   }
 }
 
+
+/* Tactil scroll in iframes for mobiles */
+@media (pointer:coarse) {
+  iframe {
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    overflow: auto !important;
+  }
+
+  .iframe-container {
+    -webkit-overflow-scrolling: touch !important;
+    overflow: auto !important;
+  }
+}

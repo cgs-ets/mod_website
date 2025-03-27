@@ -344,6 +344,7 @@
   /* [Object] Modal
  * =============================== */
   /* Always rotate caret on submenu */
+  /* Tactil scroll in iframes for mobiles */
 }
 @font-face {
   font-family: 'Poppins';
@@ -1279,6 +1280,18 @@
   #page-mod-website-site .site-sections {
     padding-left: 48px;
     padding-right: 48px;
+  }
+}
+@media (pointer: coarse) {
+  #page-mod-website-site iframe {
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    overflow: auto !important;
+  }
+  #page-mod-website-site .iframe-container {
+    -webkit-overflow-scrolling: touch !important;
+    overflow: auto !important;
   }
 }
 #page-mod-website-site .topbar {

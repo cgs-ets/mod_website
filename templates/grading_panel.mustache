@@ -33,7 +33,7 @@ Context variables required for this template:
 <div data-region="grade" id="grading-panel-container" data-websiteid="{{websiteid}}" class="row">
     {{#display}}
       <div class="grading-panel col-lg-9 col-sm-12 ">
-          <iframe id='ifile' src="{{siteurl}}"></iframe>
+          <iframe id='ifile' src="{{siteurl}}" allow="touch"></iframe>
       </div>
 
       {{> mod_website/grader }}
