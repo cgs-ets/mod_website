@@ -49,22 +49,28 @@ require_login($course, true, $cm);
 
 
 // Set up page.
-$modulecontext = context_module::instance($cm->id);
+$modulecontext = context_system::instance();
 $url = new moodle_url('/mod/website/site.php', array(
     'site' => $siteid,
     'page' => $pageid,
 ));
+
 $website->url = $url->out(false);
+
 $PAGE->set_url($url);
 $PAGE->set_title('Website Logs | ' . format_string($page->get_title()));
 $PAGE->set_heading('Website Logs | ' . format_string($page->get_title()));
 $PAGE->set_context($modulecontext);
 
+// Navigation.
+$PAGE->navbar->add( format_string($page->get_title()), new moodle_url('/mod/website/site.php', ['site' => $siteid, 'page' => $pageid]));
+$PAGE->navbar->add(get_string('summary', 'report_reflectionexporter'));
 
 // Check view site permission.
 if ( ! $site->can_user_view() ) {
     notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
 }
+
 
 echo $OUTPUT->header();
 

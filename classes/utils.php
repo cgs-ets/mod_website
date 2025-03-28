@@ -378,12 +378,13 @@ class utils {
         global $DB, $OUTPUT;
 
         // Get the first logs (Creation of the page)
-        $sql = "SELECT cl.id as changelogid, cl.*, u.firstname, u.lastname
+        $sql = "SELECT cl.id as changelogid, cl.*, u.firstname, u.lastname, sp.title as pagetitle
                 FROM {website_change_logs} cl
                 JOIN {user} u ON cl.userid = u.id
-                WHERE resourcekey = :resourcekey
+                JOIN {website_site_pages} sp ON sp.id = cl.resourcekey
+                WHERE resourcekey = :resourcekey AND resourcetype = :resourcetype
                 ORDER BY cl.logtime DESC";
-        $params = ['resourcekey' => $pageid];
+        $params = ['resourcekey' => $pageid, 'resourcetype' => 'Page'];
 
         $r1 = $DB->get_records_sql($sql, $params);
         $res = $r1;
@@ -401,11 +402,12 @@ class utils {
             $u->id = $r->userid;
 
             $d->user = $OUTPUT->user_picture($u, array(
-                'course' => $courseid,
+                // 'course' => $courseid,
                 'includefullname' => true, 'class' => 'userpicture'
             ));
+          
 
-            $d->resourcetype = $r->resourcetype;
+            $d->resourcetype = $r->resourcetype . " ($r->pagetitle)";
             $d->logdata = (json_decode($r->logdata))->event;
             $dataaux[$r->logtime] = $d;
             $data['logdata'][] = $d;
@@ -415,7 +417,7 @@ class utils {
         // on siteid and pageid. Just doing a join wouldnt work because it would bring sections from any pages in the site. Which wouldnt be
         // correct if the distribution tipe is page for each student.
         $sql = " SELECT DISTINCT ss.id AS sectionid,  ss.title AS sectiontitle,  ss.blocks,  ss.deleted,  ss.timecreated,
-                ss.timemodified
+                ss.timemodified, sp.title as pagetitle
                 FROM {website_sites} s
                 JOIN {website} w ON s.websiteid = w.id
                 JOIN {website_site_sections} ss ON ss.siteid = s.id
@@ -463,9 +465,10 @@ class utils {
                 $u = new \stdClass();
                 $u->id = $sectionlog->userid;
                 $sl->user = $OUTPUT->user_picture($u, array(
-                    'course' => $courseid,
+                    //'course' => $courseid,
                     'includefullname' => true, 'class' => 'userpicture'
                 ));
+
                 $sl->resourcetype = $sectionlog->resourcetype;
                 $sl->logdata = (json_decode($sectionlog->logdata))->event;
                 $dataaux[$sectionlog->logtime] = $sl;
@@ -484,6 +487,11 @@ class utils {
 
             list($insql, $inparams) = $DB->get_in_or_equal($blockids, SQL_PARAMS_NAMED);
 
+            //  Get the blocks details
+            $sql = "SELECT * FROM {website_site_blocks} b WHERE id $insql";
+
+            $blocks = $DB->get_records_sql($sql, $inparams);
+            
             $sql =  "SELECT cg.*, u.id as userid, u.firstname, u.lastname
                      FROM {website_change_logs} cg
                      JOIN {user} u ON cg.userid = u.id
@@ -496,7 +504,7 @@ class utils {
             foreach ($results as $result) {
 
                 $d = new \stdClass();
-
+             
                 $date = new \DateTime();
                 $d->id = $d->id;
                 $date->setTimestamp(intval($result->logtime));
@@ -504,16 +512,25 @@ class utils {
                 $u = new \stdClass();
                 $u->id = $result->userid;
                 $d->user = $OUTPUT->user_picture($u, array(
-                    'course' => $courseid,
+                    // /'course' => $courseid,
                     'includefullname' => true, 'class' => 'userpicture'
                 ));
-                $d->resourcetype = $result->resourcetype;
+
+                $blockdetails = $blocks[$result->resourcekey];
+
+                if ($blockdetails->type == 'picturebutton') {
+                    $btitle = (json_decode($blockdetails->content))->buttontitle;
+                } else {
+                    $btitle = " Type: Editor";
+                }
+
+                $d->resourcetype = $result->resourcetype . " ($btitle)";
                 $d->logdata = (json_decode($result->logdata))->event;
                 $dataaux[$result->logtime] = $d;
                 $data['logdata'][] = $d;
             }
         }
-
+        
         // Sort the array  by logtime.
         krsort($dataaux);
         $data ['logdata'] = array_values($dataaux);
