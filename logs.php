@@ -50,9 +50,11 @@ require_login($course, true, $cm);
 
 // Set up page.
 $modulecontext = context_system::instance();
+$modulecontext = context_module::instance($cm->id);
 $url = new moodle_url('/mod/website/site.php', array(
     'site' => $siteid,
     'page' => $pageid,
+    'logs' => 1
 ));
 
 $website->url = $url->out(false);

@@ -405,7 +405,7 @@ class utils {
                 // 'course' => $courseid,
                 'includefullname' => true, 'class' => 'userpicture'
             ));
-          
+
 
             $d->resourcetype = $r->resourcetype . " ($r->pagetitle)";
             $d->logdata = (json_decode($r->logdata))->event;
@@ -491,7 +491,7 @@ class utils {
             $sql = "SELECT * FROM {website_site_blocks} b WHERE id $insql";
 
             $blocks = $DB->get_records_sql($sql, $inparams);
-            
+
             $sql =  "SELECT cg.*, u.id as userid, u.firstname, u.lastname
                      FROM {website_change_logs} cg
                      JOIN {user} u ON cg.userid = u.id
@@ -504,7 +504,7 @@ class utils {
             foreach ($results as $result) {
 
                 $d = new \stdClass();
-             
+
                 $date = new \DateTime();
                 $d->id = $d->id;
                 $date->setTimestamp(intval($result->logtime));
@@ -521,7 +521,7 @@ class utils {
                 if ($blockdetails->type == 'picturebutton') {
                     $btitle = (json_decode($blockdetails->content))->buttontitle;
                 } else {
-                    $btitle = " Type: Editor";
+                    $btitle = " Type: Content";
                 }
 
                 $d->resourcetype = $result->resourcetype . " ($btitle)";
@@ -530,7 +530,7 @@ class utils {
                 $data['logdata'][] = $d;
             }
         }
-        
+
         // Sort the array  by logtime.
         krsort($dataaux);
         $data ['logdata'] = array_values($dataaux);

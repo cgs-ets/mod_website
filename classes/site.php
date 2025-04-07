@@ -498,6 +498,7 @@ class Site {
             'type' => 'site',
             'site' => $this->data->id,
             'page' => $this->currentpage->get_id(),
+            'logs' => 1
         ));
 
         $output = array(
