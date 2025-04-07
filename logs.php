@@ -66,6 +66,9 @@ $PAGE->set_context($modulecontext);
 $PAGE->navbar->add( format_string($page->get_title()), new moodle_url('/mod/website/site.php', ['site' => $siteid, 'page' => $pageid]));
 $PAGE->navbar->add(get_string('summary', 'report_reflectionexporter'));
 
+// Add css.
+$PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
+
 // Check view site permission.
 if ( ! $site->can_user_view() ) {
     notice(get_string('nopermissiontoview', 'mod_website'), new moodle_url('/course/view.php', array('id' => $course->id)));
@@ -75,6 +78,7 @@ if ( ! $site->can_user_view() ) {
 echo $OUTPUT->header();
 
 $logs = utils::get_logs($siteid, $pageid, $course->id);
+
 
 
 // Add scripts.
