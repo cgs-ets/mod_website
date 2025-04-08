@@ -1341,6 +1341,7 @@
   gap: 10px;
   justify-content: start;
   color: #005b94;
+  text-transform: uppercase;
 }
 #page-mod-website-site .site-section .section-title-cgs-branding .caret {
   display: none;
