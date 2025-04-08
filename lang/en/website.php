@@ -36,6 +36,7 @@ $string['websitename_help'] = 'Create a course website without code';
 $string['websitesettings'] = 'Website Settings';
 $string['websitefieldset'] = 'Website Fieldset';
 $string['website:addinstance'] = 'Add a new website instance';
+$string['cgsbranding'] = 'CGS branding';
 
 $string['distribution'] = 'Distribution';
 $string['exhibition'] = 'Exhibition';

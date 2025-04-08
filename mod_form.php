@@ -75,6 +75,9 @@ class mod_website_mod_form extends moodleform_mod {
             $this->add_intro_editor();
         }
 
+        // CGS Branding
+        $mform->addElement('advcheckbox', 'cgsbranding', get_string('cgsbranding', 'mod_website'), 'Set CGS branding colours for this website', array('group' => 1), array(0, 1));
+
         // Distribution
         $options = array(
             '0' => 'Single teacher-driven website, viewable by all students',
@@ -140,8 +143,8 @@ class mod_website_mod_form extends moodleform_mod {
         }
 
         if ($update) {
-            $mform->disabledIf('distribution', 'update', 'neq', '0'); 
-            $mform->disabledIf('distgroups', 'update', 'neq', '0'); 
+            $mform->disabledIf('distribution', 'update', 'neq', '0');
+            $mform->disabledIf('distgroups', 'update', 'neq', '0');
         }
 
         /************************
@@ -198,7 +201,7 @@ class mod_website_mod_form extends moodleform_mod {
 
     public function set_data($default_values) {
 
-        $selectedgroups = array();        
+        $selectedgroups = array();
         if (isset($default_values->groups)) {
             $selectedgroups = json_decode($default_values->groups);
         }

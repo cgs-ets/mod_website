@@ -25,8 +25,8 @@
 /**
  * @module mod_website/editsection
  */
- define(['core/log', 'core/ajax', 'core/notification'], 
- function(Log, Ajax, Notification) {    
+ define(['core/log', 'core/ajax', 'core/notification'],
+ function(Log, Ajax, Notification) {
   'use strict';
 
   /**
@@ -35,7 +35,7 @@
   function init() {
       Log.debug('mod_website/editsection: initializing');
 
-    
+
       var editsection = new EditSection();
       editsection.main();
   }
@@ -62,21 +62,25 @@
     }
 
     let deletebutton = document.querySelector('.btn-delete')
-    deletebutton.addEventListener('click', e => {
-      e.preventDefault();
-      Ajax.call([{
-        methodname: 'mod_website_apicontrol',
-        args: { 
-            action: 'delete_section',
-            data: deletebutton.dataset.sectionid,
-        },
-        done: function (e) {
-          window.open(deletebutton.dataset.returnurl, '_parent');
-        },
-        fail: Notification.exception
-      }]);
-    })
-  };
+
+    if (deletebutton != null) {
+
+        deletebutton.addEventListener('click', e => {
+          e.preventDefault();
+          Ajax.call([{
+            methodname: 'mod_website_apicontrol',
+            args: {
+                action: 'delete_section',
+                data: deletebutton.dataset.sectionid,
+            },
+            done: function (e) {
+              window.open(deletebutton.dataset.returnurl, '_parent');
+            },
+            fail: Notification.exception
+          }]);
+        })
+      };
+    }
 
 
   return {

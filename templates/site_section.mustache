@@ -20,14 +20,14 @@
     A single section.
 }}
 <div class="site-section editzone dzone {{^options.hidetitle}}{{#options.collapsible}}{{^options.expanddefault}}collapsed{{/options.expanddefault}}{{/options.collapsible}}{{/options.hidetitle}}"  action="/file/post"
-    {{#caneditpage}}data-formurl="{{embedded_sectionurl}}"{{/caneditpage}} 
-    data-sectionid="{{id}}" 
+    {{#caneditpage}}data-formurl="{{embedded_sectionurl}}"{{/caneditpage}}
+    data-sectionid="{{id}}"
     data-layout="{{layout}}"
     data-hidden="{{hidden}}"
     {{^options.hidetitle}}{{#options.collapsible}}data-collapsible="true"{{/options.collapsible}}{{/options.hidetitle}}
     >
 
-  <h2 class="section-title {{#options.hidetitle}}hidden{{/options.hidetitle}}">
+  <h2 class="{{^cgsbranding}}section-title {{/cgsbranding}} {{#cgsbranding}}section-title-cgs-branding{{/cgsbranding}} {{#options.hidetitle}}hidden{{/options.hidetitle}}">
     {{title}}
     <svg class="caret" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg">
       <path d="M128,188a11.96187,11.96187,0,0,1-8.48535-3.51465l-80-80a12.0001,12.0001,0,0,1,16.9707-16.9707L128,159.0293l71.51465-71.51465a12.0001,12.0001,0,0,1,16.9707,16.9707l-80,80A11.96187,11.96187,0,0,1,128,188Z"/>

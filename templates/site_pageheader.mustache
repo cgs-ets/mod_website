@@ -20,7 +20,7 @@
     The header.
 }}
 
-<div class="page-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}" 
+<div class="page-header editzone nopadding {{#bannerimage}}has-banner{{/bannerimage}}"
   {{#caneditpage}} data-formurl="{{embedded_editpageurl}}" {{/caneditpage}}
   {{#bannerimage}} style="background-image: url('{{path}}');" {{/bannerimage}} >
   {{#page.hidden}}
@@ -29,7 +29,8 @@
   <a data-formurl="{{embedded_pagepermissionsurl}}" href="{{pagepermissionsurl}}" class="btn-edit-permissions editoption scaleonhover" title="Page permissions">
     <i class="fa fa-user-plus" aria-hidden="true"></i>
   </a>
-  <h1 class="title">
-    {{title}}
+
+  <h1  class="{{^cgsbranding}}title{{/cgsbranding}} {{#cgsbranding}}title-cgs-branding {{/cgsbranding}}" >
+    {{title}} {{cgsbranding}}
   </h1>
 </div>

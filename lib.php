@@ -38,7 +38,7 @@ define('WEBSITE_GRADING_STATUS_NOT_GRADED', 'notgraded');
  */
 function website_supports($feature) {
     switch ($feature) {
-        case FEATURE_BACKUP_MOODLE2:  
+        case FEATURE_BACKUP_MOODLE2:
             return true;
         case FEATURE_GRADE_HAS_GRADE:
             return true;
@@ -67,10 +67,10 @@ function website_supports($feature) {
 function website_add_instance($moduleinstance, $mform = null) {
     global $DB, $USER;
 
-    //echo "<pre>";
-    //var_export($moduleinstance);
-    //var_export($mform);
-    //exit;
+    // echo "<pre>";
+    // var_export($moduleinstance);
+    // var_export($mform);
+    // exit;
 
     // Template
     $templatesiteid = 0;
@@ -78,7 +78,7 @@ function website_add_instance($moduleinstance, $mform = null) {
         $regex = '/\/mod\/website\/site\.php\?site\=(\d+)/';
         preg_match($regex, $moduleinstance->useexistingurl, $matches);
         if (empty($matches) || count($matches) < 2) {
-            echo "Template error"; 
+            echo "Template error";
             return;
         }
         $templatesiteid = $matches[1];
@@ -91,7 +91,7 @@ function website_add_instance($moduleinstance, $mform = null) {
     $moduleinstance->id = $DB->insert_record('website', $moduleinstance);
 
     // Create the sites within this activity based on distribution.
-    if ($moduleinstance->distribution === '0') { 
+    if ($moduleinstance->distribution === '0') {
         // Single site.
         $website = new \mod_website\website();
         $website->create_site(
@@ -103,12 +103,12 @@ function website_add_instance($moduleinstance, $mform = null) {
             ),
             $templatesiteid
         );
-    } else if ($moduleinstance->distribution === '1') { 
+    } else if ($moduleinstance->distribution === '1') {
         // Site per student.
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
         $website->create_sites_for_students(
-            $students, 
+            $students,
             array(
                 'websiteid' => $moduleinstance->id,
                 'cmid' => $moduleinstance->coursemodule,
@@ -135,7 +135,7 @@ function website_add_instance($moduleinstance, $mform = null) {
         $students = utils::get_students_from_groups($moduleinstance->distgroups, $moduleinstance->course);
         $website = new \mod_website\website();
         $website->create_pages_for_students(
-            $students, 
+            $students,
             array(
                 'websiteid' => $moduleinstance->id,
                 'cmid' => $moduleinstance->coursemodule,
@@ -147,7 +147,7 @@ function website_add_instance($moduleinstance, $mform = null) {
     }
 
     website_grade_item_update($moduleinstance);
-    
+
     return $moduleinstance->id;
 }
 
@@ -189,7 +189,7 @@ function website_update_instance($moduleinstance, $mform = null) {
 
     website_grade_item_update($moduleinstance); // Update the grade setting in the gradebook.
 
-    return true; 
+    return true;
 }
 
 /**
@@ -443,7 +443,7 @@ function website_grade_item_delete($moduleinstance) {
 
     $DB->delete_records('website_grades', array('websiteid' => $moduleinstance->id));
     $DB->delete_records('website_feedback', array('websiteid' => $moduleinstance->id));
-    
+
     return grade_update('/mod/website', $moduleinstance->course, 'mod', 'website',
                         $moduleinstance->id, 0, null, array('deleted' => 1));
 }
@@ -520,7 +520,7 @@ function website_get_file_info($browser, $areas, $course, $cm, $context, $filear
  *
  * @package     mod_website
  * @category    files
- * 
+ *
  * @param stdClass $course course object
  * @param stdClass $cm course module object
  * @param stdClass $context context object

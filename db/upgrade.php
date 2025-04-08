@@ -71,7 +71,7 @@ function xmldb_website_upgrade($oldversion) {
         // Conditionally launch add field type.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
-        }  
+        }
 
         // Website savepoint reached.
         upgrade_mod_savepoint(true, 2022102600, 'website');
@@ -95,7 +95,7 @@ function xmldb_website_upgrade($oldversion) {
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
-  
+
 
         // Website savepoint reached.
         upgrade_mod_savepoint(true, 2022102601, 'website');
@@ -263,6 +263,21 @@ function xmldb_website_upgrade($oldversion) {
 
         // Website savepoint reached.
         upgrade_mod_savepoint(true, 2023091900, 'website');
+    }
+
+    if ($oldversion < 2025040800) {
+
+        // Define field cgsbranding to be added to website.
+        $table = new xmldb_table('website');
+        $field = new xmldb_field('cgsbranding', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'cutoffdate');
+
+        // Conditionally launch add field cgsbranding.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Website savepoint reached.
+        upgrade_mod_savepoint(true, 2025040800, 'website');
     }
 
 

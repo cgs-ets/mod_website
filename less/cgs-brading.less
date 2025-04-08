@@ -1,0 +1,83 @@
+// Website title <h1>
+.title-cgs-branding {
+    text-transform: uppercase;
+    color: white;
+    margin: 0;
+    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    font-family: 'Poppins','sans serif';
+    padding: 35px 30px 35px 30px;
+    background: #a9aaac;
+}
+
+
+//Section title <h2>
+
+.site-section {
+    display: block;
+    position: relative;
+    margin-bottom: 40px;
+    overflow: hidden;
+
+    & > .site-block {
+      display: block;
+      width: 100%;
+      padding: 20px;
+      margin: 20px;
+    }
+
+    .section-title-cgs-branding {
+      padding: 5px 0;
+      margin-bottom: 10px;
+      font-size: 26px;
+      font-weight: 700;
+      display: flex;
+      gap: 10px;
+      justify-content: start;
+     color: #005b94;
+      .caret {
+        display: none;
+        width: 18px;
+      }
+      &.hidden {
+        display: none;
+      }
+    }
+
+    &[data-hidden="1"] {
+      display: none;
+    }
+
+    &.dzone {
+      .dz-preview-wrapper {
+        position: absolute;
+        right: 0;
+        bottom: 47px;
+        text-align: right;
+      }
+      .dz-preview {
+        margin: 5px;
+        min-height: 75px;
+        .dz-image {
+          height: 80px;
+          width: 80px;
+        }
+        .dz-details {
+          .dz-size {
+            display: none;
+          }
+        }
+        .dz-success-mark svg, .dz-error-mark svg {
+          display: block;
+          width: 30px;
+          height: 30px;
+        }
+      }
+      &.dz-drag-hover {
+        border-color: #0091F7 !important;
+        border-style: solid !important;
+        transform: scale(1.01) !important;
+      }
+    }
+  }

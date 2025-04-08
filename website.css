@@ -1309,6 +1309,77 @@
 #page-mod-website-site .page-header.has-banner .btn-edit-permissions {
   color: #fff;
 }
+#page-mod-website-site .title-cgs-branding {
+  text-transform: uppercase;
+  color: white;
+  margin: 0;
+  text-align: center;
+  font-size: 34px;
+  font-weight: bold;
+  font-family: 'Poppins', 'sans serif';
+  padding: 35px 30px 35px 30px;
+  background: #a9aaac;
+}
+#page-mod-website-site .site-section {
+  display: block;
+  position: relative;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+#page-mod-website-site .site-section > .site-block {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  margin: 20px;
+}
+#page-mod-website-site .site-section .section-title-cgs-branding {
+  padding: 5px 0;
+  margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  gap: 10px;
+  justify-content: start;
+  color: #005b94;
+}
+#page-mod-website-site .site-section .section-title-cgs-branding .caret {
+  display: none;
+  width: 18px;
+}
+#page-mod-website-site .site-section .section-title-cgs-branding.hidden {
+  display: none;
+}
+#page-mod-website-site .site-section[data-hidden="1"] {
+  display: none;
+}
+#page-mod-website-site .site-section.dzone .dz-preview-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: 47px;
+  text-align: right;
+}
+#page-mod-website-site .site-section.dzone .dz-preview {
+  margin: 5px;
+  min-height: 75px;
+}
+#page-mod-website-site .site-section.dzone .dz-preview .dz-image {
+  height: 80px;
+  width: 80px;
+}
+#page-mod-website-site .site-section.dzone .dz-preview .dz-details .dz-size {
+  display: none;
+}
+#page-mod-website-site .site-section.dzone .dz-preview .dz-success-mark svg,
+#page-mod-website-site .site-section.dzone .dz-preview .dz-error-mark svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+}
+#page-mod-website-site .site-section.dzone.dz-drag-hover {
+  border-color: #0091F7 !important;
+  border-style: solid !important;
+  transform: scale(1.01) !important;
+}
 /*Grading Style*/
 .path-mod-website [data-region="grading-navigation"] {
   position: absolute;
