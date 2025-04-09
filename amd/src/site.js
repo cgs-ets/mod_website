@@ -25,8 +25,8 @@
 /**
  * @module mod_website/site
  */
- define(['core/log', 'core/ajax', 'core/config'], 
- function(Log, Ajax, Config) {    
+ define(['core/log', 'core/ajax', 'core/config'],
+ function(Log, Ajax, Config) {
   'use strict';
 
   /**
@@ -82,7 +82,7 @@
       }
       Ajax.call([{
         methodname: 'mod_website_apicontrol',
-        args: { 
+        args: {
             action: 'update_mode',
             data: JSON.stringify({
                 mode: mode,
@@ -108,7 +108,7 @@
 
         e.preventDefault();
         e.stopPropagation();
-        
+
         let parent = e.currentTarget.parentNode;
         //let contentbody = parent.querySelector('.picturebutton-content');
         //let modalbody = document.querySelector('#modal-popupcontent .modal__body');
@@ -152,7 +152,7 @@
         }
       }
     })
-    
+
     // User is editor in some capacity (site or page).
     if (self.rootel.dataset.caneditpage == '1') {
 
@@ -163,7 +163,7 @@
 
           e.preventDefault();
           e.stopPropagation();
-          
+
           if (document.querySelector('.site-sections').classList.contains('sorting')) { return; }
 
           let formurl = e.currentTarget.dataset.formurl
@@ -211,7 +211,7 @@
       let rootel = document.querySelector(".site-root");
       document.querySelectorAll('.site-section').forEach(section => {
         let uploadURL = Config.wwwroot + "/mod/website/dropzone.php?site=" + rootel.dataset.siteid + "&section=" + section.dataset.sectionid + "&upload=1&sesskey=" + Config.sesskey
-        let dz  = new Dropzone(section, { 
+        let dz  = new Dropzone(section, {
           url: uploadURL,
           clickable: false,
         });
@@ -276,8 +276,11 @@
       })
     })
 
+    let auxsection = document.querySelectorAll('.site-section[data-collapsible="true"] .section-title').length > 0
+                  ? document.querySelectorAll('.site-section[data-collapsible="true"] .section-title')
+                  : document.querySelectorAll('.site-section[data-collapsible="true"] .section-title-cgs-branding');
     // Collapse/expand sections toggle.
-    document.querySelectorAll('.site-section[data-collapsible="true"] .section-title').forEach(a => {
+    auxsection.forEach(a => {
       a.addEventListener('click', e => {
         if ( e.currentTarget .parentNode.classList.contains('collapsed') ) {
           e.currentTarget .parentNode.classList.remove('collapsed')
@@ -346,14 +349,14 @@
     }
 
     // Check if already set up.
-    if ( self.editingawake ) { 
+    if ( self.editingawake ) {
       self.enableBlockSorting();
       self.enableSectionSorting();
     }
 
     // Only setup once.
     self.editingawake = true;
-    
+
     // Setup sorting.
     self.initBlockSorting()
     self.initSectionSorting()
@@ -397,7 +400,7 @@
     }
     Ajax.call([{
       methodname: 'mod_website_apicontrol',
-      args: { 
+      args: {
           action: 'reorder_blocks',
           data: JSON.stringify({
               sectionid: e.from.parentNode.dataset.sectionid,
@@ -405,7 +408,7 @@
           }),
       }
     }])
-  
+
     // Then do the "to" section.
     order = [];
     if (e.from.parentNode.dataset.sectionid != e.to.parentNode.dataset.sectionid) {
@@ -416,7 +419,7 @@
       }
       Ajax.call([{
         methodname: 'mod_website_apicontrol',
-        args: { 
+        args: {
             action: 'reorder_blocks',
             data: JSON.stringify({
                 sectionid: e.to.parentNode.dataset.sectionid,
@@ -441,7 +444,7 @@
     if ( rootel.dataset.mode !== 'edit') { return; }
 
     rootel.classList.remove("sorting-sections")
-    
+
     // Save the new order.
     let order = [];
     const sections = document.querySelectorAll('.site-section')
@@ -452,7 +455,7 @@
     })
     Ajax.call([{
       methodname: 'mod_website_apicontrol',
-      args: { 
+      args: {
           action: 'reorder_sections',
           data: JSON.stringify({
               pageid: rootel.dataset.currentpage,
@@ -527,9 +530,9 @@
     }
   }
 
-  /** 
-   * Wrap an HTMLElement around another set of elements 
-   * Modified global function based on Kevin Jurkowski's implementation 
+  /**
+   * Wrap an HTMLElement around another set of elements
+   * Modified global function based on Kevin Jurkowski's implementation
    * here: http://stackoverflow.com/questions/3337587/wrapping-a-dom-element-using-pure-javascript/13169465#13169465
    */
    Site.prototype.wrapAll = function(wrapper, elms) {
