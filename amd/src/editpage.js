@@ -25,8 +25,8 @@
 /**
  * @module mod_website/editpage
  */
- define(['core/log', 'core/ajax', 'core/notification'], 
- function(Log, Ajax, Notification) {    
+ define(['core/log', 'core/ajax', 'core/notification'],
+ function(Log, Ajax, Notification) {
   'use strict';
 
   /**
@@ -35,7 +35,7 @@
   function init() {
       Log.debug('mod_website/editpage: initializing')
 
-    
+
       var editpage = new EditPage()
       editpage.main()
   }
@@ -56,20 +56,24 @@
     const self = this;
 
     let deletebutton = document.querySelector('.btn-delete')
-    deletebutton.addEventListener('click', e => {
-      e.preventDefault();
-      Ajax.call([{
-        methodname: 'mod_website_apicontrol',
-        args: { 
-            action: 'delete_page',
-            data: deletebutton.dataset.pageid,
-        },
-        done: function (e) {
-          window.open(deletebutton.dataset.returnurl, '_parent')
-        },
-        fail: Notification.exception
-      }]);
-    })
+
+    if (deletebutton !=null) {
+      deletebutton.addEventListener('click', e => {
+        e.preventDefault();
+        Ajax.call([{
+          methodname: 'mod_website_apicontrol',
+          args: {
+              action: 'delete_page',
+              data: deletebutton.dataset.pageid,
+          },
+          done: function (e) {
+            window.open(deletebutton.dataset.returnurl, '_parent')
+          },
+          fail: Notification.exception
+        }]);
+      })
+
+    }
   };
 
 

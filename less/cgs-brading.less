@@ -8,7 +8,7 @@
     font-weight: bold;
     font-family: 'Poppins','sans serif';
     padding: 35px 30px 35px 30px;
-    background: #a9aaac;
+    background:  #005b94;
 }
 
 
@@ -82,3 +82,112 @@
       }
     }
   }
+
+
+// View only
+.site-root[data-mode="view"] {
+  .site-section {
+    &[data-collapsible="true"] {
+      .section-title-cgs-branding {
+        cursor: pointer;
+        .caret {
+          display: inline-block;
+          -webkit-transform: rotateX(180deg);
+                  transform: rotateX(180deg);
+        }
+      }
+
+      &.collapsed {
+        .section-blocks {
+          display: none;
+        }
+        .section-title-cgs-branding .caret {
+          -webkit-transform: none;
+                  transform: none;
+        }
+      }
+    }
+  }
+}
+
+// Horiz divided
+.site-section[data-layout="1"] .section-blocks {
+  @media (min-width: 780px) {
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+    & > .site-block {
+      flex: 1;
+      margin: 20px;
+      &:first-of-type {
+        margin-left: 0;
+      }
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// Left fixed
+.site-section[data-layout="2"] {
+  .section-title-cgs-branding {
+    padding: 5px 20px;
+  }
+  .section-blocks {
+    display: block;
+    position: relative;
+    .site-block {
+      padding: 10px;
+      margin: 10px;
+    }
+    @media (min-width: 780px) {
+      & > div:first-of-type {
+        float: left;
+      }
+      & > .site-block {
+        width: calc(50% - 40px);
+        float: right;
+        clear: right;
+      }
+    }
+  }
+}
+
+// Right fixed
+.site-section[data-layout="3"] {
+  .section-title-cgs-branding {
+    padding: 5px 20px;
+  }
+  .section-blocks {
+    display: block;
+    position: relative;
+    .site-block {
+      padding: 10px;
+      margin: 10px;
+    }
+    @media (min-width: 780px) {
+      & > div:first-of-type {
+        float: right;
+      }
+      & > .site-block {
+        width: calc(50% - 40px);
+        float: left;
+        clear: left;
+      }
+    }
+  }
+}
+
+// Responsive Grid
+.site-section[data-layout="4"] {
+  padding: 0 20px;
+  overflow: visible;
+  .section-blocks {
+    position: relative;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+    gap: 40px;
+  }
+}
