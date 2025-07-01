@@ -41,7 +41,7 @@ class Section {
     const TABLE_SITES = 'website_sites';
     const TABLE_PAGES = 'website_site_pages';
 
-    private $data = (object) array();
+    private $data = null;
 
     public $blocks = null;
 
