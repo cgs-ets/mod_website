@@ -41,7 +41,7 @@ class Section {
     const TABLE_SITES = 'website_sites';
     const TABLE_PAGES = 'website_site_pages';
 
-    private $data = array();
+    private $data = (object) array();
 
     public $blocks = null;
 
@@ -175,7 +175,7 @@ class Section {
         global $DB;
 
         $data = $DB->get_record(static::TABLE, array('id' => $id, 'deleted' => 0), '*', IGNORE_MULTIPLE);
-        $this->data = $data ? $data : array();
+        $this->data = $data ? $data : ((object) array());
         $this->read_blocks();
 
         return $this;
@@ -191,7 +191,7 @@ class Section {
         global $DB;
 
         $data = $DB->get_record(static::TABLE, array('id' => $id), '*', IGNORE_MULTIPLE);
-        $this->data = $data ? $data : array();
+        $this->data = $data ? $data : ((object) array());
         $this->read_blocks();
 
         return $this;
