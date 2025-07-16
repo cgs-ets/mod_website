@@ -1325,6 +1325,7 @@
   position: relative;
   margin-bottom: 40px;
   overflow: hidden;
+  padding: 0 20px;
 }
 #page-mod-website-site .site-section > .site-block {
   display: block;
