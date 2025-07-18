@@ -80,7 +80,7 @@ class Section {
         $this->data->timemodified = time();
 
         $this->validate_data();
-        
+
         $id = $DB->insert_record(static::TABLE, $this->data);
 
         logging::log('Section', $id, array(
@@ -101,14 +101,14 @@ class Section {
 
         if (empty($this->get_id())) {
             return false;
-        } 
+        }
 
         unset($this->data->id);
         $this->data->timecreated = time();
         $this->data->timemodified = time();
 
         $this->validate_data();
-        
+
         $id = $DB->insert_record(static::TABLE, $this->data);
 
         logging::log('Section', $id, array(
@@ -140,7 +140,7 @@ class Section {
             $this->data->hidden = $data->hidden;
             $this->update();
         }
-        
+
         return $this->data->id;
     }
 
@@ -161,7 +161,7 @@ class Section {
                 'event' => 'Section updated'
             ));
         }
-        
+
         return $this->data->id;
     }
 
@@ -269,7 +269,7 @@ class Section {
 
         return true;
     }
-    
+
 
     /**
      * Serialise data based on related info to a structure ready for rendering.
@@ -312,7 +312,7 @@ class Section {
                 'website' => $related['website']
             ));
         }
-        
+
         return array(
             'blocks' => $blocks,
             'sectionurl' => $sectionurl->out(false),
@@ -323,11 +323,12 @@ class Section {
             'embedded_copysectionurl' => $embeddedcopysectionurl->out(false),
             'title' => $this->data->title,
             'layout' => $this->data->layout,
+            'halffixed' => $this->data->layout == 2 || $this->data->layout == 3,
             'hidden' => $this->data->hidden,
             'id' => $this->data->id,
             'options' => json_decode($this->data->sectionoptions),
         );
-    } 
+    }
 
     public function get_id() {
         if (isset($this->data->id)) {
@@ -343,7 +344,7 @@ class Section {
         $blocks = json_decode($this->data->blocks);
         return $blocks ? $blocks : array();
     }
-    
+
     public function get_hidden() {
         return $this->data->hidden;
     }
@@ -354,7 +355,7 @@ class Section {
         if (empty($blockid)) {
             throw new \coding_exception('Add block to section: block id is empty.');
         }
-        
+
         if ( ! $this->data->id ) {
             throw new \coding_exception('Add block to section: section id is missing.');
         }
@@ -383,7 +384,7 @@ class Section {
             }
         }
     }
-    
+
     /**
     * Validate required relateds.
     *

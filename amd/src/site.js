@@ -193,6 +193,7 @@
           })
           e.target.classList.add("hover")
         })
+
         item.addEventListener('mouseleave', e => {
           if (self.rootel.dataset.mode !== 'edit') { return; }
           e.target.classList.remove("hover")

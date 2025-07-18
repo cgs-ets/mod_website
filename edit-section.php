@@ -35,7 +35,7 @@ $sectionid = optional_param('section', 0, PARAM_INT);
 $embed = optional_param('embed', 0, PARAM_INT);
 
 $site = new \mod_website\site($siteid);
-$page = new \mod_website\page($pageid);  
+$page = new \mod_website\page($pageid);
 
 $cm = get_coursemodule_from_id('website', $site->get_cmid(), 0, false, MUST_EXIST);
 $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -69,7 +69,7 @@ if ( ! $page->can_user_edit()) {
 }
 
 // Initialise the form.
-$formsitesection = new form_sitesection($thisurl->out(false), 
+$formsitesection = new form_sitesection($thisurl->out(false),
     array(
         'sectionid' => $sectionid,
         'returnurl' => $gobackurl->out(),
@@ -99,7 +99,7 @@ if (!empty($formdata)) {
     $sectionid = $section->save($formdata);
     // Add the section to the page.
     if ($page->get_id()) {
-        $page->add_section_to_page($sectionid);  
+        $page->add_section_to_page($sectionid);
     }
     redirect($gobackurl->out());
     exit;
@@ -117,6 +117,7 @@ if ($sectionid) {
         'collapsible' => $options->collapsible,
         'expanddefault' => $options->expanddefault,
         'visibility' => $section->hidden,
+
     ));
 }
 

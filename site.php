@@ -93,9 +93,7 @@ if ($mode == 'preview') {
     $data->caneditpage = false;
 }
 
-// echo'<pre>';
-// echo print_r($data, true);
-// echo'</pre>'; exit;
+
 // Add css.
 $PAGE->requires->css(new moodle_url($CFG->wwwroot . '/mod/website/website.css', array('nocache' => rand())));
 
@@ -113,9 +111,7 @@ $PAGE->requires->js_call_amd('mod_website/site', 'init');
 // Wrap it in moodle.
 echo $OUTPUT->header();
 
-// echo '<pre>';
-// echo print_r($data, true);
-// echo '</pre>'; exit;
+
 // Render the site.
 echo $OUTPUT->render_from_template('mod_website/site', $data);
 

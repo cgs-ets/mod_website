@@ -837,7 +837,7 @@
   }
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-title {
-  padding: 5px 20px;
+  padding: 5px /*20px*/;
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-blocks {
   display: block;
@@ -845,7 +845,6 @@
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-blocks .site-block {
   padding: 10px;
-  margin: 10px;
 }
 @media (min-width: 780px) {
   #page-mod-website-site .site-section[data-layout="2"] .section-blocks > div:first-of-type {
@@ -858,7 +857,7 @@
   }
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-title {
-  padding: 5px 20px;
+  padding: 5px /* 20px*/;
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-blocks {
   display: block;
@@ -866,7 +865,6 @@
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-blocks .site-block {
   padding: 10px;
-  margin: 10px;
 }
 @media (min-width: 780px) {
   #page-mod-website-site .site-section[data-layout="3"] .section-blocks > div:first-of-type {
@@ -1415,15 +1413,14 @@
   }
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-title-cgs-branding {
-  padding: 5px 20px;
+  padding: 5px /* 20px*/;
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-blocks {
   display: block;
   position: relative;
 }
 #page-mod-website-site .site-section[data-layout="2"] .section-blocks .site-block {
-  padding: 10px;
-  margin: 10px;
+  padding: 0px 0px 10px;
 }
 @media (min-width: 780px) {
   #page-mod-website-site .site-section[data-layout="2"] .section-blocks > div:first-of-type {
@@ -1436,15 +1433,14 @@
   }
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-title-cgs-branding {
-  padding: 5px 20px;
+  padding: 5px /*20px*/;
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-blocks {
   display: block;
   position: relative;
 }
 #page-mod-website-site .site-section[data-layout="3"] .section-blocks .site-block {
-  padding: 10px;
-  margin: 10px;
+  padding: 0px 0px 10px;
 }
 @media (min-width: 780px) {
   #page-mod-website-site .site-section[data-layout="3"] .section-blocks > div:first-of-type {
