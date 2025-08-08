@@ -64,9 +64,6 @@
   Site.prototype.main = function () {
     var self = this
 
-    const logo = document.querySelector('.logo')
-    self.logowidth = logo ? logo.offsetWidth : -1;
-
     // Set up editing.
     self.wakeupEditing();
 
@@ -238,7 +235,7 @@
     // Check menu width.
     self.checkMenuWidth()
     window.addEventListener('resize', function(event) {
-      setTimeout(() => self.checkMenuWidth(), 50)
+      self.checkMenuWidth()
     }, true)
 
     // Menu Toggle.
@@ -314,12 +311,11 @@
 
   Site.prototype.checkMenuWidth = function () {
     var self = this
-    console.log(self.logowidth);
 
-    const right = document.querySelector('.topbar-right')
-    const menu = document.querySelector('.menuwrap')
-    const topbar = document.querySelector('.topbar')
-    const logo = document.querySelector('.logo')
+    const right = self.rootel.querySelector('.topbar-right')
+    const menu = self.rootel.querySelector('.menuwrap')
+    const topbar = self.rootel.querySelector('.topbar')
+    const logo = self.rootel.querySelector('.logo')
 
     // Start check.
     menu.classList.add("checkingsize")
@@ -329,9 +325,6 @@
     let rightwidth = right.offsetWidth;
     let topbarwidth = topbar.offsetWidth;
     let logowidth = logo.offsetWidth;
-    console.log("Right width: " + rightwidth);
-    console.log("Topbar width: " + topbarwidth);
-    console.log("Logo width: " + logowidth);
 
     // If menu is too big, add mobile view.
     if (rightwidth > topbarwidth - logowidth - 50) { // 50 px buffer.
