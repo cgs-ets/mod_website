@@ -323,6 +323,9 @@
     let rightwidth = right.offsetWidth;
     let topbarwidth = topbar.offsetWidth;
     let logowidth = logo.offsetWidth;
+    console.log("Right width: " + rightwidth);
+    console.log("Topbar width: " + topbarwidth);
+    console.log("Logo width: " + logowidth);
 
     // If menu is too big, add mobile view.
     if (rightwidth > topbarwidth - logowidth - 50) { // 50 px buffer.
