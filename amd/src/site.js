@@ -64,6 +64,9 @@
   Site.prototype.main = function () {
     var self = this
 
+    const logo = document.querySelector('.logo')
+    self.logowidth = logo ? logo.offsetWidth : -1;
+
     // Set up editing.
     self.wakeupEditing();
 
@@ -310,6 +313,9 @@
   };
 
   Site.prototype.checkMenuWidth = function () {
+    var self = this
+    console.log(self.logowidth);
+
     const right = document.querySelector('.topbar-right')
     const menu = document.querySelector('.menuwrap')
     const topbar = document.querySelector('.topbar')
