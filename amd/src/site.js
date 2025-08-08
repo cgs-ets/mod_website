@@ -235,7 +235,7 @@
     // Check menu width.
     self.checkMenuWidth()
     window.addEventListener('resize', function(event) {
-      self.checkMenuWidth()
+      setTimeout(() => self.checkMenuWidth(), 50)
     }, true)
 
     // Menu Toggle.
