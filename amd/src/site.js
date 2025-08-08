@@ -239,9 +239,9 @@
     }, true)
 
     // Menu Toggle.
-    let menutoggle = document.querySelector('.menutoggle');
+    let menutoggle = self.rootel.querySelector('.menutoggle');
     menutoggle && menutoggle.addEventListener('click', e => {
-      const menu = document.querySelector('.menu')
+      const menu = self.rootel.querySelector('.menu')
       if (menu.classList.contains('expanded')) {
         menu.classList.remove('expanded');
       } else {
@@ -250,10 +250,10 @@
     })
 
     // Expand tier 2
-    document.querySelectorAll('.menu > .menuitem.haschildren > a').forEach(a => {
+    self.rootel.querySelectorAll('.menu > .menuitem.haschildren > a').forEach(a => {
       a.addEventListener('click', event => {
         // If in mobile view.
-        const topbar = document.querySelector('.topbar')
+        const topbar = self.rootel.querySelector('.topbar')
         if (topbar.classList.contains('mobile')) {
           event.preventDefault();
           if (a.parentNode.classList.contains('expanded')) {
@@ -266,7 +266,7 @@
     })
 
     // Expand tier 3
-    document.querySelectorAll('.submenu > .menuitem.haschildren > a').forEach(a => {
+    self.rootel.querySelectorAll('.submenu > .menuitem.haschildren > a').forEach(a => {
       a.addEventListener('click', event => {
         event.preventDefault();
         if (a.parentNode.classList.contains('expanded')) {
