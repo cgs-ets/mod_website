@@ -337,6 +337,7 @@
   /* devanagari */
   /* latin-ext */
   /* latin */
+  /* AI features */
   /* Site settings / Site permissions button */
   /* The switch - the box around the slider */
   /* Hide default HTML checkbox */
@@ -686,6 +687,25 @@
   color: #fff;
   padding: 6px;
   font-size: 14px;
+}
+#page-mod-website-site .course-assist-controls {
+  position: absolute;
+  z-index: 1;
+  right: 200px;
+  top: 0;
+  padding: 0 !important;
+  color: #fff;
+}
+#page-mod-website-site .course-assist-controls .btn {
+  border: 0 none;
+  height: 33px;
+  border-radius: 0;
+}
+#page-mod-website-site .course-assist-controls .ai-action .ai-course-assist-sparkles-icon.white {
+  display: inline-block;
+}
+#page-mod-website-site .course-assist-controls .ai-action .ai-course-assist-sparkles-icon {
+  display: none;
 }
 #page-mod-website-site a.btn-helplink {
   font-size: 17px;
